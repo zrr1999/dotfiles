@@ -1,0 +1,32 @@
+#!/bin/sh
+
+install_brew() {
+  # Proudly borrowed from:
+  # https://github.com/duckfullstop/dotfiles/blob/f734eea399a7ccd1c25b57242997e79f230abc4d/.config/yadm/bootstrap
+
+  # install Homebrew if it's missing
+  if ! command -v brew >/dev/null 2>&1; then
+    echo "Installing Homebrew"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+    (echo; echo "eval '$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)'") >> /etc/profile
+  fi
+
+  brew install lsd sd dust ripgrep fd hyperfine bottom procs
+  brew install pueue fzf httpie progress atuin lua yadm
+  brew install git-delta gitui zellij difftastic helix
+  brew install ast-grep 
+  brew install python pdm pre-commit
+}
+
+install_zsh() {
+  if ! command -v zsh >/dev/null 2>&1; then
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  fi
+  if ! command -v zi >/dev/null 2>&1; then
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/z-shell/zi-src/main/lib/sh/install.sh)" -- -i skip 
+    /bin/zsh -cl -- '(source /home/zrr1999/.zi.zsh && @zi-scheduler burst) || true'
+  fi
+}
+
+install_brew
+install_zsh
