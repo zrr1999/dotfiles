@@ -17,6 +17,7 @@ install_brew() {
     echo "Installing Homebrew"
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
     (echo; echo "eval '$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)'") >> /home/zrr1999/.profile
+    source /home/zrr1999/.profile
   fi
 
   brew install lsd sd dust ripgrep fd hyperfine bottom procs
@@ -27,7 +28,7 @@ install_brew() {
 }
 
 install_zsh() {
-  if ! command -v zsh >/dev/null 2>&1; then
+  if [[ -d "/home/zrr1999/.oh-my-zsh" ]]; then
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
   fi
   if ! command -v zi >/dev/null 2>&1; then
@@ -38,9 +39,8 @@ install_zsh() {
 
 if [[ $(whoami) != "zrr1999" ]]; then
   create_user
-  su - zrr1999
-  source /home/zrr1999/.profile
 fi
 
-install_brew
-install_zsh
+
+su - zrr1999 -c "install_brew"
+su - zrr1999 -c "install_zsh"
