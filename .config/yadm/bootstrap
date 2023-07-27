@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 create_user() {
   useradd -r -g root zrr1999
