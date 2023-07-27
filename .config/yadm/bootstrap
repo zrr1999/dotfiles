@@ -1,12 +1,13 @@
 #!/bin/bash
 
-create_user() {
-  useradd -r -g root zrr1999
-  mkdir /home/zrr1999
-  chown zrr1999:root /home/zrr1999
-  echo "zrr1999:0000" | chpasswd
-  sed -i '/^root[[:space:]]*ALL=(ALL:ALL)[[:space:]]*ALL$/a zrr1999\tALL=(ALL:ALL) ALL' /etc/sudoers
-}
+# TODO: create_user
+# create_user() {
+#   useradd -r -g root zrr1999
+#   mkdir /home/zrr1999
+#   chown zrr1999:root /home/zrr1999
+#   echo "zrr1999:0000" | chpasswd
+#   sed -i '/^root[[:space:]]*ALL=(ALL:ALL)[[:space:]]*ALL$/a zrr1999\tALL=(ALL:ALL) ALL' /etc/sudoers
+# }
 
 install_brew() {
   # Proudly borrowed from:
@@ -37,10 +38,9 @@ install_zsh() {
   fi
 }
 
-if [[ $(whoami) != "zrr1999" ]]; then
-  create_user
-fi
+# if [[ $(whoami) != "zrr1999" ]]; then
+#   create_user
+# fi
 
-
-su - zrr1999 -c "install_brew"
-su - zrr1999 -c "install_zsh"
+install_brew
+install_zsh
