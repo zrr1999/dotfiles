@@ -36,8 +36,7 @@ install_zsh() {
   fi
 }
 
-current_home=$(echo ~)
-if [[ $current_home != "/root" ]]; then
+if [[ $(whoami) != "zrr1999" ]]; then
   create_user
   su - zrr1999
   source /home/zrr1999/.profile
