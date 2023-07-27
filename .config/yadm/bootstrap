@@ -36,9 +36,10 @@ install_zsh() {
   fi
 }
 
-if [[ $UID -eq 0 ]]; then
+if [[ $(echo ~) != "/root" ]]; then
   create_user
   su - zrr1999
+  source /home/zrr1999/.profile
 fi
 
 install_brew
