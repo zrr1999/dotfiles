@@ -1,4 +1,3 @@
-
 # add some alias
 alias j='z'
 alias grep='rg'

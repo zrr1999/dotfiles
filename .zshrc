@@ -1,4 +1,4 @@
-source etc/profile
+source /home/zrr1999/.profile
 setopt no_nomatch
 export LC_ALL=C.UTF-8
 export LANG=C.UTF-8
