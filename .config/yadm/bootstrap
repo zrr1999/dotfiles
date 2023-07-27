@@ -39,7 +39,7 @@ install_zsh() {
 if [[ $UID -eq 0 ]]; then
   create_user
   su - zrr1999
-else
+fi
 
 install_brew
 install_zsh
