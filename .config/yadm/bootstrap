@@ -1,13 +1,13 @@
 #!/bin/bash
 
-# TODO: create_user
-# create_user() {
-#   useradd -r -g root zrr1999
-#   mkdir /home/zrr1999
-#   chown zrr1999:root /home/zrr1999
-#   echo "zrr1999:0000" | chpasswd
-#   sed -i '/^root[[:space:]]*ALL=(ALL:ALL)[[:space:]]*ALL$/a zrr1999\tALL=(ALL:ALL) ALL' /etc/sudoers
-# }
+
+create_user() {
+  useradd -r -g root zrr1999
+  mkdir /home/zrr1999
+  chown zrr1999:root /home/zrr1999
+  echo "zrr1999:0000" | chpasswd
+  sed -i '/^root[[:space:]]*ALL=(ALL:ALL)[[:space:]]*ALL$/a zrr1999\tALL=(ALL:ALL) ALL' /etc/sudoers
+}
 
 install_brew() {
   # Proudly borrowed from:
@@ -21,6 +21,7 @@ install_brew() {
     source /home/zrr1999/.profile
   fi
 
+  brew install zsh git
   brew install lsd sd dust ripgrep fd hyperfine bottom procs
   brew install pueue fzf httpie progress atuin lua yadm
   brew install git-delta gitui zellij difftastic helix
@@ -38,9 +39,13 @@ install_zsh() {
   fi
 }
 
-# if [[ $(whoami) != "zrr1999" ]]; then
-#   create_user
-# fi
+user_name=${1:-$(whoami)}
+if [[ $user_name == "root" ]]; then
+  create_user
+  echo "Please login as zrr1999 and run this script again:"
+  echo "  su - zrr1999"
+else
+  install_brewzsh
+  install_zsh
+fi
 
-install_brew
-install_zsh
