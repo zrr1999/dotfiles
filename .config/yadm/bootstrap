@@ -39,13 +39,11 @@ install_zsh() {
   fi
 }
 
-user_name=${1:-$(whoami)}
-if [[ $user_name == "root" ]]; then
+if [[ $USER == "root" ]]; then
   create_user
   echo "Please login as zrr1999 and run this script again:"
   echo "  su - zrr1999"
 else
-  install_brewzsh
+  install_brew
   install_zsh
 fi
-
