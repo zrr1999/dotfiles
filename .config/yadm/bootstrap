@@ -2,11 +2,11 @@
 
 
 create_user() {
+  apt-get install zsh
   useradd -r -g root zrr1999
   mkdir /home/zrr1999
-  chown zrr1999:root /home/zrr1999
-  echo "zrr1999:0000" | chpasswd
-  sed -i '/^root[[:space:]]*ALL=(ALL:ALL)[[:space:]]*ALL$/a zrr1999\tALL=(ALL:ALL) ALL' /etc/sudoers
+  sed -i 's#zrr1999:x:999:0::/home/zrr1999:/bin/sh#zrr1999:x:0:0::/home/zrr1999:/bin/zsh#g' /etc/passwd
+  echo "zrr1999:0000" | chpasswds
 }
 
 install_brew() {
@@ -30,7 +30,7 @@ install_brew() {
 }
 
 install_zsh() {
-  if [[ -d "/home/zrr1999/.oh-my-zsh" ]]; then
+  if [[ ! -d "/home/zrr1999/.oh-my-zsh" ]]; then
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
   fi
   if ! command -v zi >/dev/null 2>&1; then
@@ -43,6 +43,7 @@ if [[ $USER == "root" ]]; then
   create_user
   echo "Please login as zrr1999 and run this script again:"
   echo "  su - zrr1999"
+  echo "  yadm clone --bootstrap https://github.com/zrr1999/dotfiles.git"
 else
   install_brew
   install_zsh

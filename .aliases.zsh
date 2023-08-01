@@ -2,7 +2,7 @@
 alias j='z'
 alias grep='rg'
 alias ls='lsd'
-alias l='ls -l'
+alias ll='ls -l'
 alias la='ls -a'
 alias lla='ls -la'
 alias wget='http --download'
