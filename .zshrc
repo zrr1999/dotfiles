@@ -7,7 +7,7 @@ export ZSH=$HOME/.oh-my-zsh
 ZSH_THEME="robbyrussell"
 ZSH_DISABLE_COMPFIX=true
 
-source $ZSH/oh-my-zsh.sh
+# source $ZSH/oh-my-zsh.sh
 
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 fpath+=~/.zfunc
@@ -17,6 +17,7 @@ autoload -Uz compinit
 
 source ~/.zi.zsh
 source ~/.atuin.zsh
+source ~/.aliases.zsh
 
 # session-wise fix
 ulimit -n 4096
@@ -26,5 +27,3 @@ export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
 export HOMEBREW_NO_AUTO_UPDATE=true
 export HOMEBREW_NO_INSTALL_FROM_API=1
 export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.ustc.edu.cn/homebrew-bottles/
-
-source ~/.aliases.zsh

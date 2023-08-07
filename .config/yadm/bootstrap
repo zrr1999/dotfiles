@@ -6,7 +6,7 @@ create_user() {
   useradd -r -g root zrr1999
   mkdir /home/zrr1999
   sed -i 's#zrr1999:x:999:0::/home/zrr1999:/bin/sh#zrr1999:x:0:0::/home/zrr1999:/bin/zsh#g' /etc/passwd
-  echo "zrr1999:0000" | chpasswds
+  echo "zrr1999:0000" | chpasswd
 }
 
 install_brew() {
@@ -30,9 +30,9 @@ install_brew() {
 }
 
 install_zsh() {
-  if [[ ! -d "/home/zrr1999/.oh-my-zsh" ]]; then
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-  fi
+  # if [[ ! -d "/home/zrr1999/.oh-my-zsh" ]]; then
+  #   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  # fi
   if ! command -v zi >/dev/null 2>&1; then
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/z-shell/zi-src/main/lib/sh/install.sh)" -- -i skip 
     /bin/zsh -cl -- '(source /home/zrr1999/.zi.zsh && @zi-scheduler burst) || true'
