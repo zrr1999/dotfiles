@@ -1,4 +1,4 @@
-source /home/zrr1999/.profile
+source /etc/profile
 setopt no_nomatch
 export LC_ALL=C.UTF-8
 export LANG=C.UTF-8
@@ -7,7 +7,10 @@ ZSH_THEME="robbyrussell"
 ZSH_DISABLE_COMPFIX=true
 
 fpath+=~/.zfunc
-fpath+=$(brew --prefix)/share/zsh/site-functions
+if [[ -f $(brew --prefix) ]]; then
+  fpath+=$(brew --prefix)/share/zsh/site-functions
+fi
+
 zstyle ':completion:*' menu select
 autoload -Uz compinit
 
