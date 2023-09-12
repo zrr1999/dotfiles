@@ -26,7 +26,7 @@ install_by_pacman() {
   sudo pacman -Sy --noconfirm lsd sd dust ripgrep fd hyperfine bottom procs
   sudo pacman -Sy --noconfirm pueue fzf httpie progress atuin lua yadm
   sudo pacman -Sy --noconfirm git-delta gitui zellij difftastic helix
-  sudo paru -Sy --noconfirm ast-grep
+  paru -Sy --noconfirm ast-grep
   sudo pacman -Sy --noconfirm python python-pdm python-pre-commit
 }
 
