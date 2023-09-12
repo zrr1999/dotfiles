@@ -40,13 +40,13 @@ install_by_apt() {
 config_zsh() {
   if ! command -v zi >/dev/null 2>&1; then
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/z-shell/zi-src/main/lib/sh/install.sh)" -- -i skip 
-    /bin/zsh -cl -- '(source /home/zrr1999/.zi.zsh && @zi-scheduler burst) || true'
+    /bin/zsh -cl -- '(source $HOME/.zi.zsh && @zi-scheduler burst) || true'
   fi
 }
 
 if [[ $USER == "root" ]]; then
-  echo "Please login as zrr1999 and run this script again:"
-  echo "  su - zrr1999"
+  echo "Please login as user and run this script again:"
+  echo "  su - user"
   echo "  yadm clone --bootstrap https://github.com/zrr1999/dotfiles.git"
   exit
 fi
