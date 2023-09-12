@@ -21,7 +21,15 @@ zi wait lucid light-mode for \
 zi lucid light-mode for \
     zsh-users/zsh-autosuggestions \
     zsh-users/zsh-completions \
-    z-shell/brew-completions \
+    zsh-users/zsh-syntax-highlighting \
+    z-shell/brew-completions has'python'\
     as"theme" depth"1" romkatv/powerlevel10k
+
+zi snippet OMZL::clipboard.zsh
+zi snippet OMZL::completion.zsh
+zi snippet OMZL::directories.zsh
+zi snippet OMZL::history.zsh
+zi snippet OMZL::key-bindings.zsh
+zi snippet OMZP::colored-man-pages
 
 zicompinit

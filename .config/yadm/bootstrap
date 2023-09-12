@@ -1,15 +1,6 @@
 #!/bin/bash
 
-
-create_user() {
-  apt-get install zsh
-  useradd -r -g root zrr1999
-  mkdir /home/zrr1999
-  sed -i 's#zrr1999:x:999:0::/home/zrr1999:/bin/sh#zrr1999:x:0:0::/home/zrr1999:/bin/zsh#g' /etc/passwd
-  echo "zrr1999:0000" | chpasswd
-}
-
-install_brew() {
+install_by_brew() {
   # Proudly borrowed from:
   # https://github.com/duckfullstop/dotfiles/blob/f734eea399a7ccd1c25b57242997e79f230abc4d/.config/yadm/bootstrap
 
@@ -29,10 +20,24 @@ install_brew() {
   brew install python pdm pre-commit
 }
 
-install_zsh() {
-  # if [[ ! -d "/home/zrr1999/.oh-my-zsh" ]]; then
-  #   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-  # fi
+install_by_pacman() {
+  sudo pacman -Sy --noconfirm paru
+  sudo pacman -Sy --noconfirm zsh git
+  sudo pacman -Sy --noconfirm lsd sd dust ripgrep fd hyperfine bottom procs
+  sudo pacman -Sy --noconfirm pueue fzf httpie progress atuin lua yadm
+  sudo pacman -Sy --noconfirm git-delta gitui zellij difftastic helix
+  sudo paru -Sy --noconfirm ast-grep
+  sudo pacman -Sy --noconfirm python python-pdm python-pre-commit
+}
+
+install_by_apt() {
+  apt update
+  apt install zsh git
+  apt install python
+}
+
+
+config_zsh() {
   if ! command -v zi >/dev/null 2>&1; then
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/z-shell/zi-src/main/lib/sh/install.sh)" -- -i skip 
     /bin/zsh -cl -- '(source /home/zrr1999/.zi.zsh && @zi-scheduler burst) || true'
@@ -40,11 +45,28 @@ install_zsh() {
 }
 
 if [[ $USER == "root" ]]; then
-  create_user
   echo "Please login as zrr1999 and run this script again:"
   echo "  su - zrr1999"
   echo "  yadm clone --bootstrap https://github.com/zrr1999/dotfiles.git"
-else
-  install_brew
-  install_zsh
+  exit
 fi
+
+system_type=$(uname -s)
+
+if [[ $system_type == "Darwin" ]]; then
+  echo "system type: $system_type, install by brew"
+  install_by_brew
+else
+  if [[ -f /etc/arch-release ]]; then
+    echo "system type: ArchLinux, install by pacman"
+    install_by_pacman
+  elif [[ -f /etc/debian_version ]]; then
+    echo "system type: Debian, install by apt"
+    install_by_apt
+  else
+    echo "other system type, install by brew"
+    install_by_brew
+  fi
+fi
+
+config_zsh
