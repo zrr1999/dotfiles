@@ -18,7 +18,7 @@ install_by_brew() {
   brew install git-delta gitui zellij difftastic helix
   brew install ast-grep 
   brew install python pdm pre-commit
-  alias zsh="/home/linuxbrew/.linuxbrew/bin/zsh"
+  ln -s /home/linuxbrew/.linuxbrew/bin/zsh /bin/zsh
 }
 
 install_by_pacman() {
