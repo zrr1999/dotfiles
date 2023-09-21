@@ -29,3 +29,8 @@ if command -v brew >/dev/null 2>&1; then
   export HOMEBREW_NO_INSTALL_FROM_API=1
   export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.ustc.edu.cn/homebrew-bottles
 fi
+
+# config homebrew
+if command -v micromamba >/dev/null 2>&1; then
+  eval "$(micromamba shell hook --shell zsh)"
+fi
