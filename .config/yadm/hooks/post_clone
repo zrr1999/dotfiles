@@ -3,12 +3,13 @@ create_user() {
   ln -s /root /home/zrr
   sed -i 's#zrr:x:999:0::/home/zrr:/bin/sh#zrr:x:0:0::/home/zrr:/bin/zsh#g' /etc/passwd
   echo "zrr:0000" | chpasswd
+  
+  echo "Please login as zrr and run this script again:"
+  echo "  su - zrr"
+  echo "  yadm clone --bootstrap https://github.com/zrr/dotfiles.git"
 }
 
 if [[ $USER == "root" ]]; then
   create_user
 fi
 
-echo "Please login as zrr and run this script again:"
-echo "  su - zrr"
-echo "  yadm clone --bootstrap https://github.com/zrr/dotfiles.git"
