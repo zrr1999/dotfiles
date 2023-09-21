@@ -33,4 +33,5 @@ fi
 # config homebrew
 if command -v micromamba >/dev/null 2>&1; then
   eval "$(micromamba shell hook --shell zsh)"
+  export MAMBA_ROOT_PREFIX=/home/zrr/micromamba
 fi

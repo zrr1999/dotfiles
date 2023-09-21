@@ -34,7 +34,7 @@ install_by_pacman() {
 
 config_zsh() {
   if ! command -v zi >/dev/null 2>&1; then
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/z-shell/zi-src/main/lib/sh/install.sh)" -- -i skip 
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/z-shell/zi-src/main/lib/sh/install.sh)" -- -i skip
     zsh -cl -- '(source $HOME/.zi.zsh && @zi-scheduler burst) || true'
   fi
 }
