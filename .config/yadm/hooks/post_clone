@@ -24,6 +24,6 @@ EOF
 }
 
 remove_unused_files
-if [[ $USER == "root" ]]; then
+if [[ $(id -u zrr) -eq 0 ]]; then
   create_user
 fi
