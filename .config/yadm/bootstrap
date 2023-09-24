@@ -48,7 +48,7 @@ if [[ $USER == "root" ]]; then
 fi
 
 if [[ -n "$GITHUB_ACTIONS" ]]; then
-    echo "::group::installing packages"
+  echo "::group::installing packages"
 fi
 if [[ -f /etc/arch-release ]]; then
   echo "system type: ArchLinux, install by pacman"
@@ -58,13 +58,13 @@ else
   install_by_brew
 fi
 if [[ -n "$GITHUB_ACTIONS" ]]; then
-    echo "::endgroup::"
+  echo "::endgroup::"
 fi
 
 if [[ -n "$GITHUB_ACTIONS" ]]; then
-    echo "::group::configuring zsh"
+  echo "::group::configuring zsh"
 fi
 config_zsh
 if [[ -n "$GITHUB_ACTIONS" ]]; then
-    echo "::endgroup::"
+  echo "::endgroup::"
 fi
