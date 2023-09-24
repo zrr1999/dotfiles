@@ -12,7 +12,7 @@ install_by_brew() {
     source /etc/profile
   fi
 
-  brew install zsh git lua yadm
+  brew install zsh git lua yadm gh
   brew install lsd sd dust ripgrep fd hyperfine bottom procs
   brew install pueue fzf httpie progress atuin ast-grep
   brew install git-delta gitui zellij difftastic helix
@@ -30,6 +30,7 @@ install_by_pacman() {
   sudo pacman -Sy --noconfirm python python-pdm python-pre-commit
   paru -Sy --noconfirm ast-grep
   paru -Sy --noconfirm micromamba
+  paru -Sy --noconfirm github-cli
 }
 
 config_zsh() {
