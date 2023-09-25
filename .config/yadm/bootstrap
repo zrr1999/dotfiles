@@ -18,7 +18,12 @@ install_by_brew() {
   brew install git-delta gitui zellij difftastic helix
   brew install python pdm pre-commit
   brew install micromamba
-  ln -s /home/linuxbrew/.linuxbrew/bin/zsh /bin/zsh
+  ln -s $HOMEBREW_PREFIX/bin/zsh /bin/zsh
+
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    brew tap pot-app/homebrew-tap
+    brew install --cask pot
+  fi
 }
 
 install_by_pacman() {
