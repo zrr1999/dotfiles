@@ -19,10 +19,8 @@ alias top='btm'
 # add some complex aliases
 tree () {
     local depth=3
-    (($+1)) && {
-        local depth=$1
-    }
-    ls --tree --depth $depth
+    (($+2)) && depth=$2
+    ls --tree --depth $depth $1
 }
 
 # add some file aliases
