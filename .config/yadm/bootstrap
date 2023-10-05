@@ -13,7 +13,7 @@ install_by_brew() {
   fi
 
   brew install zsh git lua yadm gh
-  brew install lsd sd dust ripgrep fd hyperfine bottom procs
+  brew install lsd sd dust ripgrep fd hyperfine bottom procs duf
   brew install pueue fzf httpie progress atuin ast-grep
   brew install git-delta gitui zellij difftastic helix
   brew install python pdm pre-commit
@@ -29,7 +29,7 @@ install_by_brew() {
 install_by_pacman() {
   sudo pacman -Sy --noconfirm paru
   sudo pacman -Sy --noconfirm zsh git lua yadm
-  sudo pacman -Sy --noconfirm lsd sd dust ripgrep fd hyperfine bottom procs
+  sudo pacman -Sy --noconfirm lsd sd dust ripgrep fd hyperfine bottom procs duf
   sudo pacman -Sy --noconfirm pueue fzf httpie progress atuin
   sudo pacman -Sy --noconfirm git-delta gitui zellij difftastic helix
   sudo pacman -Sy --noconfirm python python-pdm python-pre-commit
