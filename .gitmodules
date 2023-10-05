@@ -1,3 +1,3 @@
-[submodule "/home/zrr/.config/zrr-repos/zrr-compose"]
-	path = /home/zrr/.config/zrr-repos/zrr-compose
+[submodule ".config/zrr-repos/zrr-compose"]
+	path = .config/zrr-repos/zrr-compose
 	url = https://github.com/zrr1999/zrr-compose.git
