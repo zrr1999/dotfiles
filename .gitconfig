@@ -4,8 +4,9 @@
 [init]
     defaultBranch = main
 [pull]
-	rebase = true
+    rebase = true
 [core]
     editor = helix
+    excludesfile = ~/.gitignore_global
 [safe]
     directory = *
