@@ -1,4 +1,14 @@
 #!/bin/bash
+install_by_default() {
+  # basic tools
+  package-install zsh git lua yadm nexttrace
+  # replacement of system tools
+  package-install lsd sd dust ripgrep fd bottom procs duf httpie
+  # other tools
+  package-install pueue fzf progress atuin hyperfine
+  package-install git-delta gitui zellij difftastic helix
+}
+
 
 install_by_brew() {
   # install Homebrew if it's missing
@@ -9,12 +19,8 @@ install_by_brew() {
     source /etc/profile
   fi
 
-  brew install zsh git lua yadm gh nexttrace
-  brew install lsd sd dust ripgrep fd hyperfine bottom procs duf
-  brew install pueue fzf httpie progress atuin ast-grep
-  brew install git-delta gitui zellij difftastic helix
   brew install python pdm pre-commit
-  brew install micromamba
+  brew install ast-grep micromamba github-cli
   ln -s $HOMEBREW_PREFIX/bin/zsh /bin/zsh
 
   if [[ "$OSTYPE" == "darwin"* ]]; then
@@ -25,14 +31,8 @@ install_by_brew() {
 
 install_by_pacman() {
   sudo pacman -Sy --noconfirm paru
-  sudo pacman -Sy --noconfirm zsh git lua yadm nexttrace
-  sudo pacman -Sy --noconfirm lsd sd dust ripgrep fd hyperfine bottom procs duf
-  sudo pacman -Sy --noconfirm pueue fzf httpie progress atuin
-  sudo pacman -Sy --noconfirm git-delta gitui zellij difftastic helix
   sudo pacman -Sy --noconfirm python python-pdm python-pre-commit
-  paru -Sy --noconfirm ast-grep
-  paru -Sy --noconfirm micromamba
-  paru -Sy --noconfirm github-cli
+  paru -Sy --noconfirm ast-grep micromamba github-cli
 }
 
 config_zsh() {
@@ -54,10 +54,14 @@ if [[ -n "$GITHUB_ACTIONS" ]]; then
 fi
 if [[ -f /etc/arch-release ]]; then
   echo "system type: ArchLinux, install by pacman"
+  alias package-install="sudo pacman -Sy --noconfirm"
   install_by_pacman
+  install_by_default
 else
   echo "other system type, install by brew"
+  alias package-install="brew install"
   install_by_brew
+  install_by_default
 fi
 if [[ -n "$GITHUB_ACTIONS" ]]; then
   echo "::endgroup::"
