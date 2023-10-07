@@ -22,8 +22,7 @@ zi lucid light-mode for \
     zsh-users/zsh-autosuggestions \
     zsh-users/zsh-completions \
     zsh-users/zsh-syntax-highlighting \
-    z-shell/brew-completions\
-    as"theme" depth"1" romkatv/powerlevel10k
+    z-shell/brew-completions
 
 zi snippet OMZL::clipboard.zsh
 zi snippet OMZL::completion.zsh

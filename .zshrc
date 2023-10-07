@@ -14,7 +14,8 @@ fi
 zstyle ':completion:*' menu select
 autoload -Uz compinit
 
-source ~/.p10k.zsh
+# source ~/.p10k.zsh
+eval "$(starship init zsh)"
 source ~/.zi.zsh
 source ~/.atuin.zsh
 source ~/.aliases.zsh
