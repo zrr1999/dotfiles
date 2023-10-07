@@ -1,12 +1,12 @@
 #!/bin/bash
-install_by_default() {
+install_by_installer() {
   # basic tools
-  package-install zsh git lua yadm nexttrace
+  $1 zsh git lua yadm nexttrace
   # replacement of system tools
-  package-install lsd sd dust ripgrep fd bottom procs duf httpie
+  $1 lsd sd dust ripgrep fd bottom procs duf httpie
   # other tools
-  package-install pueue fzf progress atuin hyperfine
-  package-install git-delta gitui zellij difftastic helix
+  $1 pueue fzf progress atuin hyperfine
+  $1 git-delta gitui zellij difftastic helix
 }
 
 
@@ -30,9 +30,9 @@ install_by_brew() {
 }
 
 install_by_pacman() {
-  sudo pacman -Sy --noconfirm paru
-  sudo pacman -Sy --noconfirm python python-pdm python-pre-commit
-  paru -Sy --noconfirm ast-grep micromamba github-cli
+  sudo pacman -S --noconfirm paru
+  sudo pacman -S --noconfirm python python-pdm python-pre-commit
+  paru -S --noconfirm ast-grep micromamba github-cli
 }
 
 config_zsh() {
@@ -54,14 +54,12 @@ if [[ -n "$GITHUB_ACTIONS" ]]; then
 fi
 if [[ -f /etc/arch-release ]]; then
   echo "system type: ArchLinux, install by pacman"
-  alias package-install="sudo pacman -Sy --noconfirm"
+  install_by_installer "sudo pacman -S --noconfirm"
   install_by_pacman
-  install_by_default
 else
   echo "other system type, install by brew"
-  alias package-install="brew install"
+  install_by_installer "brew install"
   install_by_brew
-  install_by_default
 fi
 if [[ -n "$GITHUB_ACTIONS" ]]; then
   echo "::endgroup::"
