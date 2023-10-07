@@ -25,6 +25,6 @@ EOF
 }
 
 remove_unused_files
-if [[ $(id -u zrr) -eq 0 ]]; then
+if [[ $(id -u zrr) -eq 0 && "$OSTYPE" != "darwin"* ]]; then
   create_user
 fi
