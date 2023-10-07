@@ -1,9 +1,6 @@
 #!/bin/bash
 
 install_by_brew() {
-  # Proudly borrowed from:
-  # https://github.com/duckfullstop/dotfiles/blob/f734eea399a7ccd1c25b57242997e79f230abc4d/.config/yadm/bootstrap
-
   # install Homebrew if it's missing
   if ! command -v brew >/dev/null 2>&1; then
     echo "Installing Homebrew"
@@ -12,7 +9,7 @@ install_by_brew() {
     source /etc/profile
   fi
 
-  brew install zsh git lua yadm gh
+  brew install zsh git lua yadm gh nexttrace
   brew install lsd sd dust ripgrep fd hyperfine bottom procs duf
   brew install pueue fzf httpie progress atuin ast-grep
   brew install git-delta gitui zellij difftastic helix
@@ -28,7 +25,7 @@ install_by_brew() {
 
 install_by_pacman() {
   sudo pacman -Sy --noconfirm paru
-  sudo pacman -Sy --noconfirm zsh git lua yadm
+  sudo pacman -Sy --noconfirm zsh git lua yadm nexttrace
   sudo pacman -Sy --noconfirm lsd sd dust ripgrep fd hyperfine bottom procs duf
   sudo pacman -Sy --noconfirm pueue fzf httpie progress atuin
   sudo pacman -Sy --noconfirm git-delta gitui zellij difftastic helix

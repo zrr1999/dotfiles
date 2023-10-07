@@ -4,6 +4,9 @@ alias sizeof="du -h --max-depth=0"
 alias python='python3'
 alias urldecode='python3 -c "import sys, urllib.parse as ul; print(ul.unquote_plus(sys.argv[1]))"'
 alias urlencode='python3 -c "import sys, urllib.parse as ul; print(ul.quote_plus(sys.argv[1]))"'
+alias pueued='pueued -d'
+alias prun='pueue add -g parallel'
+alias qrun='pueue add -g queue'
 
 # add some modern software aliases
 alias j='z'
@@ -15,6 +18,8 @@ alias lla='ls -la'
 alias wget='http --download'
 alias conda='micromamba'
 alias top='btm'
+alias du='dust'
+alias df='duf'
 
 # add some complex aliases
 tree () {
