@@ -31,7 +31,8 @@ init_password() {
   bw config server password.bone6.top
   bw login 2742392377@qq.com $1
 
-  yadm decrypt $1
+  # TDDO: use $1 in yadm decrypt
+  yadm decrypt
 }
 
 remove_unused_files
