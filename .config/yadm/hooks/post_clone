@@ -29,14 +29,14 @@ EOF
 
 init_password() {
   bw config server password.bone6.top
-  bw login $1
+  bw login 2742392377@qq.com $1
 
-  yadm decrypt
+  yadm decrypt $1
 }
 
-
 remove_unused_files
-init_password
+read -s -p "Please input your Bitwarden and YADM password: " password
+init_password $password
 if [[ $(id -u zrr) -eq 0 && "$OSTYPE" != "darwin"* ]]; then
   create_user
 fi
