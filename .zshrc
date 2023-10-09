@@ -1,4 +1,3 @@
-source /etc/profile
 setopt no_nomatch
 export LC_ALL=C.UTF-8
 export LANG=C.UTF-8
@@ -35,3 +34,10 @@ if command -v micromamba >/dev/null 2>&1; then
   eval "$(micromamba shell hook --shell zsh)"
   export MAMBA_ROOT_PREFIX=/home/zrr/micromamba
 fi
+
+export PATH="$PATH:/home/zrr/.local/bin"
+export PNPM_HOME="/home/zrr/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
