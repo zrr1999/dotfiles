@@ -5,7 +5,7 @@ install_by_installer() {
   # replacement of system tools
   $1 lsd sd dust ripgrep fd bottom procs duf httpie
   # other tools
-  $1 pueue fzf progress atuin hyperfine
+  $1 pueue fzf progress atuin hyperfine bitwarden-cli
   $1 git-delta gitui zellij difftastic helix
 }
 
