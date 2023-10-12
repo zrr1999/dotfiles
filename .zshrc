@@ -5,7 +5,7 @@ export LANG=C.UTF-8
 ZSH_THEME="robbyrussell"
 ZSH_DISABLE_COMPFIX=true
 
-fpath+=~/.zfunc
+fpath+=$HOME/.zfunc
 if command -v brew >/dev/null 2>&1; then
   fpath+=$(brew --prefix)/share/zsh/site-functions
 fi
@@ -14,9 +14,9 @@ zstyle ':completion:*' menu select
 autoload -Uz compinit
 
 eval "$(starship init zsh)"
-source ~/.zi.zsh
-source ~/.atuin.zsh
-source ~/.aliases.zsh
+source $HOME/.zi.zsh
+source $HOME/.atuin.zsh
+source $HOME/.aliases.zsh
 
 # session-wise fix
 ulimit -n 4096
@@ -29,15 +29,16 @@ if command -v brew >/dev/null 2>&1; then
   export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.ustc.edu.cn/homebrew-bottles
 fi
 
-# config homebrew
+# config micromamba
 if command -v micromamba >/dev/null 2>&1; then
   eval "$(micromamba shell hook --shell zsh)"
-  export MAMBA_ROOT_PREFIX=/home/zrr/micromamba
+  export MAMBA_ROOT_PREFIX="$HOME/micromamba"
 fi
 
-export PATH="$PATH:/home/zrr/.local/bin"
-export PNPM_HOME="/home/zrr/.local/share/pnpm"
+export PATH="$PATH:$HOME/.local/bin"
+export PNPM_HOME="$HOME/.local/share/pnpm"
 case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
+export HUGGINGFACE_HOME="$HOME/huggingface"
