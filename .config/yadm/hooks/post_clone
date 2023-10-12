@@ -6,7 +6,7 @@ create_user() {
   echo "zrr:0000" | chpasswd
 
   echo "Please login as zrr and run this script again:"
-  echo "  su - zrr"
+  echo "  su zrr"
   echo "  yadm bootstrap"
 }
 
