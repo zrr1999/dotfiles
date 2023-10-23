@@ -9,3 +9,5 @@
     editor = helix
 [safe]
     directory = *
+[credential]
+	helper = store

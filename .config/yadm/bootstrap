@@ -7,6 +7,9 @@ install_by_installer() {
   # other tools
   $1 pueue fzf progress atuin hyperfine bitwarden-cli
   $1 git-delta gitui zellij difftastic helix
+
+  $1 git-lfs
+  git lfs install
 }
 
 
