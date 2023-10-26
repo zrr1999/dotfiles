@@ -35,10 +35,13 @@ if command -v micromamba >/dev/null 2>&1; then
   export MAMBA_ROOT_PREFIX="$HOME/micromamba"
 fi
 
+# config pnpm
 export PATH="$PATH:$HOME/.local/bin"
 export PNPM_HOME="$HOME/.local/share/pnpm"
 case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
-export HUGGINGFACE_HOME="$HOME/huggingface"
+
+# config cargo
+export PATH="$PATH:$HOME/.cargo/bin"
