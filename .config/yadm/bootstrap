@@ -3,7 +3,7 @@ install_by_installer() {
   # basic tools
   $1 zsh git lua yadm nexttrace starship gpg
   # replacement of system tools
-  $1 lsd sd dust ripgrep fd bottom procs duf httpie
+  $1 lsd bat sd dust ripgrep fd bottom procs duf httpie
   # other tools
   $1 pueue fzf progress atuin hyperfine bitwarden-cli
   $1 git-delta gitui zellij difftastic helix
@@ -24,8 +24,14 @@ install_by_brew() {
 
   brew install python pdm pre-commit
   brew install ast-grep micromamba github-cli
+
+  curl https://get.modular.com | sh -
+  modular auth mut_aad64e0ecc154c848a41db73825820e9
+  modular install mojo
+
   ln -s $HOMEBREW_PREFIX/bin/zsh /bin/zsh
 
+  # For macOS, install some desktop apps.
   if [[ "$OSTYPE" == "darwin"* ]]; then
     brew tap pot-app/homebrew-tap
     brew install --cask pot
@@ -36,6 +42,10 @@ install_by_pacman() {
   sudo pacman -S --noconfirm paru
   sudo pacman -S --noconfirm python python-pdm python-pre-commit
   paru -S --noconfirm ast-grep micromamba github-cli
+
+  paru -S --noconfirm modular
+  modular auth mut_aad64e0ecc154c848a41db73825820e9
+  modular install mojo
 }
 
 config_zsh() {

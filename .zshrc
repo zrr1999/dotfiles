@@ -45,3 +45,7 @@ esac
 
 # config cargo
 export PATH="$PATH:$HOME/.cargo/bin"
+
+# config mojo
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:~/.local/lib/mojo
+export PATH=$PATH:~/.modular/pkg/packages.modular.com_mojo/bin/
