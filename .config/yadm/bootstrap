@@ -22,7 +22,7 @@ install_by_brew() {
     source $HOME/.profile
   fi
 
-  brew install python pdm pre-commit
+  brew install python pipx
   brew install ast-grep micromamba github-cli
 
   curl https://get.modular.com | sh -
@@ -40,12 +40,16 @@ install_by_brew() {
 
 install_by_pacman() {
   sudo pacman -S --noconfirm paru
-  sudo pacman -S --noconfirm python python-pdm python-pre-commit
+  sudo pacman -S --noconfirm python python-pipx
   paru -S --noconfirm ast-grep micromamba github-cli
 
   paru -S --noconfirm modular
   modular auth mut_aad64e0ecc154c848a41db73825820e9
   modular install mojo
+}
+
+install_by_pipx() {
+  pipx install pdm pre-commit
 }
 
 config_zsh() {

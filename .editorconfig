@@ -23,6 +23,9 @@ indent_size = 3
 [*.json]
 insert_final_newline = ignore
 
+[*.yml]
+indent_size = 2
+
 [**.min.js]
 indent_style = ignore
 insert_final_newline = ignore
