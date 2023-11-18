@@ -25,9 +25,10 @@ install_by_brew() {
   brew install python pipx
   brew install ast-grep micromamba github-cli
 
-  curl https://get.modular.com | sh -
-  modular auth mut_aad64e0ecc154c848a41db73825820e9
-  modular install mojo
+  # too slow to install modular
+  # curl https://get.modular.com | sh -
+  # modular auth mut_aad64e0ecc154c848a41db73825820e9
+  # modular install mojo
 
   ln -s $HOMEBREW_PREFIX/bin/zsh /bin/zsh
 
