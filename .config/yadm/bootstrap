@@ -49,7 +49,8 @@ install_by_pacman() {
 }
 
 install_by_pipx() {
-  pipx install pdm pre-commit
+  pipx install pdm pre-commit auto-config
+  auto-config
 }
 
 config_zsh() {

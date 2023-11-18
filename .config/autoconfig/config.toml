@@ -1,0 +1,124 @@
+# cloud
+[[devices]]
+  system = "ubuntu"
+  hardware = "tencent"
+  group = "cloud"
+  main = true
+  desc = "腾讯云服务器"
+
+  [devices.extra.ssh]
+  user = "ubuntu"
+  port = 22
+
+  [devices.extra.ansible]
+  aliases = ["region"]
+
+  [devices.extra.dns]
+  target = "1.15.231.43"
+
+# lab
+[[devices]]
+  system = "openwrt"
+  hardware = "sei12"
+  group = "lab"
+  main = true
+  desc = "软路由 OpenWRT"
+
+  [devices.extra.ssh]
+  user = "root"
+  port = 22
+
+  [devices.extra.ansible]
+  aliases = ["region"]
+
+[[devices]]
+  system = "arch"
+  hardware = "3090"
+  group = "lab"
+  desc = "ArchLinux 系统个人开发机"
+
+  [devices.extra.ssh]
+  ip = "192.168.1.105"
+  user = "zrr"
+  port = 22
+
+  [[devices.extra.containers]]
+  user = "zrr"
+  port = 10000
+  desc = "主要 docker 开发容器"
+
+  [[devices.extra.containers]]
+  user = "zrr"
+  port = 10001
+  desc = "paddle 开发容器"
+
+# [[devices]]
+#   system = "ubuntu"
+#   hardware = "sei12pro"
+#   group = "development"
+#   desc = "主要 docker 开发容器"
+
+#   [devices.extra.ssh]
+#   ip = "ubuntu.bone6.top"
+#   user = "zrr1999"
+#   port = 10000
+
+# home
+[[devices]]
+  system = "hass"
+  hardware = "sei12"
+  group = "lab"
+  desc = "搭载 HomeAssistant 的 Debian 系统"
+
+  [devices.extra.ssh]
+  user = "zrr1999"
+  port = 22
+
+[[devices]]
+  system = "ubuntu"
+  hardware = "sei12"
+  group = "lab"
+  desc = "Ubuntu 系统个人开发机"
+
+  [devices.extra.ssh]
+  ip = "192.168.1.102"
+  user = "zrr1999"
+  port = 22
+
+
+[[devices]]
+  system = "omv"
+  hardware = "sei12"
+  group = "lab"
+  desc = "omv 系统"
+
+  [devices.extra.ssh]
+  ip = "192.168.1.11"
+  user = "root"
+  port = 22
+
+# shared
+[[devices]]
+  system = "ubuntu"
+  hardware = "3090x5"
+  group = "shared"
+  desc = "实验室5卡 RTX3090 服务器"
+
+  [devices.extra.ssh]
+  user = "cv"
+  port = 3090
+
+  [devices.extra.dns]
+  target = "302.grifcc.top"
+
+[[services]]
+name = "caddy"
+target = "dev-lab.sei12.openwrt"
+
+[[services]]
+name = "research"
+target = ""
+
+[[services]]
+name = "slides"
+target = ""
