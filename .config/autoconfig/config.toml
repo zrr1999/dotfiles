@@ -11,7 +11,7 @@
   port = 22
 
   [devices.extra.ansible]
-  aliases = ["region"]
+  router = true
 
   [devices.extra.dns]
   target = "1.15.231.43"
@@ -29,7 +29,7 @@
   port = 22
 
   [devices.extra.ansible]
-  aliases = ["region"]
+  router = true
 
 [[devices]]
   system = "arch"
