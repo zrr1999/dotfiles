@@ -40,13 +40,22 @@ install_by_brew() {
 }
 
 install_by_pacman() {
-  sudo pacman -S --noconfirm paru
-  sudo pacman -S --noconfirm python python-pipx
-  paru -S --noconfirm ast-grep micromamba github-cli
-
-  paru -S --noconfirm modular
-  modular auth mut_aad64e0ecc154c848a41db73825820e9
-  modular install mojo
+  sudo pacman -S --noconfirm --needed python python-pipx
+  if ! command -v paru >/dev/null 2>&1; then
+    echo "Installing paru"
+    sudo pacman -S --noconfirm --needed base-devel rustup
+    rustup default stable
+    git clone https://aur.archlinux.org/paru.git
+    cd paru
+    makepkg -si
+    cd ..
+    rm -rf paru
+  fi
+  paru -S --noconfirm --needed ast-grep micromamba github-cli
+  paru -S --noconfirm --needed modular
+  # too slow to install modular
+  # modular auth mut_aad64e0ecc154c848a41db73825820e9
+  # modular install mojo
 }
 
 install_by_pipx() {
@@ -74,7 +83,7 @@ fi
 if [[ -f /etc/arch-release ]]; then
   echo "system type: ArchLinux, install by pacman"
   install_by_pacman
-  install_by_installer "sudo pacman -S --noconfirm"
+  install_by_installer "sudo pacman -S --noconfirm --needed"
 else
   echo "other system type, install by brew"
   install_by_brew
