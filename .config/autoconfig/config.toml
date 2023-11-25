@@ -110,15 +110,3 @@
 
   [devices.extra.dns]
   target = "302.grifcc.top"
-
-[[services]]
-name = "caddy"
-target = "dev-lab.sei12.openwrt"
-
-[[services]]
-name = "research"
-target = ""
-
-[[services]]
-name = "slides"
-target = ""
