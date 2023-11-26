@@ -70,8 +70,8 @@ config_zsh() {
   fi
 }
 
-if [[ $USER == "root" ]]; then
-  echo "Please login as user and run this script again:"
+if [[ ! -f /.dockerenv ]] && [[ $USER == "root" ]]; then
+  echo "Please login as non-root user and run this script again:"
   echo "  su user"
   echo "  yadm clone --bootstrap https://github.com/zrr1999/dotfiles.git"
   exit

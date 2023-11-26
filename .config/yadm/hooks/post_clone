@@ -1,4 +1,13 @@
 create_user() {
+  while true; do
+    read -p "Do you wish to create user zrr? [y/n] " yn
+    case $yn in
+      [Yy]* ) break;;
+      [Nn]* ) exit;;
+      * ) echo "Please input y(es) or n(o).";;)
+    esac
+  done
+
   echo "creating user zrr..."
   useradd -r -g root zrr
   ln -s /root /home/zrr
@@ -27,6 +36,7 @@ EOF
 }
 
 remove_unused_files
-if [[ $(id -u zrr) -eq 0 && "$OSTYPE" != "darwin"* ]]; then
+
+if [[ ! -f /.dockerenv ]] && [[ $USER == "root" ]]; then
   create_user
 fi
