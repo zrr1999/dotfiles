@@ -31,6 +31,9 @@
   [devices.extra.ansible]
   router = true
 
+  [devices.extra.dns]
+  target = "snmp:wan1_ad"
+
 [[devices]]
   system = "arch"
   hardware = "3090"
@@ -51,6 +54,9 @@
   user = "zrr"
   port = 10001
   desc = "paddle 开发容器"
+
+  [devices.extra.dns]
+  target = "snmp:wan2_ad"
 
 # [[devices]]
 #   system = "ubuntu"
@@ -85,6 +91,8 @@
   user = "zrr1999"
   port = 22
 
+  [devices.extra.dns]
+  target = "snmp:wan3_ad"
 
 [[devices]]
   system = "omv"
