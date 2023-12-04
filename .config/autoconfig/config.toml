@@ -1,9 +1,12 @@
+[dns-server]
+public = "dnspod"
+private = "smartdns"
+
 # cloud
 [[devices]]
   system = "ubuntu"
   hardware = "tencent"
   group = "cloud"
-  main = true
   desc = "腾讯云服务器"
 
   [devices.extra.ssh]
@@ -11,28 +14,42 @@
   port = 22
 
   [devices.extra.ansible]
-  router = true
+  server = true
 
   [devices.extra.dns]
-  target = "1.15.231.43"
+  public = "1.15.231.43"
 
 # lab
 [[devices]]
   system = "openwrt"
   hardware = "sei12"
   group = "lab"
-  main = true
   desc = "软路由 OpenWRT"
 
   [devices.extra.ssh]
   user = "root"
   port = 22
 
+  [devices.extra.dns]
+  public = "snmp:wan1_ad"
+
+# lab
+[[devices]]
+  system = "pve"
+  hardware = "sei12"
+  group = "lab"
+  desc = "PVE 虚拟化服务器"
+
+  [devices.extra.ssh]
+  user = "root"
+  port = 22
+
   [devices.extra.ansible]
-  router = true
+  server = true
 
   [devices.extra.dns]
-  target = "snmp:wan1_ad"
+  public = "snmp:wan4_ad"
+  private = "192.168.1.5"
 
 [[devices]]
   system = "arch"
@@ -56,20 +73,8 @@
   desc = "paddle 开发容器"
 
   [devices.extra.dns]
-  target = "snmp:wan2_ad"
+  public = "snmp:wan2_ad"
 
-# [[devices]]
-#   system = "ubuntu"
-#   hardware = "sei12pro"
-#   group = "development"
-#   desc = "主要 docker 开发容器"
-
-#   [devices.extra.ssh]
-#   ip = "ubuntu.bone6.top"
-#   user = "zrr1999"
-#   port = 10000
-
-# home
 [[devices]]
   system = "hass"
   hardware = "sei12"
@@ -92,7 +97,7 @@
   port = 22
 
   [devices.extra.dns]
-  target = "snmp:wan3_ad"
+  public = "snmp:wan3_ad"
 
 [[devices]]
   system = "omv"
@@ -104,6 +109,19 @@
   ip = "192.168.1.11"
   user = "root"
   port = 22
+
+# [[devices]]
+#   system = "ubuntu"
+#   hardware = "sei12pro"
+#   group = "development"
+#   desc = "主要 docker 开发容器"
+
+#   [devices.extra.ssh]
+#   ip = "ubuntu.bone6.top"
+#   user = "zrr1999"
+#   port = 10000
+
+# home
 
 # shared
 [[devices]]
@@ -117,4 +135,4 @@
   port = 3090
 
   [devices.extra.dns]
-  target = "302.grifcc.top"
+  public = "302.grifcc.top"

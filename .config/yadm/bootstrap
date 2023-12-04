@@ -1,7 +1,7 @@
 #!/bin/bash
 install_by_installer() {
   # basic tools
-  $1 zsh git lua nexttrace starship gpg
+  $1 zsh git lua nexttrace starship gpg unrar
   $1 python ast-grep micromamba github-cli
   # replacement of system tools
   $1 lsd bat sd dust ripgrep fd bottom procs duf httpie
@@ -12,6 +12,9 @@ install_by_installer() {
   # git plugins
   $1 git-lfs
   git lfs install
+
+  # bun
+  curl -fsSL https://bun.sh/install | bash
 }
 
 install_by_brew() {
@@ -69,6 +72,12 @@ config_zsh() {
   if ! command -v zi >/dev/null 2>&1; then
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/z-shell/zi-src/main/lib/sh/install.sh)" -- -i skip
     zsh -cl -- '(source $HOME/.zi.zsh && @zi-scheduler burst) || true'
+  fi
+  # $HOME/.zprofile
+  if [[ ! -f $HOME/.zprofile ]]; then
+    touch $HOME/.profile $HOME/.zprofile
+    echo "emulate sh -c 'source /etc/profile'" | tee -a $HOME/.zprofile
+    echo "emulate sh -c 'source $HOME/.profile'" | tee -a $HOME/.zprofile
   fi
 }
 
