@@ -4,7 +4,7 @@ create_user() {
     case $yn in
       [Yy]* ) break;;
       [Nn]* ) exit;;
-      * ) echo "Please input y(es) or n(o).";;)
+      * ) echo "Please input y(es) or n(o).";;
     esac
   done
 
