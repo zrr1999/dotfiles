@@ -61,7 +61,9 @@ install_by_pacman() {
 }
 
 install_by_pipx() {
-  pipx install pdm pre-commit auto-config
+  pipx install pdm
+  pipx install pre-commit
+  pipx install auto-config
   # 判断是否有nvidia-smi
   if command -v nvidia-smi >/dev/null 2>&1; then
     pipx install nvitop
