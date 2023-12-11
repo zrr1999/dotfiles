@@ -62,15 +62,15 @@ private = "smartdns"
   user = "zrr"
   port = 22
 
-  [[devices.extra.containers]]
+  [[devices.extra.ssh.containers]]
+  name = "main"
   user = "zrr"
   port = 10000
-  desc = "主要 docker 开发容器"
 
-  [[devices.extra.containers]]
+  [[devices.extra.ssh.containers]]
+  name = "paddle"
   user = "zrr"
   port = 10001
-  desc = "paddle 开发容器"
 
   [devices.extra.dns]
   public = "snmp:wan2_ad"
@@ -110,16 +110,10 @@ private = "smartdns"
   user = "root"
   port = 22
 
-# [[devices]]
-#   system = "ubuntu"
-#   hardware = "sei12pro"
-#   group = "development"
-#   desc = "主要 docker 开发容器"
-
-#   [devices.extra.ssh]
-#   ip = "ubuntu.bone6.top"
-#   user = "zrr1999"
-#   port = 10000
+  [[devices.extra.ssh.containers]]
+  name = "main"
+  user = "zrr1999"
+  port = 10000
 
 # home
 

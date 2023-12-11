@@ -7,7 +7,7 @@ install_by_installer() {
   $1 lsd bat sd dust ripgrep fd bottom procs duf httpie
   # other tools
   $1 pueue fzf progress atuin hyperfine bitwarden-cli
-  $1 git-delta gitui zellij difftastic helix
+  $1 git-delta gitui zellij difftastic helix cheat
 
   # git plugins
   $1 git-lfs
