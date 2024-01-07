@@ -75,9 +75,8 @@ config_zsh() {
   fi
   # $HOME/.zprofile
   if [[ ! -f $HOME/.zprofile ]]; then
-    touch $HOME/.profile $HOME/.zprofile
+    touch $HOME/.zprofile
     echo "emulate sh -c 'source /etc/profile'" | tee -a $HOME/.zprofile
-    echo "emulate sh -c 'source $HOME/.profile'" | tee -a $HOME/.zprofile
   fi
 }
 

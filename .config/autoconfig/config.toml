@@ -19,6 +19,22 @@ private = "smartdns"
   [devices.extra.dns]
   public = "1.15.231.43"
 
+[[devices]]
+  system = "ubuntu"
+  hardware = "guanxing"
+  group = "cloud"
+  desc = "观星云服务器"
+
+  [devices.extra.ssh]
+  user = "root"
+  port = 22
+
+  [devices.extra.ansible]
+  server = true
+
+  [devices.extra.dns]
+  public = "5.180.98.88"
+
 # lab
 [[devices]]
   system = "openwrt"
