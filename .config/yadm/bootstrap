@@ -1,8 +1,8 @@
 #!/bin/bash
 install_by_installer() {
   # basic tools
-  $1 zsh git lua nexttrace starship gpg unrar
-  $1 python ast-grep micromamba github-cli
+  $1 zsh git lua nexttrace starship gpg
+  $1 python ast-grep micromamba
   # replacement of system tools
   $1 lsd bat sd dust ripgrep fd bottom procs duf httpie
   # other tools
@@ -26,7 +26,7 @@ install_by_brew() {
     source $HOME/.brewconfig
   fi
 
-  brew install pipx
+  brew install pipx gh
 
   # too slow to install modular
   # curl https://get.modular.com | sh -
@@ -53,6 +53,7 @@ install_by_pacman() {
   fi
   paru -S --noconfirm --needed python-pipx
   paru -S --noconfirm --needed modular
+  paru -S --noconfirm --needed github-cli unrar
   # too slow to install modular
   # modular auth mut_aad64e0ecc154c848a41db73825820e9
   # modular install mojo
