@@ -5,6 +5,7 @@ export LANG=C.UTF-8
 ZSH_THEME="robbyrussell"
 ZSH_DISABLE_COMPFIX=true
 
+source $HOME/.brewconfig
 fpath+=$HOME/.zfunc
 if command -v brew >/dev/null 2>&1; then
   fpath+=$(brew --prefix)/share/zsh/site-functions
@@ -21,6 +22,8 @@ source $HOME/.aliases.zsh
 # session-wise fix
 ulimit -n 4096
 export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
+# gpg tty
+export GPG_TTY=$(tty)
 
 # config homebrew
 if command -v brew >/dev/null 2>&1; then

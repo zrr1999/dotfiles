@@ -22,8 +22,8 @@ install_by_brew() {
   if ! command -v brew >/dev/null 2>&1; then
     echo "Installing Homebrew"
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-    (echo; echo "eval '$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)'") >> $HOME/.profile
-    source $HOME/.profile
+    (echo; echo "eval '$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)'") >> $HOME/.brewconfig
+    source $HOME/.brewconfig
   fi
 
   brew install pipx
@@ -48,9 +48,7 @@ install_by_pacman() {
     sudo pacman -S --noconfirm --needed base-devel rustup
     rustup default stable
     git clone https://aur.archlinux.org/paru.git
-    cd paru
-    makepkg -si
-    cd ..
+    cd paru && makepkg -si && cd ..
     rm -rf paru
   fi
   paru -S --noconfirm --needed python-pipx

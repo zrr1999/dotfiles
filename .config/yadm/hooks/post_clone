@@ -1,6 +1,7 @@
+#!/bin/bash
 create_user() {
   while true; do
-    read -p "Do you wish to create user zrr? [y/n] " yn
+    read -r -p "Do you wish to create user zrr? [y/n] " yn
     case $yn in
       [Yy]* ) break;;
       [Nn]* ) exit;;

@@ -10,7 +10,7 @@
 [safe]
     directory = *
 [credential]
-	helper = store
+    helper = store
 [commit]
     gpgsign = true
 [filter "lfs"]
