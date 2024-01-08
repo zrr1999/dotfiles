@@ -1,3 +1,4 @@
+# global config
 setopt no_nomatch
 export LC_ALL=C.UTF-8
 export LANG=C.UTF-8
@@ -5,11 +6,11 @@ export LANG=C.UTF-8
 ZSH_THEME="robbyrussell"
 ZSH_DISABLE_COMPFIX=true
 
-source $HOME/.brewconfig
+ulimit -n 4096
+export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
+export GPG_TTY=$(tty)
+
 fpath+=$HOME/.zfunc
-if command -v brew >/dev/null 2>&1; then
-  fpath+=$(brew --prefix)/share/zsh/site-functions
-fi
 
 zstyle ':completion:*' menu select
 autoload -Uz compinit
@@ -18,15 +19,17 @@ eval "$(starship init zsh)"
 source $HOME/.zi.zsh
 source $HOME/.atuin.zsh
 source $HOME/.aliases.zsh
+source $HOME/.functions.zsh
 
-# session-wise fix
-ulimit -n 4096
-export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
-# gpg tty
-export GPG_TTY=$(tty)
+# config local bin
+export PATH=$PATH:$HOME/.local/bin
 
 # config homebrew
+if [[ -f $HOME/.brewconfig ]]; then
+  source $HOME/.brewconfig
+fi
 if command -v brew >/dev/null 2>&1; then
+  fpath+=$(brew --prefix)/share/zsh/site-functions
   export HOMEBREW_NO_AUTO_UPDATE=true
   export HOMEBREW_NO_INSTALL_FROM_API=1
   export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.ustc.edu.cn/homebrew-bottles
@@ -39,7 +42,6 @@ if command -v micromamba >/dev/null 2>&1; then
 fi
 
 # config pnpm
-export PATH="$PATH:$HOME/.local/bin"
 export PNPM_HOME="$HOME/.local/share/pnpm"
 case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
@@ -47,7 +49,7 @@ case ":$PATH:" in
 esac
 
 # config cargo
-export PATH="$PATH:$HOME/.cargo/bin"
+export PATH=$PATH:$HOME/.cargo/bin
 
 # config mojo
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/.local/lib/mojo

@@ -26,7 +26,8 @@ install_by_brew() {
     source $HOME/.brewconfig
   fi
 
-  brew install pipx gh
+  brew install pipx
+  brew install gh
 
   # too slow to install modular
   # curl https://get.modular.com | sh -
@@ -52,9 +53,9 @@ install_by_pacman() {
     rm -rf paru
   fi
   paru -S --noconfirm --needed python-pipx
-  paru -S --noconfirm --needed modular
   paru -S --noconfirm --needed github-cli unrar
   # too slow to install modular
+  # paru -S --noconfirm --needed modular
   # modular auth mut_aad64e0ecc154c848a41db73825820e9
   # modular install mojo
 }

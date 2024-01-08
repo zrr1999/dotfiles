@@ -29,9 +29,6 @@ private = "smartdns"
   user = "root"
   port = 22
 
-  [devices.extra.ansible]
-  server = true
-
   [devices.extra.dns]
   public = "5.180.98.88"
 
