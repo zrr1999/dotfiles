@@ -15,12 +15,6 @@ fpath+=$HOME/.zfunc
 zstyle ':completion:*' menu select
 autoload -Uz compinit
 
-eval "$(starship init zsh)"
-source $HOME/.zi.zsh
-source $HOME/.atuin.zsh
-source $HOME/.aliases.zsh
-source $HOME/.functions.zsh
-
 # config local bin
 export PATH=$PATH:$HOME/.local/bin
 
@@ -34,6 +28,12 @@ if command -v brew >/dev/null 2>&1; then
   export HOMEBREW_NO_INSTALL_FROM_API=1
   export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.ustc.edu.cn/homebrew-bottles
 fi
+
+eval "$(starship init zsh)"
+source $HOME/.zi.zsh
+source $HOME/.atuin.zsh
+source $HOME/.aliases.zsh
+source $HOME/.functions.zsh
 
 # config micromamba
 if command -v micromamba >/dev/null 2>&1; then
