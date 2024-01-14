@@ -143,3 +143,16 @@ private = "smartdns"
 
   [devices.extra.dns]
   public = "302.grifcc.top"
+
+[[devices]]
+  system = "ubuntu"
+  hardware = "guanxing"
+  group = "shared"
+  desc = "观星云服务器 2C4G"
+
+  [devices.extra.ssh]
+  user = "root"
+  port = 22
+
+  [devices.extra.dns]
+  public = "154.40.43.220"
