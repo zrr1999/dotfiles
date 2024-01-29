@@ -15,7 +15,11 @@ install_by_installer() {
 
   # install bun if it's missing
   if ! command -v brew >/dev/null 2>&1; then
-    curl -fsSL https://bun.sh/install | sed 's/\.zshrc/\.bunconfig/g' | bash
+    curl -fsSL https://bun.sh/install | sed 's/\.zshrc/\.config/zsh/dotconfig/.bunconfig/g' | bash
+  fi
+
+  # TODO: remove this
+  if [[ -s $HOME/.bunconfig ]]; then
     mv $HOME/.bunconfig $HOME/.config/zsh/dotconfig/.bunconfig
   fi
 }
@@ -38,12 +42,12 @@ install_by_brew() {
   # modular auth mut_aad64e0ecc154c848a41db73825820e9
   # modular install mojo
 
-  ln -s $HOMEBREW_PREFIX/bin/zsh /bin/zsh
-
   # For macOS, install some desktop apps.
   if [[ "$OSTYPE" == "darwin"* ]]; then
     brew tap pot-app/homebrew-tap
     brew install --cask pot
+    brew install --cask linearmouse
+    brew install --cask he3-app/he3/he3
   fi
 }
 
