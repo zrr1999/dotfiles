@@ -34,11 +34,19 @@ if [[ -s $HOME/.bunconfig ]]; then
   source $HOME/.bunconfig
 fi
 
+# config some tools in .dotconfig
+for file in $HOME/.config/zsh/dotconfig/*; do
+  if [ -f "$file" ]; then
+    source "$file"
+  fi
+done
+
+eval "$(atuin init zsh)"
 eval "$(starship init zsh)"
-source $HOME/.zi.zsh
-source $HOME/.atuin.zsh
-source $HOME/.aliases.zsh
-source $HOME/.functions.zsh
+source $HOME/.config/zsh/.zi.zsh
+source $HOME/.config/zsh/.atuin.zsh
+source $HOME/.config/zsh/.aliases.zsh
+source $HOME/.config/zsh/.functions.zsh
 
 # config micromamba
 if command -v micromamba >/dev/null 2>&1; then
