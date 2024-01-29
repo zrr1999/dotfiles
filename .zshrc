@@ -19,7 +19,7 @@ autoload -Uz compinit
 export PATH=$PATH:$HOME/.local/bin
 
 # config homebrew
-if [[ -f $HOME/.brewconfig ]]; then
+if [[ -s $HOME/.brewconfig ]]; then
   source $HOME/.brewconfig
 fi
 if command -v brew >/dev/null 2>&1; then
@@ -27,6 +27,11 @@ if command -v brew >/dev/null 2>&1; then
   export HOMEBREW_NO_AUTO_UPDATE=true
   export HOMEBREW_NO_INSTALL_FROM_API=1
   export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.ustc.edu.cn/homebrew-bottles
+fi
+
+# config bun
+if [[ -s $HOME/.bunconfig ]]; then
+  source $HOME/.bunconfig
 fi
 
 eval "$(starship init zsh)"

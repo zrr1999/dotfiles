@@ -13,8 +13,10 @@ install_by_installer() {
   $1 git-lfs
   git lfs install
 
-  # bun
-  curl -fsSL https://bun.sh/install | bash
+  # install bun if it's missing
+  if ! command -v brew >/dev/null 2>&1; then
+    curl -fsSL https://bun.sh/install | sed 's/\.zshrc/\.bunconfig/g' | bash
+  fi
 }
 
 install_by_brew() {
@@ -28,6 +30,7 @@ install_by_brew() {
 
   brew install pipx
   brew install gh
+  brew install bundler-completion
 
   # too slow to install modular
   # curl https://get.modular.com | sh -
