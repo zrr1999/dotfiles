@@ -10,12 +10,8 @@ autoload -Uz _zi
 (( ${+_comps} )) && _comps[zi]=_zi
 
 zi wait lucid light-mode for \
-    davidde/git \
+    zsh-users/zsh-syntax-highlighting \
     skywind3000/z.lua \
-    zrr1999/zsh-ssh \
-    Game4Move78/zsh-bitwarden \
-    rapgenic/zsh-git-complete-urls \
-    z-shell/zbrowse
 
 if [[ -n $(command -v docker) ]]; then
   zi wait lucid light-mode for \
@@ -23,10 +19,14 @@ if [[ -n $(command -v docker) ]]; then
 fi
 
 zi lucid light-mode for \
+    davidde/git \
     zsh-users/zsh-autosuggestions \
     zsh-users/zsh-completions \
-    zsh-users/zsh-syntax-highlighting \
-    z-shell/brew-completions 
+    z-shell/brew-completions \
+    zrr1999/zsh-ssh \
+    Game4Move78/zsh-bitwarden \
+    rapgenic/zsh-git-complete-urls \
+    z-shell/zbrowse
 
 zi snippet OMZL::clipboard.zsh
 zi snippet OMZL::completion.zsh
