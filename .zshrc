@@ -46,7 +46,7 @@ source $HOME/.config/zsh/.aliases.zsh
 source $HOME/.config/zsh/.functions.zsh
 
 eval "$(atuin init zsh --disable-up-arrow)"
-eval "$(starship init zsh)"
+export STARSHIP_CONFIG="$HOME/.config/starship.toml"
 
 # config micromamba
 if command -v micromamba >/dev/null 2>&1; then

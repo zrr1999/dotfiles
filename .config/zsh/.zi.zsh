@@ -19,6 +19,7 @@ if [[ -n $(command -v docker) ]]; then
 fi
 
 zi lucid light-mode for \
+    wintermi/zsh-starship \
     davidde/git \
     zsh-users/zsh-autosuggestions \
     zsh-users/zsh-completions \
