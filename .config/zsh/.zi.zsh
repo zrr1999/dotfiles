@@ -10,8 +10,7 @@ autoload -Uz _zi
 (( ${+_comps} )) && _comps[zi]=_zi
 
 zi wait lucid light-mode for \
-    zsh-users/zsh-history-substring-search \
-    z-shell/H-S-MW \
+    z-shell/F-Sy-H \
     davidde/git \
     skywind3000/z.lua \
     zrr1999/zsh-ssh \
