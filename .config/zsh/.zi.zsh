@@ -10,18 +10,19 @@ autoload -Uz _zi
 (( ${+_comps} )) && _comps[zi]=_zi
 
 zi wait lucid light-mode for \
-    z-shell/F-Sy-H \
     davidde/git \
     skywind3000/z.lua \
     zrr1999/zsh-ssh \
     Game4Move78/zsh-bitwarden \
-    rapgenic/zsh-git-complete-urls
+    rapgenic/zsh-git-complete-urls \
+    z-shell/zbrowse
 
 zi lucid light-mode for \
     zsh-users/zsh-autosuggestions \
     zsh-users/zsh-completions \
     zsh-users/zsh-syntax-highlighting \
-    z-shell/brew-completions
+    z-shell/brew-completions \
+    redxtech/zsh-containers
 
 zi snippet OMZL::clipboard.zsh
 zi snippet OMZL::completion.zsh
