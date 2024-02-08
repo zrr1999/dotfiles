@@ -17,12 +17,16 @@ zi wait lucid light-mode for \
     rapgenic/zsh-git-complete-urls \
     z-shell/zbrowse
 
+if [[ -n $(command -v docker) ]]; then
+  zi wait lucid light-mode for \
+    redxtech/zsh-containers
+fi
+
 zi lucid light-mode for \
     zsh-users/zsh-autosuggestions \
     zsh-users/zsh-completions \
     zsh-users/zsh-syntax-highlighting \
-    z-shell/brew-completions \
-    redxtech/zsh-containers
+    z-shell/brew-completions 
 
 zi snippet OMZL::clipboard.zsh
 zi snippet OMZL::completion.zsh
