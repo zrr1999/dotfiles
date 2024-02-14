@@ -22,6 +22,11 @@ alias top='btm'
 alias du='dust'
 alias df='duf'
 
+# add some docker aliases
+alias dcup='docker compose up -d --remove-orphans' 
+alias dcdown='docker compose down'
+alias dcpull='docker compose pull'
+
 # add some complex aliases
 tree () {
     local depth=3
