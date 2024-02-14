@@ -29,6 +29,10 @@ if command -v brew >/dev/null 2>&1; then
   export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.ustc.edu.cn/homebrew-bottles
 fi
 
+source $HOME/.config/zsh/.zi.zsh
+source $HOME/.config/zsh/.aliases.zsh
+source $HOME/.config/zsh/.functions.zsh
+
 # config bun
 if [[ -s $HOME/.bunconfig ]]; then
   source $HOME/.bunconfig
@@ -40,10 +44,6 @@ for file in $HOME/.config/zsh/dotconfig/*; do
     source "$file"
   fi
 done
-
-source $HOME/.config/zsh/.zi.zsh
-source $HOME/.config/zsh/.aliases.zsh
-source $HOME/.config/zsh/.functions.zsh
 
 eval "$(atuin init zsh --disable-up-arrow)"
 export STARSHIP_CONFIG="$HOME/.config/starship.toml"
@@ -68,4 +68,4 @@ export PATH=$PATH:$HOME/.cargo/bin
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/.local/lib/mojo
 export PATH=$PATH:$HOME/.modular/pkg/packages.modular.com_mojo/bin/
 
-eval '$(auto-token envshell)'
+eval '$(auto-token shellenv)'
