@@ -2,6 +2,7 @@
 alias sudo='sudo -E '
 alias sizeof="du -h --max-depth=0"
 alias python='python3'
+alias pip='pip3'
 alias urldecode='python3 -c "import sys, urllib.parse as ul; print(ul.unquote_plus(sys.argv[1]))"'
 alias urlencode='python3 -c "import sys, urllib.parse as ul; print(ul.quote_plus(sys.argv[1]))"'
 alias pd='pueued -d'
