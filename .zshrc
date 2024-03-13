@@ -69,3 +69,5 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/.local/lib/mojo
 export PATH=$PATH:$HOME/.modular/pkg/packages.modular.com_mojo/bin/
 
 eval '$(auto-token shellenv)'
+find ~/.ssh -name 'id_*' ! -name '*.pub' -exec ssh-add {} \;
+
