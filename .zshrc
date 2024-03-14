@@ -33,11 +33,6 @@ source $HOME/.config/zsh/.zi.zsh
 source $HOME/.config/zsh/.aliases.zsh
 source $HOME/.config/zsh/.functions.zsh
 
-# config bun
-if [[ -s $HOME/.bunconfig ]]; then
-  source $HOME/.bunconfig
-fi
-
 # config some tools in .dotconfig
 for file in $HOME/.config/zsh/dotconfig/*; do
   if [ -f "$file" ]; then
