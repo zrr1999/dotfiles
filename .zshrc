@@ -58,7 +58,7 @@ case ":$PATH:" in
 esac
 
 # config cargo
-export PATH=$PATH:$HOME/.cargo/bin
+export PATH=$HOME/.cargo/bin:$PATH
 
 # config mojo
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/.local/lib/mojo
