@@ -35,7 +35,7 @@ source $HOME/.config/zsh/.aliases.zsh
 source $HOME/.config/zsh/.functions.zsh
 
 # config some tools in .dotconfig
-for file in $HOME/.config/zsh/dotconfig/*; do
+for file in $HOME/.config/zsh/dotconfig/.*; do
   if [ -f "$file" ]; then
     source "$file"
   fi
