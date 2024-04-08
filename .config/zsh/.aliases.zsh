@@ -37,3 +37,6 @@ alias -s bz2='tar -xjvf'
 alias -s xz='tar -xf'
 alias -s zip='unzip'
 alias -s rar='unrar x'
+
+# some git aliases
+alias gsquash='git reset --soft HEAD~1 && git commit --amend'

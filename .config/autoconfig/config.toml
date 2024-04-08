@@ -76,12 +76,12 @@ private = "smartdns"
   port = 22
 
   [[devices.extra.ssh.containers]]
-  name = "dev-main"
+  name = "main"
   user = "root"
   port = 10000
 
   [[devices.extra.ssh.containers]]
-  name = "dev-paddle"
+  name = "paddle"
   user = "root"
   port = 10001
 
