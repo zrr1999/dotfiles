@@ -1,0 +1,51 @@
+{
+  "domain": "bone6.top",
+  "records": [
+    [
+      "blog",
+      "zrr1999.github.io."
+    ],
+    [
+      "*.lab",
+      "lab.bone6.top."
+    ],
+    [
+      "ghk.derp",
+      "5.180.98.88"
+    ],
+    [
+      "storage",
+      "basic-1256983506.cos.ap-beijing.myqcloud.com."
+    ],
+    [
+      "password",
+      "1.15.231.43"
+    ],
+    [
+      "ql",
+      "https://ql.home.bone6.top"
+    ],
+    [
+      "@",
+      "record.dnspod.net."
+    ],
+    [
+      "nomad",
+      "3090-arch.ssh.lab.bone6.top."
+    ],
+    [
+      ["one-api", "chat", "lobe", "n8n", "lobe-chat", "consul", "headscale"],
+      "guanxing-ubuntu.ssh.cloud.bone6.top."
+    ],
+    [
+      ["research", "slides", "images"],
+      "cname-china.vercel-dns.com."
+    ]
+  ],
+  "ignore": [
+    "_ab317b6ca58ff7c8314c67d8cff75f43.password",
+    "_8b9a2b823d3fd5772afe0312f98c1ca1",
+    "_dnsauth",
+    "*"
+  ]
+}

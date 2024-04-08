@@ -1,0 +1,5 @@
+domain = "bone6.top"
+records_files = [
+    "ddns.json",
+    "sdns.json",
+]
