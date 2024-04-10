@@ -129,6 +129,18 @@ private = "smartdns"
   port = 10000
 
 # home
+[[devices]]
+  system = "arch"
+  hardware = "7505"
+  group = "home"
+  desc = "ArchLinux 系统 7505 个人开发机"
+
+  [devices.extra.ssh]
+  user = "zrr"
+  port = 22
+
+  [devices.extra.dns]
+  public = "100.64.0.6"
 
 # shared
 [[devices]]
