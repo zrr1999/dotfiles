@@ -41,7 +41,6 @@ for file in $HOME/.config/zsh/dotconfig/.*; do
   fi
 done
 
-eval "$(atuin init zsh --disable-up-arrow)"
 export STARSHIP_CONFIG="$HOME/.config/starship.toml"
 
 # config micromamba
@@ -64,6 +63,6 @@ export PATH=$HOME/.cargo/bin:$PATH
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/.local/lib/mojo
 export PATH=$PATH:$HOME/.modular/pkg/packages.modular.com_mojo/bin/
 
-eval '$(auto-token shellenv)'
-find ~/.ssh -name 'id_*' ! -name '*.pub' -exec ssh-add {} \;
-
+zsh-defer eval "$(atuin init zsh --disable-up-arrow)"
+zsh-defer eval '$(auto-token shellenv)'
+zsh-defer find ~/.ssh -name 'id_*' ! -name '*.pub' -exec ssh-add {} \;

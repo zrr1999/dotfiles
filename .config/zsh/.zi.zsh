@@ -27,7 +27,8 @@ zi lucid light-mode for \
     zrr1999/zsh-ssh \
     Game4Move78/zsh-bitwarden \
     rapgenic/zsh-git-complete-urls \
-    z-shell/zbrowse
+    z-shell/zbrowse \
+    romkatv/zsh-defer
 
 zi snippet OMZL::clipboard.zsh
 zi snippet OMZL::completion.zsh
