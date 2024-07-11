@@ -2,9 +2,9 @@
 install_by_installer() {
   # basic tools
   $1 git lua nexttrace starship gpg
-  $1 python ast-grep micromamba
+  $1 python micromamba uv
   # replacement of system tools
-  $1 lsd bat sd dust ripgrep fd bottom procs duf httpie
+  $1 lsd bat sd dust ripgrep fd bottom procs duf httpie ast-grep
   # other tools
   $1 pueue fzf progress atuin hyperfine bitwarden-cli
   $1 git-delta gitui zellij difftastic helix cheat
@@ -33,7 +33,6 @@ install_by_brew() {
     source $HOME/.brewconfig
   fi
 
-  brew install pipx
   brew install gh
   brew install bundler-completion
 
@@ -60,7 +59,6 @@ install_by_pacman() {
     cd paru && makepkg -si && cd ..
     rm -rf paru
   fi
-  paru -S --noconfirm --needed python-pipx
   paru -S --noconfirm --needed github-cli unrar
   # too slow to install modular
   # paru -S --noconfirm --needed modular
@@ -68,21 +66,21 @@ install_by_pacman() {
   # modular install mojo
 }
 
-install_by_pipx() {
-  pipx install pdm
-  pipx install pre-commit
-  pipx install auto-config
-  pipx install auto-token
+install_by_uv() {
+  uv tool install pdm
+  uv tool install pre-commit
+  uv tool install auto-config
+  uv tool install auto-token
   # 判断是否有nvidia-smi
   if command -v nvidia-smi >/dev/null 2>&1; then
-    pipx install nvitop
+    uv tool install nvitop
   fi
 }
 
 config_zsh() {
   if ! command -v zi >/dev/null 2>&1; then
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/z-shell/zi-src/main/lib/sh/install.sh)" -- -i skip
-    zsh -cl -- '(source $HOME/.zi.zsh && @zi-scheduler burst) || true'
+    zsh -cl -- '(source $HOME/.config/zsh/.zi.zsh && @zi-scheduler burst) || true'
   fi
   # $HOME/.zprofile
   if [[ ! -f $HOME/.zprofile ]]; then
@@ -110,7 +108,7 @@ else
   install_by_brew
   install_by_installer "brew install"
 fi
-install_by_pipx
+install_by_uv
 auto-config
 auto-token init
 if [[ -n "$GITHUB_ACTIONS" ]]; then
