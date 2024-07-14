@@ -1,13 +1,14 @@
 #!/bin/bash
 install_by_installer() {
   # basic tools
-  $1 git lua nexttrace starship gpg
+  $1 git lua nexttrace starship gpg yadm
   $1 python micromamba uv
   # replacement of system tools
-  $1 lsd bat sd dust ripgrep fd bottom procs duf httpie ast-grep
+  $1 lsd bat sd dust ripgrep fd bottom procs duf httpie
+  $1 ast-grep
   # other tools
   $1 pueue fzf progress atuin hyperfine bitwarden-cli
-  $1 git-delta gitui zellij difftastic helix cheat
+  $1 git-delta gitui zellij difftastic helix
 
   # git plugins
   $1 git-lfs
