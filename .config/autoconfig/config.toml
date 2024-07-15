@@ -152,6 +152,9 @@ private = "smartdns"
   user = "zrr"
   port = 22
 
+  [devices.extra.ansible]
+  server = true
+
   [devices.extra.dns]
   public = "snmp:adsl3"
 
