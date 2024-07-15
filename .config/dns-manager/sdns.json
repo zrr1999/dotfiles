@@ -21,11 +21,31 @@
       "3090-arch.ssh.lab.bone6.top."
     ],
     [
-      ["one-api", "chat", "lobe", "n8n", "lobe-chat", "consul", "headscale", "homepage"],
+      [
+        "one-api",
+        "chat",
+        "lobe",
+        "n8n",
+        "lobe-chat",
+        "consul",
+        "headscale",
+        "homepage",
+        "memos",
+        "illa",
+        "tools"
+      ],
       "guanxing-ubuntu.ssh.cloud.bone6.top."
     ],
     [
-      ["research", "slides", "images"],
+      "cloud",
+      "tencent-ubuntu.ssh.cloud.bone6.top"
+    ],
+    [
+      [
+        "research",
+        "slides",
+        "images"
+      ],
       "cname-china.vercel-dns.com."
     ],
     [
