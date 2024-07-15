@@ -140,7 +140,7 @@ private = "smartdns"
   port = 22
 
   [devices.extra.dns]
-  public = "snmp:wan3_ad"
+  public = "snmp:adsl1"
 
 # shared
 [[devices]]

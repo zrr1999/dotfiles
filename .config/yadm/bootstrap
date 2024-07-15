@@ -15,7 +15,7 @@ install_by_installer() {
   git lfs install
 
   # install bun if it's missing
-  if ! command -v brew >/dev/null 2>&1; then
+  if ! command -v bun >/dev/null 2>&1; then
     curl -fsSL https://bun.sh/install | sed 's/\.zshrc/\.config/zsh/dotconfig/.bunconfig/g' | bash
   fi
 
@@ -61,6 +61,7 @@ install_by_pacman() {
     rm -rf paru
   fi
   paru -S --noconfirm --needed github-cli unrar
+  paru -S --noconfirm --needed zsh
   # too slow to install modular
   # paru -S --noconfirm --needed modular
   # modular auth mut_aad64e0ecc154c848a41db73825820e9
