@@ -13,15 +13,13 @@
       "basic-1256983506.cos.ap-beijing.myqcloud.com."
     ],
     [
-      "password",
-      "1.15.231.43"
-    ],
-    [
       "nomad",
       "3090-arch.ssh.lab.bone6.top."
     ],
     [
       [
+        "password",
+        "pw",
         "one-api",
         "chat",
         "lobe",
