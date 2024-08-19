@@ -52,8 +52,8 @@ fi
 # config pnpm
 export PNPM_HOME="$HOME/.local/share/pnpm"
 case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
+*":$PNPM_HOME:"*) ;;
+*) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 
 # config cargo
@@ -62,6 +62,11 @@ export PATH=$HOME/.cargo/bin:$PATH
 # config mojo
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/.local/lib/mojo
 export PATH=$PATH:$HOME/.modular/pkg/packages.modular.com_mojo/bin/
+
+# config bun
+[ -s "/home/zrr/.bun/_bun" ] && source "/home/zrr/.bun/_bun" # bun completions
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
 
 zsh-defer eval "$(atuin init zsh --disable-up-arrow)"
 zsh-defer eval '$(auto-token shellenv)'
