@@ -5,22 +5,6 @@ private = "smartdns"
 # cloud
 [[devices]]
   system = "ubuntu"
-  hardware = "tencent"
-  group = "cloud"
-  desc = "腾讯云服务器"
-
-  [devices.extra.ssh]
-  user = "ubuntu"
-  port = 22
-
-  [devices.extra.ansible]
-  server = true
-
-  [devices.extra.dns]
-  public = "1.15.231.43"
-
-[[devices]]
-  system = "ubuntu"
   hardware = "guanxing"
   group = "cloud"
   desc = "观星云服务器"
@@ -159,19 +143,6 @@ private = "smartdns"
   public = "snmp:adsl3"
 
 # shared
-[[devices]]
-  system = "ubuntu"
-  hardware = "3090"
-  group = "shared"
-  desc = "实验室5卡 RTX3090 服务器"
-
-  [devices.extra.ssh]
-  user = "cv"
-  port = 22
-
-  [devices.extra.dns]
-  public = "3090.grifcc.top"
-
 [[devices]]
   system = "ubuntu"
   hardware = "4090"
