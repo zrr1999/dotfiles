@@ -60,8 +60,9 @@ esac
 export PATH=$HOME/.cargo/bin:$PATH
 
 # config mojo
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/.local/lib/mojo
-export PATH=$PATH:$HOME/.modular/pkg/packages.modular.com_mojo/bin/
+export MODULAR_HOME="$HOME/.modular"
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/.local/lib/arch-mojo
+export PATH=$PATH:$HOME/.modular/pkg/packages.modular.com_max/bin/
 
 # config bun
 [ -s "/home/zrr/.bun/_bun" ] && source "/home/zrr/.bun/_bun" # bun completions
