@@ -155,3 +155,15 @@ private = "smartdns"
 
   [devices.extra.dns]
   public = "4090.grifcc.top"
+[[devices]]
+  system = "ubuntu"
+  hardware = "3090"
+  group = "shared"
+  desc = "实验室4卡 RTX3090 服务器"
+
+  [devices.extra.ssh]
+  user = "zhanrongrui"
+  port = 22
+
+  [devices.extra.dns]
+  public = "3090.grifcc.top"
