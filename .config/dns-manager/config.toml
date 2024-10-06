@@ -12,5 +12,6 @@ setter_name = "cloudflare"
 records_files = [
     "ddns.json",
     "sdns.json",
+    "sdns-cf.json",
 ]
 

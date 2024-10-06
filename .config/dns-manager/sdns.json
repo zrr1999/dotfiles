@@ -14,6 +14,7 @@
     ],
     [
       [
+        "caddy",
         "password",
         "pw",
         "one-api",
@@ -30,7 +31,8 @@
         "illa",
         "tools",
         "rss",
-        "miniflux"
+        "miniflux",
+        "searxng"
       ],
       "guanxing-ubuntu.ssh.cloud.bone6.top."
     ],
