@@ -1,7 +1,7 @@
 #!/bin/bash
 install_by_installer() {
   # basic tools
-  $1 git lua nexttrace starship gpg yadm
+  $1 git lua nexttrace starship gpg yadm fastfetch
   $1 python micromamba uv
   # replacement of system tools
   $1 lsd bat sd dust ripgrep fd bottom procs duf httpie
