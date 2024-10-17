@@ -167,3 +167,15 @@ private = "smartdns"
 
   [devices.extra.dns]
   public = "3090.grifcc.top"
+[[devices]]
+  system = "ubuntu"
+  hardware = "2080"
+  group = "shared"
+  desc = "实验室8卡 RTX2080Ti 服务器"
+
+  [devices.extra.ssh]
+  user = "zhanrongrui"
+  port = 22
+
+  [devices.extra.dns]
+  public = "2080.grifcc.top"
