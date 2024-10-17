@@ -32,6 +32,8 @@
         "tools",
         "rss",
         "miniflux",
+        "git",
+        "gitea",
         "searxng"
       ],
       "guanxing-ubuntu.ssh.cloud.bone6.top."
