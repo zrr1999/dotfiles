@@ -13,6 +13,7 @@ export GPG_TTY=$(tty)
 
 fpath+=$HOME/.zfunc
 
+fastfetch
 zstyle ':completion:*' menu select
 autoload -Uz compinit
 
