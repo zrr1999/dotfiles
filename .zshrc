@@ -73,3 +73,5 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 zsh-defer eval "$(atuin init zsh --disable-up-arrow)"
 zsh-defer eval '$(auto-token shellenv)'
 zsh-defer find ~/.ssh -name 'id_*' ! -name '*.pub' -exec ssh-add {} \;
+
+fpath+=~/.zfunc; autoload -Uz compinit; compinit

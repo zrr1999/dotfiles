@@ -1,16 +1,8 @@
 {
   "records": [
     [
-      "blog",
-      "zrr1999.github.io."
-    ],
-    [
       "ghk.derp",
       "5.180.98.88"
-    ],
-    [
-      "nomad",
-      "3090-arch.ssh.lab.bone6.top."
     ],
     [
       [
@@ -53,11 +45,11 @@
     ],
     [
       "*.lab",
-      "lab.bone6.top."
+      "lab.bone6.com."
     ],
     [
       "*.home",
-      "home.bone6.top."
+      "home.bone6.com."
     ]
   ]
 }
