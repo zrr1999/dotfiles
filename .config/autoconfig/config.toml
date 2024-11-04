@@ -16,6 +16,19 @@ private = "smartdns"
   [devices.extra.dns]
   public = "5.180.98.88"
 
+[[devices]]
+  system = "ubuntu"
+  hardware = "coalcloud"
+  group = "cloud"
+  desc = "CoalCloud 服务器"
+
+  [devices.extra.ssh]
+  user = "root"
+  port = 22
+
+  [devices.extra.dns]
+  public = "45.87.103.35"
+
 # lab
 [[devices]]
   system = "openwrt"
@@ -81,20 +94,6 @@ private = "smartdns"
   [devices.extra.ssh]
   user = "zrr1999"
   port = 22
-
-[[devices]]
-  system = "ubuntu"
-  hardware = "sei12"
-  group = "lab"
-  desc = "Ubuntu 系统个人开发机"
-
-  [devices.extra.ssh]
-  ip = "192.168.1.102"
-  user = "zrr1999"
-  port = 22
-
-  [devices.extra.dns]
-  public = "snmp:wan3_ad"
 
 [[devices]]
   system = "omv"
