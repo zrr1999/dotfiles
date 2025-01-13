@@ -7,7 +7,7 @@ private = "smartdns"
   system = "ubuntu"
   hardware = "guanxing"
   group = "cloud"
-  desc = "观星云服务器"
+  desc = "观星云服务器（香港）"
 
   [devices.extra.ssh]
   user = "root"
@@ -18,9 +18,22 @@ private = "smartdns"
 
 [[devices]]
   system = "ubuntu"
+  hardware = "clawcloud"
+  group = "cloud"
+  desc = "ClawCloud 服务器（东京）"
+
+  [devices.extra.ssh]
+  user = "root"
+  port = 22
+
+  [devices.extra.dns]
+  public = "47.79.35.18"
+
+[[devices]]
+  system = "ubuntu"
   hardware = "coalcloud"
   group = "cloud"
-  desc = "CoalCloud 服务器"
+  desc = "CoalCloud 服务器（香港）"
 
   [devices.extra.ssh]
   user = "root"
