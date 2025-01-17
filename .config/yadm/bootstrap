@@ -124,3 +124,8 @@ config_zsh
 if [[ -n "$GITHUB_ACTIONS" ]]; then
   echo "::endgroup::"
 fi
+
+# move some files to the right place
+if [[ ! -f $HOME/.gnupg/gpg-agent.conf ]]; then
+  cp $HOME/.gnupg/gpg-agent.conf.default $HOME/.gnupg/gpg-agent.conf
+fi
