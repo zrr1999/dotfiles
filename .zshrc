@@ -13,7 +13,6 @@ export GPG_TTY=$(tty)
 
 fpath+=$HOME/.zfunc
 
-fastfetch
 zstyle ':completion:*' menu select
 autoload -Uz compinit
 
@@ -30,6 +29,7 @@ if command -v brew >/dev/null 2>&1; then
   export HOMEBREW_NO_INSTALL_FROM_API=1
   export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.ustc.edu.cn/homebrew-bottles
 fi
+fastfetch
 
 source $HOME/.config/zsh/.zi.zsh
 source $HOME/.config/zsh/.aliases.zsh
