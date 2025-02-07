@@ -1,18 +1,5 @@
 {
-  "records": [
-    [
-      "ql",
-      "https://ql.home.bone6.top"
-    ],
-    [
-      "storage",
-      "basic-1256983506.cos.ap-beijing.myqcloud.com."
-    ],
-    [
-      "@",
-      "record.dnspod.net."
-    ]
-  ],
+  "records": [],
   "ignore": [
     "_ab317b6ca58ff7c8314c67d8cff75f43.password",
     "_8b9a2b823d3fd5772afe0312f98c1ca1",

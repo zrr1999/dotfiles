@@ -1,6 +1,14 @@
 {
   "records": [
     [
+      "storage",
+      "basic-1256983506.cos.ap-beijing.myqcloud.com."
+    ],
+    [
+      "@",
+      "record.dnspod.net."
+    ],
+    [
       "ghk.derp",
       "5.180.98.88"
     ],
