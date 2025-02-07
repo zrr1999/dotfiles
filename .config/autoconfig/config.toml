@@ -1,3 +1,5 @@
+domain = "bone6.com"
+
 [dns-server]
 public = "dnspod"
 private = "smartdns"
