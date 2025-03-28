@@ -34,7 +34,8 @@
         "miniflux",
         "git",
         "gitea",
-        "searxng"
+        "searxng",
+        "dozzle"
       ],
       "guanxing-ubuntu.ssh.cloud.bone6.com."
     ],
