@@ -1,11 +1,3 @@
-[dnspod]
-domain = "bone6.top"
-setter_name = "dnspod"
-records_files = [
-    "ddns.json",
-    "sdns.json",
-    "sdns-dnspod.json",
-]
 [cloudflare]
 domain = "bone6.com"
 setter_name = "cloudflare"
@@ -14,4 +6,3 @@ records_files = [
     "sdns.json",
     "sdns-cf.json",
 ]
-
