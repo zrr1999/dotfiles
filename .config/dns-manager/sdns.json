@@ -1,12 +1,8 @@
 {
   "records": [
     [
-      "storage",
+      "tencent-storage",
       "basic-1256983506.cos.ap-beijing.myqcloud.com."
-    ],
-    [
-      "@",
-      "record.dnspod.net."
     ],
     [
       "ghk.derp",
