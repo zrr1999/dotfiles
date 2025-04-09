@@ -31,7 +31,9 @@
         "git",
         "gitea",
         "searxng",
-        "dozzle"
+        "searxng",
+	"dozzle",
+	"wallos"
       ],
       "guanxing-ubuntu.ssh.cloud.bone6.com."
     ],
