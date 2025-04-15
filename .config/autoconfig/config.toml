@@ -2,14 +2,14 @@ domain = "bone6.com"
 
 [dns-server]
 public = "dnspod"
-private = "smartdns"
+private = "hosts"
 
 # cloud
 [[devices]]
   system = "ubuntu"
   hardware = "guanxing"
   group = "cloud"
-  desc = "观星云服务器（香港）"
+  desc = "观星云服务器（香港，服务节点）"
 
   [devices.extra.ssh]
   user = "root"
@@ -22,7 +22,7 @@ private = "smartdns"
   system = "ubuntu"
   hardware = "clawcloud"
   group = "cloud"
-  desc = "ClawCloud 服务器（东京）"
+  desc = "ClawCloud 服务器（东京，代理节点）"
 
   [devices.extra.ssh]
   user = "root"
@@ -35,7 +35,7 @@ private = "smartdns"
   system = "ubuntu"
   hardware = "coalcloud"
   group = "cloud"
-  desc = "CoalCloud 服务器（香港）"
+  desc = "CoalCloud 服务器（香港，代理节点）"
 
   [devices.extra.ssh]
   user = "root"
@@ -58,7 +58,6 @@ private = "smartdns"
   [devices.extra.dns]
   public = "snmp:wan1_ad"
 
-# lab
 [[devices]]
   system = "pve"
   hardware = "sei12"
@@ -83,7 +82,6 @@ private = "smartdns"
   desc = "ArchLinux 系统个人开发机"
 
   [devices.extra.ssh]
-  ip = "192.168.1.105"
   user = "zrr"
   port = 22
 
@@ -99,6 +97,7 @@ private = "smartdns"
 
   [devices.extra.dns]
   public = "snmp:wan2_ad"
+  private = "192.168.1.105"
 
 [[devices]]
   system = "hass"
@@ -114,10 +113,9 @@ private = "smartdns"
   system = "omv"
   hardware = "sei12"
   group = "lab"
-  desc = "omv 系统"
+  desc = "omv 个人存储系统（基于 Debian）"
 
   [devices.extra.ssh]
-  ip = "192.168.1.11"
   user = "root"
   port = 22
 
@@ -126,12 +124,15 @@ private = "smartdns"
   user = "zrr1999"
   port = 10000
 
+  [devices.extra.dns]
+  private = "192.168.1.11"
+
 # home
 [[devices]]
   system = "arch"
   hardware = "7505"
   group = "home"
-  desc = "ArchLinux 系统 7505 个人开发机"
+  desc = "ArchLinux 系统 7505 宿主机"
 
   [devices.extra.ssh]
   user = "zrr"
@@ -139,12 +140,13 @@ private = "smartdns"
 
   [devices.extra.dns]
   public = "snmp:adsl1"
+  private = "192.168.10.5"
 
 [[devices]]
   system = "server"
   hardware = "7505"
   group = "home"
-  desc = "7505 个人开发机用于运行各种服务的容器（ArchLinux）"
+  desc = "7505 个人开发机用于运行各种服务的 ArchLinux 系统容器"
 
   [devices.extra.ssh]
   user = "zrr"
@@ -155,6 +157,7 @@ private = "smartdns"
 
   [devices.extra.dns]
   public = "snmp:adsl3"
+  private = "192.168.10.2"
 
 # shared
 [[devices]]
@@ -169,6 +172,7 @@ private = "smartdns"
 
   [devices.extra.dns]
   public = "4090.grifcc.top"
+
 [[devices]]
   system = "ubuntu"
   hardware = "3090"
@@ -181,6 +185,7 @@ private = "smartdns"
 
   [devices.extra.dns]
   public = "3090.grifcc.top"
+
 [[devices]]
   system = "ubuntu"
   hardware = "2080"
