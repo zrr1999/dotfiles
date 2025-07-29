@@ -42,7 +42,7 @@ private = "hosts"
   port = 22
 
   [devices.extra.dns]
-  public = "45.87.103.35"
+  public = "45.87.103.80"
 
 # lab
 [[devices]]
