@@ -1,4 +1,4 @@
-domain = "bone6.com"
+domain = "sixbones.dev"
 
 [dns-server]
 public = "dnspod"

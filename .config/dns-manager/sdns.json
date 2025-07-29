@@ -35,11 +35,11 @@
 	"dozzle",
 	"wallos"
       ],
-      "guanxing-ubuntu.ssh.cloud.bone6.com."
+      "guanxing-ubuntu.ssh.cloud.sixbones.dev."
     ],
     [
       "cloud",
-      "tencent-ubuntu.ssh.cloud.bone6.com"
+      "tencent-ubuntu.ssh.cloud.sixbones.dev"
     ],
     [
       [
@@ -53,11 +53,11 @@
     ],
     [
       "*.lab",
-      "lab.bone6.com."
+      "lab.sixbones.dev."
     ],
     [
       "*.home",
-      "home.bone6.com."
+      "home.sixbones.dev."
     ]
   ]
 }
