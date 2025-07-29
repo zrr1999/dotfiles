@@ -1,5 +1,5 @@
 [cloudflare]
-domain = "bone6.com"
+domain = "sixbones.dev"
 setter_name = "cloudflare"
 records_files = [
     "ddns.json",
