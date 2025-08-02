@@ -12,6 +12,9 @@ autoload -Uz _zi
 zi wait lucid light-mode for \
     zsh-users/zsh-syntax-highlighting \
     skywind3000/z.lua \
+    z-shell/zui \
+    z-shell/brew-completions \
+    z-shell/zbrowse 
 
 if [[ -n $(command -v docker) ]]; then
   zi wait lucid light-mode for \
@@ -23,11 +26,7 @@ zi lucid light-mode for \
     davidde/git \
     zsh-users/zsh-autosuggestions \
     zsh-users/zsh-completions \
-    z-shell/brew-completions \
-    zrr1999/zsh-ssh \
-    Game4Move78/zsh-bitwarden \
-    rapgenic/zsh-git-complete-urls \
-    z-shell/zbrowse \
+    sunlei/zsh-ssh \
     romkatv/zsh-defer
 
 zi snippet OMZL::clipboard.zsh
