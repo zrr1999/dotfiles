@@ -1,6 +1,27 @@
 {
   "records": [
     [
+      [
+        "us.hy",
+        "*.us.hy"
+      ],
+      "154.7.177.180"
+    ],
+    [
+      [
+        "hk.hy",
+        "*.hk.hy"
+      ],
+      "45.87.103.80"
+    ],
+    [
+      [
+        "jp.hy",
+        "*.jp.hy"
+      ],
+      "47.79.35.18"
+    ],
+    [
       "tencent-storage",
       "basic-1256983506.cos.ap-beijing.myqcloud.com."
     ],

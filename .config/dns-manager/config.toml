@@ -1,5 +1,14 @@
-[cloudflare]
+[sixbones]
 domain = "sixbones.dev"
+setter_name = "cloudflare"
+records_files = [
+    "ddns.json",
+    "sdns.json",
+    "sdns-cf.json",
+]
+
+[zrr]
+domain = "zrr.dev"
 setter_name = "cloudflare"
 records_files = [
     "ddns.json",
