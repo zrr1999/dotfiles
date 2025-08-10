@@ -36,6 +36,7 @@ install_by_brew() {
 
   brew install gh
   brew install bundler-completion
+  brew install squirrel-app
 
   # too slow to install modular
   # curl https://get.modular.com | sh -
