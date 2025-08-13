@@ -34,6 +34,7 @@ zi snippet OMZL::completion.zsh
 zi snippet OMZL::directories.zsh
 zi snippet OMZL::history.zsh
 zi snippet OMZL::key-bindings.zsh
+zi snippet OMZL::theme-and-appearance.zsh
 zi snippet OMZP::colored-man-pages
 
 zicompinit
