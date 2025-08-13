@@ -45,6 +45,7 @@ install_by_brew() {
 
   # For macOS, install some desktop apps.
   if [[ "$OSTYPE" == "darwin"* ]]; then
+    brew install pinentry-mac
     brew tap pot-app/homebrew-tap
     brew install --cask pot
     brew install --cask linearmouse

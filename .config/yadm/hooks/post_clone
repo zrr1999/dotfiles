@@ -41,3 +41,5 @@ remove_unused_files
 if [[ ! -f /.dockerenv ]] && [[ $USER == "root" ]]; then
   create_user
 fi
+
+yadm alt
