@@ -30,47 +30,43 @@
         "caddy",
         "password",
         "pw",
-        "one-api",
-        "llm-api",
-        "chat",
-        "lobe",
-        "n8n",
-        "flow",
-        "lobe-chat",
-        "consul",
         "headscale",
-        "homepage",
         "memos",
-        "illa",
-        "tools",
         "rss",
-        "miniflux",
-        "git",
-        "gitea",
-        "searxng",
-        "searxng",
-        "dozzle",
-        "wallos"
+        "miniflux"
       ],
       "guanxing-ubuntu.ssh.cloud.sixbones.dev."
     ],
     [
-      "cloud",
-      "tencent-ubuntu.ssh.cloud.sixbones.dev"
+      [
+        "consul",
+        "homepage",
+        "one-api",
+        "llm-api",
+        "n8n",
+        "flow",
+        "chat",
+        "lobe",
+        "lobe-chat",
+        "memos",
+        "illa",
+        "tools",
+        "git",
+        "gitea",
+        "searxng",
+        "dozzle",
+        "wallos"
+      ],
+      "tunnel.sixbones.dev."
     ],
     [
       [
-        "mail",
         "blog",
-        "research",
         "slides",
-        "images"
+        "research",
+        "mail"
       ],
       "cname-china.vercel-dns.com."
-    ],
-    [
-      "*.lab",
-      "lab.sixbones.dev."
     ],
     [
       "*.home",
