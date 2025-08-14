@@ -46,19 +46,6 @@ private = "hosts"
 
 # lab
 [[devices]]
-  system = "openwrt"
-  hardware = "sei12"
-  group = "lab"
-  desc = "软路由 OpenWRT"
-
-  [devices.extra.ssh]
-  user = "root"
-  port = 22
-
-  [devices.extra.dns]
-  public = "snmp:wan1_ad"
-
-[[devices]]
   system = "pve"
   hardware = "sei12"
   group = "lab"
@@ -76,34 +63,10 @@ private = "hosts"
   private = "192.168.1.5"
 
 [[devices]]
-  system = "arch"
-  hardware = "3090"
-  group = "lab"
-  desc = "ArchLinux 系统个人开发机"
-
-  [devices.extra.ssh]
-  user = "zrr"
-  port = 22
-
-  [[devices.extra.ssh.containers]]
-  name = "main"
-  user = "root"
-  port = 10000
-
-  [[devices.extra.ssh.containers]]
-  name = "paddle"
-  user = "root"
-  port = 10001
-
-  [devices.extra.dns]
-  public = "snmp:wan2_ad"
-  private = "192.168.1.105"
-
-[[devices]]
   system = "hass"
   hardware = "sei12"
   group = "lab"
-  desc = "搭载 HomeAssistant 的 Debian 系统"
+  desc = "HomeAssistant 智能家居系统（基于 Debian）"
 
   [devices.extra.ssh]
   user = "zrr1999"
@@ -158,43 +121,3 @@ private = "hosts"
   [devices.extra.dns]
   public = "snmp:adsl3"
   private = "192.168.10.2"
-
-# shared
-[[devices]]
-  system = "ubuntu"
-  hardware = "4090"
-  group = "shared"
-  desc = "实验室4卡 RTX4090 服务器"
-
-  [devices.extra.ssh]
-  user = "zhanrongrui"
-  port = 22
-
-  [devices.extra.dns]
-  public = "4090.grifcc.top"
-
-[[devices]]
-  system = "ubuntu"
-  hardware = "3090"
-  group = "shared"
-  desc = "实验室4卡 RTX3090 服务器"
-
-  [devices.extra.ssh]
-  user = "zhanrongrui"
-  port = 22
-
-  [devices.extra.dns]
-  public = "3090.grifcc.top"
-
-[[devices]]
-  system = "ubuntu"
-  hardware = "2080"
-  group = "shared"
-  desc = "实验室8卡 RTX2080Ti 服务器"
-
-  [devices.extra.ssh]
-  user = "zhanrongrui"
-  port = 22
-
-  [devices.extra.dns]
-  public = "2080.grifcc.top"
