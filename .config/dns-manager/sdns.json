@@ -12,14 +12,14 @@
         "hk.hy",
         "*.hk.hy"
       ],
-      "45.87.103.80"
+      "coalcloud-ubuntu.ssh.cloud.zrr.dev"
     ],
     [
       [
         "jp.hy",
         "*.jp.hy"
       ],
-      "47.79.35.18"
+      "clawcloud-ubuntu.ssh.cloud.zrr.dev"
     ],
     [
       "ghk.derp",
@@ -35,7 +35,7 @@
         "rss",
         "miniflux"
       ],
-      "guanxing-ubuntu.ssh.cloud.sixbones.dev."
+      "guanxing-ubuntu.ssh.cloud.zrr.dev"
     ],
     [
       [
@@ -56,7 +56,7 @@
         "dozzle",
         "wallos"
       ],
-      "tunnel.sixbones.dev."
+      "tunnel.zrr.dev"
     ],
     [
       [
@@ -69,7 +69,7 @@
     ],
     [
       "*.home",
-      "home.sixbones.dev."
+      "home.zrr.dev"
     ]
   ]
 }

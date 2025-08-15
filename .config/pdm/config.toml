@@ -1,4 +1,0 @@
-check_update = false
-
-[pypi]
-url = "https://pypi.tuna.tsinghua.edu.cn/simple"
