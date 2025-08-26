@@ -58,7 +58,8 @@
         "gitea",
         "searxng",
         "dozzle",
-        "wallos"
+        "wallos",
+        "home"
       ],
       "tunnel.zrr.dev"
     ],
