@@ -21,9 +21,10 @@ indent_size = 2
 indent_size = 3
 
 [*.json]
+indent_size = 2
 insert_final_newline = ignore
 
-[{*.yml,*.yaml,*.toml}]
+[{*.yml,*.yaml,*.toml,*.poml}]
 indent_size = 2
 
 [**.min.js]
