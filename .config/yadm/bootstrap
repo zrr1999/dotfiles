@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Setup sudo fallback for environments without sudo
 setup_sudo() {
@@ -33,19 +33,26 @@ install_zsh() {
   fi
 }
 
-# Package name exceptions - most packages have same name across managers
-declare -A PACKAGE_EXCEPTIONS
-init_package_exceptions() {
-  # Only list packages that have different names
-  PACKAGE_EXCEPTIONS[gh:pacman]="github-cli"
-}
-
-# Get package name, using exception or default to package name
+# Get package name, handling exceptions for different package managers
 get_package_name() {
   local package=$1
   local manager=$2
-  local key="${package}:${manager}"
-  echo "${PACKAGE_EXCEPTIONS[$key]:-$package}"
+  
+  # Handle package name exceptions
+  case "${package}:${manager}" in
+    "gh:pacman")
+      echo "github-cli"
+      ;;
+    "python:brew")
+      echo "python@3.12"
+      ;;
+    "gpg:pacman"|"gpg:paru"|"gpg:brew")
+      echo "gnupg"
+      ;;
+    *)
+      echo "$package"
+      ;;
+  esac
 }
 
 # Install packages with given package manager
@@ -79,7 +86,6 @@ FULL_PACKAGES=(lsd gh bat sd dust ripgrep fd bottom procs duf httpie nexttrace a
 # Install based on system and user type
 install_programs() {
   setup_sudo
-  init_package_exceptions
   
   if [[ "$OSTYPE" == "darwin"* ]]; then
     # macOS - always non-root user, install everything
@@ -160,7 +166,6 @@ install_macos_specific() {
 }
 
 install_by_uv() {
-  uv tool install pdm
   uv tool install pre-commit
   uv tool install auto-config
   uv tool install auto-token
