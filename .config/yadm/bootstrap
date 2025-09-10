@@ -1,73 +1,162 @@
 #!/bin/bash
-install_by_installer() {
-  # basic tools
-  $1 git lua nexttrace starship gpg yadm fastfetch
-  $1 python micromamba uv
-  # replacement of system tools
-  $1 lsd bat sd dust ripgrep fd bottom procs duf httpie
-  $1 ast-grep
-  # other tools
-  $1 pueue fzf progress atuin hyperfine bitwarden-cli
-  $1 git-delta gitui zellij difftastic helix
 
-  # git plugins
-  $1 git-lfs
-  git lfs install
-
-  # install bun if it's missing
-  if ! command -v bun >/dev/null 2>&1; then
-    curl -fsSL https://bun.sh/install | sed 's/\.zshrc/\.config/zsh/dotconfig/.bunconfig/g' | bash
-  fi
-
-  # TODO: remove this
-  if [[ -s $HOME/.bunconfig ]]; then
-    mv $HOME/.bunconfig $HOME/.config/zsh/dotconfig/.bunconfig
+# Setup sudo fallback for environments without sudo
+setup_sudo() {
+  if ! command -v sudo >/dev/null 2>&1; then
+    if [[ "$USER" == "root" ]]; then
+      # Create a fake sudo function for root user
+      sudo() { "$@"; }
+      export -f sudo
+    else
+      echo "error: sudo not available and not running as root" >&2
+      exit 1
+    fi
   fi
 }
 
-install_by_brew() {
-  # install Homebrew if it's missing
-  if ! command -v brew >/dev/null 2>&1; then
-    echo "Installing Homebrew"
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-    (echo; echo "eval '$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)'") > $HOME/.brewconfig
-    source $HOME/.brewconfig
+# Install zsh with different methods for different systems
+install_zsh() {
+  if command -v zsh >/dev/null 2>&1; then
+    echo "zsh is already installed"
+    return
   fi
+  
+  echo "Installing zsh..."
+  if [[ -f /etc/arch-release ]]; then
+    sudo pacman -S --noconfirm --needed zsh
+  elif [[ "$OSTYPE" == "darwin"* ]]; then
+    brew install zsh
+  elif command -v apt >/dev/null 2>&1; then
+    sudo apt update && sudo apt install -y zsh
+  else
+    echo "error: unsupported system, please install zsh manually" >&2
+  fi
+}
 
-  brew install gh
-  brew install bundler-completion
-  brew install squirrel-app
+# Package name exceptions - most packages have same name across managers
+declare -A PACKAGE_EXCEPTIONS
+init_package_exceptions() {
+  # Only list packages that have different names
+  PACKAGE_EXCEPTIONS[gh:pacman]="github-cli"
+}
 
-  # too slow to install modular
-  # curl https://get.modular.com | sh -
-  # modular auth mut_aad64e0ecc154c848a41db73825820e9
-  # modular install mojo
+# Get package name, using exception or default to package name
+get_package_name() {
+  local package=$1
+  local manager=$2
+  local key="${package}:${manager}"
+  echo "${PACKAGE_EXCEPTIONS[$key]:-$package}"
+}
 
-  # For macOS, install some desktop apps.
+# Install packages with given package manager
+install_packages() {
+  local manager=$1
+  local cmd=$2
+  shift 2
+  local package_list=("$@")
+  
+  if [[ ${#package_list[@]} -eq 0 ]]; then
+    return
+  fi
+  
+  local packages=()
+  for package in "${package_list[@]}"; do
+    packages+=("$(get_package_name "$package" "$manager")")
+  done
+  
+  echo "Installing with $manager: ${packages[*]}"
+  $cmd "${packages[@]}"
+}
+
+# Essential packages - available in all package managers (zsh handled separately)
+ESSENTIAL_PACKAGES=(git yadm gpg lua python)
+
+# Full packages - may not be available in apt, will use x-cmd fallback
+FULL_PACKAGES=(lsd gh bat sd dust ripgrep fd bottom procs duf httpie nexttrace ast-grep 
+              git-delta gitui zellij difftastic helix pueue fzf progress atuin 
+              hyperfine bitwarden-cli starship fastfetch micromamba uv git-lfs)
+
+# Install based on system and user type
+install_programs() {
+  setup_sudo
+  init_package_exceptions
+  
   if [[ "$OSTYPE" == "darwin"* ]]; then
-    brew install pinentry-mac
-    brew tap pot-app/homebrew-tap
-    brew install --cask pot
-    brew install --cask linearmouse
-    brew install --cask he3-app/he3/he3
+    # macOS - always non-root user, install everything
+    if [[ "$USER" == "root" ]]; then
+      echo "error: macOS should not run as root user" >&2
+      exit 1
+    fi
+    
+    echo "=== macOS: Installing all programs with brew ==="
+    install_zsh
+    install_packages "brew" "brew install" "${ESSENTIAL_PACKAGES[@]}" "${FULL_PACKAGES[@]}"
+    install_macos_specific
+    install_bun
+    
+  elif [[ -f /etc/arch-release ]]; then
+    # Arch Linux - check user type
+    install_zsh
+    if [[ "$USER" == "root" ]]; then
+      echo "=== Arch Linux (root): Installing essential programs with pacman ==="
+      install_packages "pacman" "pacman -S --noconfirm --needed" "${ESSENTIAL_PACKAGES[@]}"
+    else
+      echo "=== Arch Linux (user): Installing all programs with paru ==="
+      install_paru_if_needed
+      install_packages "paru" "paru -S --noconfirm --needed" "${ESSENTIAL_PACKAGES[@]}" "${FULL_PACKAGES[@]}"
+    fi
+    install_bun
+    
+  elif command -v apt >/dev/null 2>&1; then
+    # Ubuntu - install zsh with apt, rest with x-cmd
+    echo "=== Ubuntu: Installing zsh with apt, others with x-cmd ==="
+    install_zsh
+    
+    # TODO: merge to install_programs
+    install_with_xcmd
+    
+  else
+    echo "error: unsupported system" >&2
+    exit 1
   fi
 }
 
-install_by_pacman() {
+# Install paru if needed (for Arch Linux non-root users)
+install_paru_if_needed() {
   if ! command -v paru >/dev/null 2>&1; then
-    echo "Installing paru"
+    echo "Installing paru..."
     sudo pacman -S --noconfirm --needed base-devel rustup
     rustup default stable
     git clone https://aur.archlinux.org/paru.git
     cd paru && makepkg -si && cd ..
     rm -rf paru
   fi
-  paru -S --noconfirm --needed github-cli unrar
-  paru -S --noconfirm --needed zsh
-  # too slow to install modular
-  # paru -S --noconfirm --needed modular
-  # modular auth mut_aad64e0ecc154c848a41db73825820e9
-  # modular install mojo
+  # Install Arch-specific packages
+  paru -S --noconfirm --needed unrar
+}
+
+# Install packages with x-cmd
+install_with_xcmd() {
+  [[ -f $HOME/.x-cmd.root/X ]] || eval "$(curl https://get.x-cmd.com)"
+  x env use gh lua starship fastfetch lsd
+}
+
+# Install bun JavaScript runtime
+install_bun() {
+  if ! command -v bun >/dev/null 2>&1; then
+    echo "Installing bun..."
+    curl -fsSL https://bun.sh/install | sed 's/\.zshrc/\.config/zsh/dotconfig/.bunconfig/g' | bash
+  fi
+}
+
+# macOS specific installations
+install_macos_specific() {
+  # Install additional tools
+  brew install gh bundler-completion squirrel-app pinentry-mac
+  
+  # Install cask applications
+  brew tap pot-app/homebrew-tap
+  brew install --cask pot linearmouse he3-app/he3/he3
 }
 
 install_by_uv() {
@@ -75,7 +164,7 @@ install_by_uv() {
   uv tool install pre-commit
   uv tool install auto-config
   uv tool install auto-token
-  # 判断是否有nvidia-smi
+  # install nvitop if nvidia-smi exists
   if command -v nvidia-smi >/dev/null 2>&1; then
     uv tool install nvitop
   fi
@@ -86,35 +175,31 @@ config_zsh() {
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/z-shell/zi-src/main/lib/sh/install.sh)" -- -i skip
     zsh -cl -- '(source $HOME/.config/zsh/.zi.zsh && @zi-scheduler burst) || true'
   fi
-  # $HOME/.zprofile
+  # setup .zprofile
   if [[ ! -f $HOME/.zprofile ]]; then
     touch $HOME/.zprofile
     echo "emulate sh -c 'source /etc/profile'" | tee -a $HOME/.zprofile
   fi
 }
 
-if [[ ! -f /.dockerenv ]] && [[ $USER == "root" ]]; then
-  echo "Please login as non-root user and run this script again:"
-  echo "  su user"
-  echo "  yadm clone --bootstrap https://github.com/zrr1999/dotfiles.git"
-  exit
-fi
-
 if [[ -n "$GITHUB_ACTIONS" ]]; then
   echo "::group::installing packages"
 fi
-if [[ -f /etc/arch-release ]]; then
-  echo "system type: ArchLinux, install by pacman"
-  install_by_pacman
-  install_by_installer "paru -S --noconfirm --needed"
-else
-  echo "other system type, install by brew"
-  install_by_brew
-  install_by_installer "brew install"
+
+# Main installation logic
+install_programs
+
+# Setup git-lfs if it was installed
+if command -v git-lfs >/dev/null 2>&1; then
+  git lfs install
 fi
+
 install_by_uv
+
+# Configuration
 auto-config
 auto-token init
+
 if [[ -n "$GITHUB_ACTIONS" ]]; then
   echo "::endgroup::"
 fi
@@ -125,9 +210,4 @@ fi
 config_zsh
 if [[ -n "$GITHUB_ACTIONS" ]]; then
   echo "::endgroup::"
-fi
-
-# move some files to the right place
-if [[ ! -f $HOME/.gnupg/gpg-agent.conf ]]; then
-  cp $HOME/.gnupg/gpg-agent.conf.default $HOME/.gnupg/gpg-agent.conf
 fi

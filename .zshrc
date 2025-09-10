@@ -19,10 +19,9 @@ autoload -Uz compinit
 # config local bin
 export PATH=$PATH:$HOME/.local/bin
 
-# config homebrew
-if [[ -s $HOME/.brewconfig ]]; then
-  source $HOME/.brewconfig
-fi
+[ ! -s "$HOME/.brewconfig" ] || source "$HOME/.brewconfig"
+[ ! -s "$HOME/.x-cmd.root/X" ] || source "$HOME/.x-cmd.root/X"
+
 if command -v brew >/dev/null 2>&1; then
   fpath+=$(brew --prefix)/share/zsh/site-functions
   export HOMEBREW_NO_AUTO_UPDATE=true
