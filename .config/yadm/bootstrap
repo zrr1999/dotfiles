@@ -14,6 +14,32 @@ setup_sudo() {
   fi
 }
 
+# Install system-agnostic applications using independent installation methods
+install_independent_apps() {
+  echo "Installing system-agnostic applications..."
+  
+  # Install bun JavaScript runtime
+  if ! command -v bun >/dev/null 2>&1; then
+    echo "Installing bun..."
+    curl -fsSL https://bun.sh/install | sed 's/\.zshrc/\.config/zsh/dotconfig/.bunconfig/g' | bash
+  else
+    echo "bun is already installed"
+  fi
+  
+  # Install uv Python package manager if not available
+  if ! command -v uv >/dev/null 2>&1; then
+    echo "Installing uv..."
+    curl -LsSf https://astral.sh/uv/install.sh | sh
+  else
+    echo "uv is already installed"
+  fi
+  
+  # Setup git-lfs if it was installed
+  if command -v git-lfs >/dev/null 2>&1; then
+    git lfs install
+  fi
+}
+
 # Install zsh with different methods for different systems
 install_zsh() {
   if command -v zsh >/dev/null 2>&1; then
@@ -42,9 +68,6 @@ get_package_name() {
   case "${package}:${manager}" in
     "gh:pacman")
       echo "github-cli"
-      ;;
-    "python:brew")
-      echo "python@3.12"
       ;;
     "gpg:pacman"|"gpg:paru"|"gpg:brew")
       echo "gnupg"
@@ -76,12 +99,12 @@ install_packages() {
 }
 
 # Essential packages - available in all package managers (zsh handled separately)
-ESSENTIAL_PACKAGES=(git yadm gpg lua python)
+ESSENTIAL_PACKAGES=(lua starship fastfetch lsd dust)
 
 # Full packages - may not be available in apt, will use x-cmd fallback
-FULL_PACKAGES=(lsd gh bat sd dust ripgrep fd bottom procs duf httpie nexttrace ast-grep 
+FULL_PACKAGES=(git yadm gpg python gh bat sd ripgrep fd bottom procs duf httpie nexttrace ast-grep 
               git-delta gitui zellij difftastic helix pueue fzf progress atuin 
-              hyperfine bitwarden-cli starship fastfetch micromamba uv git-lfs)
+              hyperfine bitwarden-cli micromamba uv git-lfs)
 
 # Install based on system and user type
 install_programs() {
@@ -98,7 +121,6 @@ install_programs() {
     install_zsh
     install_packages "brew" "brew install" "${ESSENTIAL_PACKAGES[@]}" "${FULL_PACKAGES[@]}"
     install_macos_specific
-    install_bun
     
   elif [[ -f /etc/arch-release ]]; then
     # Arch Linux - check user type
@@ -111,7 +133,6 @@ install_programs() {
       install_paru_if_needed
       install_packages "paru" "paru -S --noconfirm --needed" "${ESSENTIAL_PACKAGES[@]}" "${FULL_PACKAGES[@]}"
     fi
-    install_bun
     
   elif command -v apt >/dev/null 2>&1; then
     # Ubuntu - install zsh with apt, rest with x-cmd
@@ -120,11 +141,15 @@ install_programs() {
     
     # TODO: merge to install_programs
     install_with_xcmd
+    install_packages "xcmd" "x env use" "${ESSENTIAL_PACKAGES[@]}"
     
   else
     echo "error: unsupported system" >&2
     exit 1
   fi
+  
+  # Install system-agnostic applications
+  install_independent_apps
 }
 
 # Install paru if needed (for Arch Linux non-root users)
@@ -144,25 +169,16 @@ install_paru_if_needed() {
 # Install packages with x-cmd
 install_with_xcmd() {
   [[ -f $HOME/.x-cmd.root/X ]] || eval "$(curl https://get.x-cmd.com)"
-  x env use gh lua starship fastfetch lsd
-}
-
-# Install bun JavaScript runtime
-install_bun() {
-  if ! command -v bun >/dev/null 2>&1; then
-    echo "Installing bun..."
-    curl -fsSL https://bun.sh/install | sed 's/\.zshrc/\.config/zsh/dotconfig/.bunconfig/g' | bash
-  fi
+  x env use gh
 }
 
 # macOS specific installations
 install_macos_specific() {
   # Install additional tools
-  brew install gh bundler-completion squirrel-app pinentry-mac
+  brew install bundler-completion squirrel-app pinentry-mac
   
   # Install cask applications
-  brew tap pot-app/homebrew-tap
-  brew install --cask pot linearmouse he3-app/he3/he3
+  brew install --cask linearmouse he3-app/he3/he3
 }
 
 install_by_uv() {
@@ -190,21 +206,8 @@ config_zsh() {
 if [[ -n "$GITHUB_ACTIONS" ]]; then
   echo "::group::installing packages"
 fi
-
-# Main installation logic
 install_programs
-
-# Setup git-lfs if it was installed
-if command -v git-lfs >/dev/null 2>&1; then
-  git lfs install
-fi
-
 install_by_uv
-
-# Configuration
-auto-config
-auto-token init
-
 if [[ -n "$GITHUB_ACTIONS" ]]; then
   echo "::endgroup::"
 fi
@@ -212,6 +215,8 @@ fi
 if [[ -n "$GITHUB_ACTIONS" ]]; then
   echo "::group::configuring zsh"
 fi
+auto-config generate-config
+auto-token init
 config_zsh
 if [[ -n "$GITHUB_ACTIONS" ]]; then
   echo "::endgroup::"
