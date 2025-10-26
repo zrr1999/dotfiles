@@ -60,7 +60,7 @@ private = "hosts"
 
   [devices.extra.dns]
   public = "snmp:wan4_ad"
-  private = "192.168.1.5"
+  private = "10.0.0.5"
 
 [[devices]]
   system = "hass"
@@ -88,7 +88,7 @@ private = "hosts"
   port = 10000
 
   [devices.extra.dns]
-  private = "192.168.1.11"
+  private = "10.0.0.11"
 
 # home
 [[devices]]
@@ -103,7 +103,7 @@ private = "hosts"
 
   [devices.extra.dns]
   public = "snmp:adsl1"
-  private = "192.168.10.5"
+  private = "10.0.1.4"
 
 [[devices]]
   system = "server"
