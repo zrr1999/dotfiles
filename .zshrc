@@ -65,12 +65,20 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/.local/lib/arch-mojo
 export PATH=$PATH:$HOME/.modular/pkg/packages.modular.com_max/bin/
 
 # config bun
-[ -s "/home/zrr/.bun/_bun" ] && source "/home/zrr/.bun/_bun" # bun completions
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun" # bun completions
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
 # zsh-defer eval "$(atuin init zsh --disable-up-arrow)"
 zsh-defer find ~/.ssh -name 'id_*' ! -name '*.pub' -exec ssh-add {} \;
 
-eval $(auto-token shellenv)
-fpath+=~/.zfunc; autoload -Uz compinit; compinit
+# Initialize auto-token if available
+command -v auto-token >/dev/null 2>&1 && eval $(auto-token shellenv)
+
+# Initialize completions (avoid duplicate calls)
+if [[ -z "$_COMPINIT_LOADED" ]]; then
+  fpath+=~/.zfunc
+  autoload -Uz compinit
+  compinit
+  export _COMPINIT_LOADED=1
+fi

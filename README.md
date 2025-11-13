@@ -1,25 +1,77 @@
-# My dotfiles
+# My Dotfiles
 
+一个现代化的 dotfiles 配置，支持多平台（macOS、Arch Linux、Ubuntu），提供完整的开发环境配置。
 
-## install
-```sh
+## ✨ 特性
+
+- 🚀 **现代化工具链**: 使用 starship、zi、lsd、ripgrep 等现代化工具
+- 🎯 **多平台支持**: 支持 macOS、Arch Linux、Ubuntu
+- 🔧 **自动化安装**: 一键安装和配置所有工具
+- 📦 **包管理器集成**: 支持 brew、pacman、apt 等包管理器
+- 🐍 **Python 环境**: 集成 micromamba、uv 等 Python 工具
+- 🔐 **安全配置**: GPG 签名、SSH 密钥管理
+
+## 🚀 快速安装
+
+### 前置条件
+- Git
+- Curl
+- 网络连接
+
+### 一键安装
+```bash
+# 方法1: 使用 yadm（推荐）
 curl -fLo /tmp/yadm https://github.com/TheLocehiliosan/yadm/raw/master/yadm \
 && chmod a+x /tmp/yadm \
 && /tmp/yadm clone https://github.com/zrr1999/dotfiles.git \
 && /tmp/yadm bootstrap \
 && rm /tmp/yadm
+
+# 方法2: 使用安装脚本(暂不可用)
+# bash <(curl -fsSL https://raw.githubusercontent.com/zrr1999/dotfiles/main/get-dotfiles.sh)
 ```
 
-### arch
-```sh
+### Arch Linux 镜像优化
+```bash
 echo "Setting up pacman mirrorlist"
-pacman -S --noconfirm --needed reflector
-reflector --save /etc/pacman.d/mirrorlist --country China --protocol https --latest 5
+sudo pacman -S --noconfirm --needed reflector
+sudo reflector --save /etc/pacman.d/mirrorlist --country China --protocol https --latest 5
 ```
 
+## 🔧 主要配置
 
-## zsh config
+### Zsh 配置
+- **插件管理**: 使用 zi 管理 zsh 插件
+- **主题**: Starship 现代化提示符
+- **补全**: 智能命令补全和语法高亮
+- **别名**: 现代化工具别名（ls→lsd, grep→rg 等）
 
-## bootstrap
+### 开发工具
+- **编辑器**: Helix
+- **版本控制**: Git + Git LFS + GPG 签名
+- **Python**: Micromamba + uv 包管理
+- **Node.js**: Bun 运行时
+- **Rust**: Cargo 工具链
 
-## ssh config
+### 系统工具
+- **文件管理**: lsd, dust, duf
+- **搜索工具**: ripgrep, fd
+- **网络工具**: httpie, nexttrace
+- **监控工具**: bottom, procs
+
+## 🛠️ 自定义配置
+
+安装完成后，你可以根据需要修改以下文件：
+
+- `~/.config/zsh/.aliases.zsh` - 添加自定义别名
+- `~/.config/zsh/.functions.zsh` - 添加自定义函数
+- `~/.config/starship.toml` - 自定义提示符样式
+- `~/.gitconfig` - 修改 Git 配置
+
+## 🔐 安全说明
+
+- Git 提交默认启用 GPG 签名
+- SSH 密钥自动加载到 ssh-agent
+
+## 📝 许可证
+本项目采用 MIT 许可证，详见 [LICENSE](LICENSE) 文件。

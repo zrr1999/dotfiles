@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -euo pipefail  # 严格模式：遇到错误即退出
 
 # Setup sudo fallback for environments without sudo
 setup_sudo() {
@@ -21,7 +22,7 @@ install_independent_apps() {
   # Install bun JavaScript runtime
   if ! command -v bun >/dev/null 2>&1; then
     echo "Installing bun..."
-    curl -fsSL https://bun.sh/install | sed 's/\.zshrc/\.config/zsh/dotconfig/.bunconfig/g' | bash
+    curl -fsSL https://bun.sh/install | sed 's/\.zshrc/\.config\/zsh\/dotconfig\/.bunconfig/g' | bash
   else
     echo "bun is already installed"
   fi
