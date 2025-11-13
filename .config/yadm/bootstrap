@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
-set -euo pipefail  # 严格模式：遇到错误即退出
-
 # Setup sudo fallback for environments without sudo
 setup_sudo() {
   if ! command -v sudo >/dev/null 2>&1; then
