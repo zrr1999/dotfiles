@@ -184,7 +184,7 @@ install_macos_specific() {
 }
 
 install_by_uv() {
-  uv tool install pre-commit
+  uv tool install prek
   uv tool install auto-config
   uv tool install auto-token
   # install nvitop if nvidia-smi exists
