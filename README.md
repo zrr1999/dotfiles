@@ -21,7 +21,7 @@
 ### 一键安装
 ```bash
 # 方法1: 使用 yadm（推荐）
-curl -fLo /tmp/yadm https://github.com/TheLocehiliosan/yadm/raw/master/yadm \
+PATH=/tmp:$PATH curl -fLo /tmp/yadm https://github.com/TheLocehiliosan/yadm/raw/master/yadm \
 && chmod a+x /tmp/yadm \
 && /tmp/yadm clone https://github.com/zrr1999/dotfiles.git \
 && /tmp/yadm bootstrap \
