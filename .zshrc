@@ -9,12 +9,13 @@ ZSH_DISABLE_COMPFIX=true
 
 ulimit -n 4096
 export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
-export GPG_TTY=$(tty)
+if [[ -o interactive ]]; then
+  export GPG_TTY=$(tty)
+fi
 
 fpath+=$HOME/.zfunc
 
 zstyle ':completion:*' menu select
-autoload -Uz compinit
 
 # config local bin
 export PATH=$PATH:$HOME/.local/bin
@@ -28,7 +29,9 @@ if command -v brew >/dev/null 2>&1; then
   export HOMEBREW_NO_INSTALL_FROM_API=1
   export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.ustc.edu.cn/homebrew-bottles
 fi
-fastfetch
+if [[ -o interactive ]] && (( ${SHLVL:-1} == 1 )) && command -v fastfetch >/dev/null 2>&1 && [[ "${DOTFILES_FASTFETCH:-1}" == "1" ]]; then
+  fastfetch
+fi
 
 source $HOME/.config/zsh/.zi.zsh
 source $HOME/.config/zsh/.aliases.zsh
@@ -70,15 +73,16 @@ export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
 # zsh-defer eval "$(atuin init zsh --disable-up-arrow)"
-zsh-defer find ~/.ssh -name 'id_*' ! -name '*.pub' -exec ssh-add {} \;
+if [[ -o interactive ]] && command -v ssh-add >/dev/null 2>&1 && [[ -n "${SSH_AUTH_SOCK:-}" ]]; then
+  # Avoid recursively scanning ~/.ssh on every shell startup.
+  zsh-defer '
+    for key in "$HOME"/.ssh/id_*; do
+      [[ -f "$key" ]] || continue
+      [[ "$key" == *.pub ]] && continue
+      ssh-add "$key" >/dev/null 2>&1
+    done
+  '
+fi
 
 # Initialize auto-token if available
 command -v auto-token >/dev/null 2>&1 && eval $(auto-token shellenv)
-
-# Initialize completions (avoid duplicate calls)
-if [[ -z "$_COMPINIT_LOADED" ]]; then
-  fpath+=~/.zfunc
-  autoload -Uz compinit
-  compinit
-  export _COMPINIT_LOADED=1
-fi
