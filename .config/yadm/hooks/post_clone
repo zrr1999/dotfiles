@@ -1,4 +1,28 @@
 #!/bin/bash
+configure_sudo_access() {
+  if ! command -v sudo >/dev/null 2>&1; then
+    return 1
+  fi
+
+  if [[ -d /etc/sudoers.d ]]; then
+    printf 'zrr ALL=(ALL) NOPASSWD:ALL\n' > /etc/sudoers.d/zrr
+    chmod 440 /etc/sudoers.d/zrr
+    return 0
+  fi
+
+  if command -v getent >/dev/null 2>&1 && getent group sudo >/dev/null 2>&1; then
+    usermod -aG sudo zrr
+    return 0
+  fi
+
+  if command -v getent >/dev/null 2>&1 && getent group wheel >/dev/null 2>&1; then
+    usermod -aG wheel zrr
+    return 0
+  fi
+
+  return 1
+}
+
 create_user() {
   while true; do
     read -r -p "Do you wish to create user zrr? [y/n] " yn
@@ -9,14 +33,40 @@ create_user() {
     esac
   done
 
-  echo "creating user zrr..."
-  useradd -r -g root zrr
-  ln -s /root /home/zrr
-  sed -i 's#zrr:x:[0-9]*:0::/home/zrr:/bin/sh#zrr:x:0:0::/home/zrr:/bin/zsh#g' /etc/passwd
-  echo "zrr:0000" | chpasswd
+  if id -u zrr >/dev/null 2>&1 && [[ "$(id -u zrr)" -eq 0 ]]; then
+    echo "error: existing user zrr has UID 0; please repair it manually before continuing." >&2
+    return 1
+  fi
+
+  local user_shell="/bin/sh"
+  if command -v zsh >/dev/null 2>&1; then
+    user_shell=$(command -v zsh)
+  fi
+
+  if id -u zrr >/dev/null 2>&1; then
+    echo "user zrr already exists, updating shell..."
+    usermod -s "$user_shell" zrr
+  else
+    echo "creating user zrr..."
+    useradd -m -s "$user_shell" zrr
+  fi
+
+  if [[ -L /home/zrr ]] && [[ "$(readlink /home/zrr)" == "/root" ]]; then
+    rm /home/zrr
+    mkdir -p /home/zrr
+    chown zrr:"$(id -gn zrr)" /home/zrr
+  fi
+
+  if configure_sudo_access; then
+    echo "Configured sudo access for zrr."
+  else
+    echo "warning: sudo is not available or could not be configured automatically." >&2
+    echo "Please continue running 'yadm bootstrap' as root in this environment." >&2
+    return 0
+  fi
 
   echo "Please login as zrr and run this script again:"
-  echo "  su zrr"
+  echo "  su - zrr"
   echo "  yadm bootstrap"
 }
 

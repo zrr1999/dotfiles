@@ -184,17 +184,27 @@ install_macos_specific() {
 }
 
 install_by_uv() {
-  uv tool install prek
-  uv tool install auto-config
-  uv tool install auto-token
+  install_uv_tool_if_missing "prek"
+  install_uv_tool_if_missing "auto-config"
+  install_uv_tool_if_missing "auto-token"
   # install nvitop if nvidia-smi exists
   if command -v nvidia-smi >/dev/null 2>&1; then
-    uv tool install nvitop
+    install_uv_tool_if_missing "nvitop"
   fi
 }
 
 install_by_bun() {
   bun install -g opencode-ai
+}
+
+install_uv_tool_if_missing() {
+  local tool=$1
+  if command -v "$tool" >/dev/null 2>&1; then
+    echo "$tool is already installed"
+    return
+  fi
+
+  uv tool install "$tool"
 }
 
 config_zsh() {
