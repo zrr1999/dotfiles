@@ -27,8 +27,8 @@ PATH=/tmp:$PATH curl -fLo /tmp/yadm https://github.com/TheLocehiliosan/yadm/raw/
 && /tmp/yadm bootstrap \
 && rm /tmp/yadm
 
-# 方法2: 使用安装脚本(暂不可用)
-# bash <(curl -fsSL https://raw.githubusercontent.com/zrr1999/dotfiles/main/get-dotfiles.sh)
+# 方法2: 使用安装脚本（一键安装）
+bash <(curl -fsSL https://raw.githubusercontent.com/zrr1999/dotfiles/main/install)
 ```
 
 ### Arch Linux 镜像优化
