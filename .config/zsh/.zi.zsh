@@ -14,7 +14,7 @@ zi wait lucid light-mode for \
     skywind3000/z.lua \
     z-shell/zui \
     z-shell/brew-completions \
-    z-shell/zbrowse 
+    z-shell/zbrowse
 
 if [[ -n $(command -v docker) ]]; then
   zi wait lucid light-mode for \

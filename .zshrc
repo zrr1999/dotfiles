@@ -72,6 +72,9 @@ export PATH=$PATH:$HOME/.modular/pkg/packages.modular.com_max/bin/
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
+# Vite+ (https://viteplus.dev)，若已安装则加载
+[ -f "$HOME/.vite-plus/env" ] && . "$HOME/.vite-plus/env"
+
 # zsh-defer eval "$(atuin init zsh --disable-up-arrow)"
 if [[ -o interactive ]] && command -v ssh-add >/dev/null 2>&1 && [[ -n "${SSH_AUTH_SOCK:-}" ]]; then
   # Avoid recursively scanning ~/.ssh on every shell startup.

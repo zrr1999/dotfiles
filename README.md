@@ -8,7 +8,7 @@
 - 🎯 **多平台支持**: 支持 macOS、Arch Linux、Ubuntu
 - 🔧 **自动化安装**: 一键安装和配置所有工具
 - 📦 **包管理器集成**: 支持 brew、pacman、apt 等包管理器
-- 🐍 **Python 环境**: 集成 micromamba、uv 等 Python 工具
+- 🐍 **Python 环境**: uv 为主（包/工具），micromamba 可选（多版本/科学计算）
 - 🔐 **安全配置**: GPG 签名、SSH 密钥管理
 
 ## 🚀 快速安装
@@ -31,6 +31,10 @@ PATH=/tmp:$PATH curl -fLo /tmp/yadm https://github.com/TheLocehiliosan/yadm/raw/
 bash <(curl -fsSL https://raw.githubusercontent.com/zrr1999/dotfiles/main/install)
 ```
 
+安装完成后，在 dotfiles 目录内可用 **just** 执行常用任务：
+- `just install` — 运行 yadm bootstrap
+- `just update` — 拉取最新配置并重新应用
+
 ### Arch Linux 镜像优化
 ```bash
 echo "Setting up pacman mirrorlist"
@@ -49,9 +53,11 @@ sudo reflector --save /etc/pacman.d/mirrorlist --country China --protocol https 
 ### 开发工具
 - **编辑器**: Helix
 - **版本控制**: Git + Git LFS + GPG 签名
-- **Python**: Micromamba + uv 包管理
+- **Python**: uv 包管理 + 全局工具（prek、ty、ruff 等），micromamba 可选
 - **Node.js**: Bun 运行时
 - **Rust**: Cargo 工具链
+- **Vite+**: 若已安装（~/.vite-plus/env），会在 shell 中自动加载
+- **任务脚本**: just（替代 Makefile）
 
 ### 系统工具
 - **文件管理**: lsd, dust, duf

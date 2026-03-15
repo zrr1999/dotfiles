@@ -26,8 +26,11 @@ alias top='btm'       # 使用 bottom 替换 top
 alias du='dust'       # 使用 dust 替换 du
 alias df='duf'        # 使用 duf 替换 df
 
-# 性能优化别名
-alias pre-commit='prek'  # 使用 prek 加速 pre-commit
+# uvx 按需运行（不全局安装）
+alias prek='uvx prek'
+alias pre-commit='uvx prek'
+alias ty='uvx ty'
+alias ruff='uvx ruff'
 
 # 复杂命令别名
 # 树形显示目录结构（使用 lsd）

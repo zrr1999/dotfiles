@@ -16,7 +16,7 @@ setup_sudo() {
 # Install system-agnostic applications using independent installation methods
 install_independent_apps() {
   echo "Installing system-agnostic applications..."
-  
+
   # Install bun JavaScript runtime
   if ! command -v bun >/dev/null 2>&1; then
     echo "Installing bun..."
@@ -24,7 +24,7 @@ install_independent_apps() {
   else
     echo "bun is already installed"
   fi
-  
+
   # Install uv Python package manager if not available
   if ! command -v uv >/dev/null 2>&1; then
     echo "Installing uv..."
@@ -32,7 +32,7 @@ install_independent_apps() {
   else
     echo "uv is already installed"
   fi
-  
+
   # Setup git-lfs if it was installed
   if command -v git-lfs >/dev/null 2>&1; then
     git lfs install
@@ -45,7 +45,7 @@ install_zsh() {
     echo "zsh is already installed"
     return
   fi
-  
+
   echo "Installing zsh..."
   if [[ -f /etc/arch-release ]]; then
     sudo pacman -S --noconfirm --needed zsh
@@ -63,7 +63,7 @@ install_zsh() {
 get_package_name() {
   local package=$1
   local manager=$2
-  
+
   # Handle package name exceptions
   case "${package}:${manager}" in
     "gh:pacman")
@@ -84,16 +84,16 @@ install_packages() {
   local cmd=$2
   shift 2
   local package_list=("$@")
-  
+
   if [[ ${#package_list[@]} -eq 0 ]]; then
     return
   fi
-  
+
   local packages=()
   for package in "${package_list[@]}"; do
     packages+=("$(get_package_name "$package" "$manager")")
   done
-  
+
   echo "Installing with $manager: ${packages[*]}"
   $cmd "${packages[@]}"
 }
@@ -102,26 +102,26 @@ install_packages() {
 ESSENTIAL_PACKAGES=(lua starship fastfetch lsd dust)
 
 # Full packages - may not be available in apt, will use x-cmd fallback
-FULL_PACKAGES=(git yadm gpg python gh bat sd ripgrep fd bottom procs duf httpie nexttrace ast-grep 
-              git-delta gitui zellij difftastic helix pueue fzf progress atuin 
-              hyperfine bitwarden-cli micromamba uv git-lfs)
+FULL_PACKAGES=(git yadm gpg python gh bat sd ripgrep fd bottom procs duf httpie nexttrace ast-grep
+              git-delta gitui zellij difftastic helix pueue fzf progress atuin
+              hyperfine bitwarden-cli micromamba uv git-lfs just)
 
 # Install based on system and user type
 install_programs() {
   setup_sudo
-  
+
   if [[ "$OSTYPE" == "darwin"* ]]; then
     # macOS - always non-root user, install everything
     if [[ "$USER" == "root" ]]; then
       echo "error: macOS should not run as root user" >&2
       exit 1
     fi
-    
+
     echo "=== macOS: Installing all programs with brew ==="
     install_zsh
     install_packages "brew" "brew install" "${ESSENTIAL_PACKAGES[@]}" "${FULL_PACKAGES[@]}"
     install_macos_specific
-    
+
   elif [[ -f /etc/arch-release ]]; then
     # Arch Linux - check user type
     install_zsh
@@ -133,21 +133,21 @@ install_programs() {
       install_paru_if_needed
       install_packages "paru" "paru -S --noconfirm --needed" "${ESSENTIAL_PACKAGES[@]}" "${FULL_PACKAGES[@]}"
     fi
-    
+
   elif command -v apt >/dev/null 2>&1; then
     # Ubuntu - install zsh with apt, rest with x-cmd
     echo "=== Ubuntu: Installing zsh with apt, others with x-cmd ==="
     install_zsh
-    
+
     # TODO: merge to install_programs
     install_with_xcmd
     install_packages "xcmd" "x env use" "${ESSENTIAL_PACKAGES[@]}"
-    
+
   else
     echo "error: unsupported system" >&2
     exit 1
   fi
-  
+
   # Install system-agnostic applications
   install_independent_apps
 }
@@ -178,13 +178,19 @@ install_macos_specific() {
 
   # Install additional tools
   brew install bundler-completion squirrel-app pinentry-mac
-  
+
   # Install cask applications
   brew install --cask linearmouse he3-app/he3/he3
 }
 
+# Set git gpg.program to current gpg (e.g. Homebrew on macOS)
+set_git_gpg_program() {
+  if command -v gpg >/dev/null 2>&1; then
+    git config --global gpg.program "$(command -v gpg)"
+  fi
+}
+
 install_by_uv() {
-  install_uv_tool_if_missing "prek"
   install_uv_tool_if_missing "auto-config"
   install_uv_tool_if_missing "auto-token"
   # install nvitop if nvidia-smi exists
@@ -224,6 +230,7 @@ if [[ -n "$GITHUB_ACTIONS" ]]; then
 fi
 install_programs
 install_by_uv
+set_git_gpg_program
 if [[ -n "$GITHUB_ACTIONS" ]]; then
   echo "::endgroup::"
 fi
