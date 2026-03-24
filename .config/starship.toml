@@ -88,15 +88,21 @@ $shell\
 $character"""
 
 [character]
-success_symbol = '[➜](bold green)'
+success_symbol = '[➜](bold #98c379)'
+error_symbol = '[➜](bold #e06c75)'
 
 [package]
 disabled = true
 
 [directory]
+style = "bold #61afef"
 truncation_symbol = '.../'
 
+[git_branch]
+style = "bold #c678dd"
+
 [git_status]
+style = "bold #e5c07b"
 ahead = "⇡$count"
 diverged = "⇕⇡$ahead_count⇣$behind_count"
 behind = "⇣$count"
@@ -107,19 +113,25 @@ renamed = "»$count"
 conflicted = "=$count"
 untracked = "?$count"
 
+[fill]
+style = "bold #7f848e"
+
 [username]
-style_user = "yellow bold"
+style_user = "#e5c07b bold"
 format = " [$user@]($style)"
 
 [hostname]
-style = "yellow bold"
+style = "#e5c07b bold"
 ssh_only = false
 format = '[$hostname]($style) '
 disabled = false
 
 [time]
-style = "bold green"
+style = "bold #98c379"
 disabled = false
 format = '[$time]($style) '
 time_format = '%T'
 utc_time_offset = '+8'
+
+[status]
+style = "bold #e06c75"
