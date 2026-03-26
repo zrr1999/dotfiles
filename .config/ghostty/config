@@ -11,3 +11,7 @@ selection-foreground = #e6efff
 unfocused-split-opacity = 0.82
 unfocused-split-fill = #21252b
 split-divider-color = #3e4451
+
+# Send macOS Option as Alt so Option-based shortcuts reach zellij/zsh
+# instead of producing special characters like "ƒå".
+macos-option-as-alt = true

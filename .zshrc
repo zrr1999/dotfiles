@@ -90,5 +90,3 @@ fi
 # Initialize auto-token if available
 command -v auto-token >/dev/null 2>&1 && eval $(auto-token shellenv)
 
-# Added by DuCC (symlink)
-export PATH="/Users/zhanrongrui/.comate/baidu-cc/bin:$PATH"
