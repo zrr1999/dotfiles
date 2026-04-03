@@ -102,7 +102,7 @@ install_packages() {
 ESSENTIAL_PACKAGES=(lua starship fastfetch lsd dust)
 
 # Full packages - may not be available in apt, will use x-cmd fallback
-FULL_PACKAGES=(git yadm gpg python gh bat sd ripgrep fd bottom procs duf httpie nexttrace ast-grep
+FULL_PACKAGES=(git gitoxide yadm gpg python gh bat sd ripgrep fd bottom procs duf httpie nexttrace ast-grep
               git-delta gitui zellij difftastic helix pueue fzf progress atuin
               hyperfine bitwarden-cli micromamba uv git-lfs just)
 
@@ -178,6 +178,7 @@ install_macos_specific() {
 
   # Install additional tools
   brew install bundler-completion squirrel-app pinentry-mac
+  brew install gh aviator-co/tap/av
 
   # Install cask applications
   brew install --cask linearmouse he3-app/he3/he3

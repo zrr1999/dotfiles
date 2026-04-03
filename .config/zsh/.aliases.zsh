@@ -15,13 +15,15 @@ alias qrun='pueue add -g queue'     # 队列执行任务
 
 # 现代化工具别名
 alias j='z'           # 目录跳转（z.lua）
+if command -v gix >/dev/null 2>&1; then
+    alias git='gix'   # 默认使用 gitoxide
+fi
 alias grep='rg'       # 使用 ripgrep 替换 grep
 alias ls='lsd'        # 使用 lsd 替换 ls
 alias ll='ls -l'      # 详细列表
 alias la='ls -a'      # 显示隐藏文件
 alias lla='ls -la'    # 详细列表含隐藏文件
 alias curl='curl --keepalive-time 60'  # 保持连接活跃
-alias conda='micromamba'  # 使用 micromamba 替换 conda
 alias top='btm'       # 使用 bottom 替换 top
 alias du='dust'       # 使用 dust 替换 du
 alias df='duf'        # 使用 duf 替换 df
@@ -50,4 +52,4 @@ alias -s zip='unzip'      # .zip 文件自动解压
 alias -s rar='unrar x'    # .rar 文件自动解压
 
 # Git 命令别名
-alias gsquash='git reset --soft HEAD~1 && git commit --amend'  # 合并最后一次提交
+alias gsquash='command git reset --soft HEAD~1 && command git commit --amend'  # 合并最后一次提交
