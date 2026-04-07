@@ -8,7 +8,7 @@
 - 🎯 **多平台支持**: 支持 macOS、Arch Linux、Ubuntu
 - 🔧 **自动化安装**: 一键安装和配置所有工具
 - 📦 **包管理器集成**: 支持 brew、pacman、apt 等包管理器
-- 🐍 **Python 环境**: uv 为主（包/工具），micromamba 可选（多版本/科学计算）
+- 🐍 **Python 环境**: uv 为主（包/工具）
 - 🔐 **安全配置**: GPG 签名、SSH 密钥管理
 
 ## 🚀 快速安装
@@ -53,8 +53,8 @@ sudo reflector --save /etc/pacman.d/mirrorlist --country China --protocol https 
 ### 开发工具
 - **编辑器**: Helix
 - **版本控制**: Git + Git LFS + GPG 签名
-- **Python**: uv 包管理 + 全局工具（prek、ty、ruff 等），micromamba 可选
-- **Node.js**: Bun 运行时
+- **Python**: uv 包管理 + 全局工具（prek、ty、ruff 等）
+- **Node.js**: fnm + Node.js LTS + pnpm + Bun
 - **Rust**: Cargo 工具链
 - **Vite+**: 若已安装（~/.vite-plus/env），会在 shell 中自动加载
 - **任务脚本**: just（替代 Makefile）

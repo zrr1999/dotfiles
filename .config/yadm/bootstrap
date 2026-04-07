@@ -33,6 +33,9 @@ install_independent_apps() {
     echo "uv is already installed"
   fi
 
+  install_node_tooling
+  install_nexttrace_if_missing
+
   # Setup git-lfs if it was installed
   if command -v git-lfs >/dev/null 2>&1; then
     git lfs install
@@ -69,7 +72,7 @@ get_package_name() {
     "gh:pacman")
       echo "github-cli"
       ;;
-    "gpg:pacman"|"gpg:paru"|"gpg:brew")
+    "gpg:pacman"|"gpg:brew")
       echo "gnupg"
       ;;
     *)
@@ -102,9 +105,16 @@ install_packages() {
 ESSENTIAL_PACKAGES=(lua starship fastfetch lsd dust)
 
 # Full packages - may not be available in apt, will use x-cmd fallback
-FULL_PACKAGES=(git gitoxide yadm gpg python gh bat sd ripgrep fd bottom procs duf httpie nexttrace ast-grep
-              git-delta gitui zellij difftastic helix pueue fzf progress atuin
-              hyperfine bitwarden-cli micromamba uv git-lfs just)
+FULL_PACKAGES=(git gitoxide yadm gpg python gh bat sd ripgrep fd bottom procs duf httpie ast-grep
+              git-delta gitui zellij difftastic helix pueue fzf progress atuin fnm
+              hyperfine bitwarden-cli uv git-lfs just)
+
+# Arch Linux (user): prefer official repos with pacman, use uv for Python CLIs,
+# and install nexttrace from the upstream release binary.
+ARCH_PACMAN_PACKAGES=("${ESSENTIAL_PACKAGES[@]}" git gitoxide yadm gpg python gh bat sd ripgrep fd bottom procs duf
+                     ast-grep git-delta gitui zellij difftastic helix pueue fzf progress atuin fnm
+                     hyperfine bitwarden-cli git-lfs just unrar)
+UV_TOOL_PACKAGES=(auto-config auto-token httpie)
 
 # Install based on system and user type
 install_programs() {
@@ -129,9 +139,8 @@ install_programs() {
       echo "=== Arch Linux (root): Installing essential programs with pacman ==="
       install_packages "pacman" "pacman -S --noconfirm --needed" "${ESSENTIAL_PACKAGES[@]}"
     else
-      echo "=== Arch Linux (user): Installing all programs with paru ==="
-      install_paru_if_needed
-      install_packages "paru" "paru -S --noconfirm --needed" "${ESSENTIAL_PACKAGES[@]}" "${FULL_PACKAGES[@]}"
+      echo "=== Arch Linux (user): Installing pacman and uv packages ==="
+      install_packages "pacman" "sudo pacman -S --noconfirm --needed" "${ARCH_PACMAN_PACKAGES[@]}"
     fi
 
   elif command -v apt >/dev/null 2>&1; then
@@ -150,20 +159,6 @@ install_programs() {
 
   # Install system-agnostic applications
   install_independent_apps
-}
-
-# Install paru if needed (for Arch Linux non-root users)
-install_paru_if_needed() {
-  if ! command -v paru >/dev/null 2>&1; then
-    echo "Installing paru..."
-    sudo pacman -S --noconfirm --needed base-devel rustup
-    rustup default stable
-    git clone https://aur.archlinux.org/paru.git
-    cd paru && makepkg -si && cd ..
-    rm -rf paru
-  fi
-  # Install Arch-specific packages
-  paru -S --noconfirm --needed unrar
 }
 
 # Install packages with x-cmd
@@ -191,9 +186,101 @@ set_git_gpg_program() {
   fi
 }
 
+install_node_tooling() {
+  if ! command -v fnm >/dev/null 2>&1; then
+    echo "fnm is not installed; skipping Node.js and pnpm setup"
+    return
+  fi
+
+  eval "$(fnm env --shell bash)"
+
+  local current_node_version
+  current_node_version=$(fnm current 2>/dev/null || true)
+  if [[ -z "$current_node_version" || "$current_node_version" == "system" ]]; then
+    echo "Installing Node.js LTS with fnm..."
+    fnm install --lts
+    fnm use --lts
+    current_node_version=$(fnm current 2>/dev/null || true)
+  fi
+
+  if [[ -z "$current_node_version" || "$current_node_version" == "system" ]]; then
+    echo "warning: fnm did not activate a managed Node.js version; skipping pnpm setup" >&2
+    return
+  fi
+
+  fnm use "$current_node_version"
+  fnm default "$current_node_version"
+
+  if ! command -v corepack >/dev/null 2>&1; then
+    echo "Installing corepack..."
+    npm install --global corepack@latest
+    hash -r
+  fi
+
+  corepack enable pnpm
+  hash -r
+
+  if ! command -v pnpm >/dev/null 2>&1; then
+    corepack prepare pnpm@latest --activate
+    hash -r
+  fi
+}
+
+get_nexttrace_platform() {
+  local os arch
+  case "$(uname -s)" in
+    Linux) os="linux" ;;
+    Darwin) os="darwin" ;;
+    *)
+      return 1
+      ;;
+  esac
+
+  case "$(uname -m)" in
+    x86_64|amd64) arch="amd64" ;;
+    aarch64|arm64) arch="arm64" ;;
+    armv7l|armv7) arch="armv7" ;;
+    i386|i686) arch="386" ;;
+    riscv64) arch="riscv64" ;;
+    loongarch64) arch="loong64" ;;
+    s390x) arch="s390x" ;;
+    *)
+      return 1
+      ;;
+  esac
+
+  echo "${os}_${arch}"
+}
+
+install_nexttrace_if_missing() {
+  if command -v nexttrace >/dev/null 2>&1; then
+    echo "nexttrace is already installed"
+    return
+  fi
+
+  local platform
+  if ! platform=$(get_nexttrace_platform); then
+    echo "warning: skipping nexttrace install on unsupported platform $(uname -s)/$(uname -m)" >&2
+    return
+  fi
+
+  echo "Installing nexttrace..."
+  local tmp_file
+  tmp_file=$(mktemp)
+  mkdir -p "$HOME/.local/bin"
+  curl -fsSL "https://github.com/nxtrace/NTrace-core/releases/latest/download/nexttrace_${platform}" -o "$tmp_file"
+  install -m 755 "$tmp_file" "$HOME/.local/bin/nexttrace"
+  rm -f "$tmp_file"
+}
+
 install_by_uv() {
-  install_uv_tool_if_missing "auto-config"
-  install_uv_tool_if_missing "auto-token"
+  for tool in "${UV_TOOL_PACKAGES[@]}"; do
+    if [[ "$tool" == "httpie" ]]; then
+      install_uv_tool_if_missing "$tool" "http"
+      continue
+    fi
+    install_uv_tool_if_missing "$tool"
+  done
   # install nvitop if nvidia-smi exists
   if command -v nvidia-smi >/dev/null 2>&1; then
     install_uv_tool_if_missing "nvitop"
@@ -205,13 +292,14 @@ install_by_bun() {
 }
 
 install_uv_tool_if_missing() {
-  local tool=$1
-  if command -v "$tool" >/dev/null 2>&1; then
-    echo "$tool is already installed"
+  local package=$1
+  local binary=${2:-$package}
+  if command -v "$binary" >/dev/null 2>&1; then
+    echo "$binary is already installed"
     return
   fi
 
-  uv tool install "$tool"
+  uv tool install "$package"
 }
 
 config_zsh() {
