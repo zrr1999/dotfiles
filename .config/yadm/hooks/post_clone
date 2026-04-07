@@ -81,6 +81,9 @@ remove_unused_files() {
 !LICENSE
 !.pre-commit-config.yaml
 !.gitignore
+!install
+!justfile
+!prek.toml
 EOF
     yadm checkout --quiet
   fi
