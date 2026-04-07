@@ -106,6 +106,14 @@ FULL_PACKAGES=(git gitoxide yadm gpg python gh bat sd ripgrep fd bottom procs du
               git-delta gitui zellij difftastic helix pueue fzf progress atuin
               hyperfine bitwarden-cli micromamba uv git-lfs just)
 
+# Arch Linux (user): prefer official repos with pacman, use uv for Python CLIs,
+# and keep paru only for AUR-only tools.
+ARCH_PACMAN_PACKAGES=("${ESSENTIAL_PACKAGES[@]}" git gitoxide yadm gpg python gh bat sd ripgrep fd bottom procs duf
+                     ast-grep git-delta gitui zellij difftastic helix pueue fzf progress atuin
+                     hyperfine bitwarden-cli git-lfs just unrar)
+ARCH_PARU_PACKAGES=(nexttrace micromamba)
+UV_TOOL_PACKAGES=(auto-config auto-token httpie)
+
 # Install based on system and user type
 install_programs() {
   setup_sudo
@@ -129,9 +137,9 @@ install_programs() {
       echo "=== Arch Linux (root): Installing essential programs with pacman ==="
       install_packages "pacman" "pacman -S --noconfirm --needed" "${ESSENTIAL_PACKAGES[@]}"
     else
-      echo "=== Arch Linux (user): Installing all programs with paru ==="
-      install_paru_if_needed
-      install_packages "paru" "paru -S --noconfirm --needed" "${ESSENTIAL_PACKAGES[@]}" "${FULL_PACKAGES[@]}"
+      echo "=== Arch Linux (user): Installing pacman, uv, and AUR packages ==="
+      install_packages "pacman" "sudo pacman -S --noconfirm --needed" "${ARCH_PACMAN_PACKAGES[@]}"
+      install_arch_aur_packages
     fi
 
   elif command -v apt >/dev/null 2>&1; then
@@ -152,6 +160,16 @@ install_programs() {
   install_independent_apps
 }
 
+# Install AUR-only Arch Linux packages when needed
+install_arch_aur_packages() {
+  if [[ ${#ARCH_PARU_PACKAGES[@]} -eq 0 ]]; then
+    return
+  fi
+
+  install_paru_if_needed
+  install_packages "paru" "paru -S --noconfirm --needed" "${ARCH_PARU_PACKAGES[@]}"
+}
+
 # Install paru if needed (for Arch Linux non-root users)
 install_paru_if_needed() {
   if ! command -v paru >/dev/null 2>&1; then
@@ -162,8 +180,6 @@ install_paru_if_needed() {
     cd paru && makepkg -si && cd ..
     rm -rf paru
   fi
-  # Install Arch-specific packages
-  paru -S --noconfirm --needed unrar
 }
 
 # Install packages with x-cmd
@@ -192,8 +208,13 @@ set_git_gpg_program() {
 }
 
 install_by_uv() {
-  install_uv_tool_if_missing "auto-config"
-  install_uv_tool_if_missing "auto-token"
+  for tool in "${UV_TOOL_PACKAGES[@]}"; do
+    if [[ "$tool" == "httpie" ]]; then
+      install_uv_tool_if_missing "$tool" "http"
+      continue
+    fi
+    install_uv_tool_if_missing "$tool"
+  done
   # install nvitop if nvidia-smi exists
   if command -v nvidia-smi >/dev/null 2>&1; then
     install_uv_tool_if_missing "nvitop"
@@ -205,13 +226,14 @@ install_by_bun() {
 }
 
 install_uv_tool_if_missing() {
-  local tool=$1
-  if command -v "$tool" >/dev/null 2>&1; then
-    echo "$tool is already installed"
+  local package=$1
+  local binary=${2:-$package}
+  if command -v "$binary" >/dev/null 2>&1; then
+    echo "$binary is already installed"
     return
   fi
 
-  uv tool install "$tool"
+  uv tool install "$package"
 }
 
 config_zsh() {
