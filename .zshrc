@@ -59,11 +59,6 @@ export MODULAR_HOME="$HOME/.modular"
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/.local/lib/arch-mojo
 export PATH=$PATH:$HOME/.modular/pkg/packages.modular.com_max/bin/
 
-# config bun
-[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun" # bun completions
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
-
 # Vite+ (https://viteplus.dev)，若已安装则加载
 [ -f "$HOME/.vite-plus/env" ] && . "$HOME/.vite-plus/env"
 
