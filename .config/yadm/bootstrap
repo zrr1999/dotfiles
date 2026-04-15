@@ -280,6 +280,10 @@ install_by_uv() {
 }
 
 install_by_pnpm() {
+  if ! command -v pnpm >/dev/null 2>&1; then
+    echo "pnpm is not available; skipping pnpm global installs"
+    return
+  fi
   pnpm install -g opencode-ai
 }
 
