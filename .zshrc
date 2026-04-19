@@ -25,8 +25,6 @@ export PATH=$PATH:$HOME/.local/bin
 
 if command -v brew >/dev/null 2>&1; then
   fpath+=$(brew --prefix)/share/zsh/site-functions
-  export HOMEBREW_NO_AUTO_UPDATE=true
-  export HOMEBREW_NO_INSTALL_FROM_API=1
   export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.ustc.edu.cn/homebrew-bottles
 fi
 if [[ -o interactive ]] && (( ${SHLVL:-1} == 1 )) && command -v fastfetch >/dev/null 2>&1 && [[ "${DOTFILES_FASTFETCH:-1}" == "1" ]]; then
