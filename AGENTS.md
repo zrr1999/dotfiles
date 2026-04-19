@@ -8,4 +8,4 @@
 - Do not silently broaden privileges, rewrite trust settings, delete user data, or generalize this environment into a public template.
 - Keep this file short and global: it describes how agents should treat the managed home directory, not a catalog of repo contents.
 - Prefer `uvx`-backed aliases for `prek`, `ty`, and `ruff` when matching this environment.
-- Default interactive Git usage to gitoxide via `gix`; when classic Git is required inside aliases or functions, call `command git`.
+- Keep `git` as the original Git binary. Use `gix` explicitly when needed, but do not replace or alias `git`.
