@@ -168,7 +168,7 @@ install_macos_specific() {
   brew install gh aviator-co/tap/av
 
   # Install cask applications
-  brew install --cask linearmouse he3-app/he3/he3
+  brew install --cask linearmouse
 }
 
 # Set git gpg.program to current gpg (e.g. Homebrew on macOS)
