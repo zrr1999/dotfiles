@@ -33,7 +33,7 @@ PATH="/usr/bin:/bin:$PATH" curl -fLo /tmp/yadm https://github.com/TheLocehiliosa
 1. 通过 `yadm clone` 拉下仓库，并自动执行 `post_clone` hook。
 2. 在首次 clone 时收窄 sparse-checkout，只保留顶层入口文件。
 3. 在非容器的 root 环境下，提示创建 `zrr` 用户并配置 sudo。
-4. 三个系统先用各自原生包管理器安装最基础工具，再统一补齐大多数通用 CLI 和各生态工具。
+4. 先按平台安装基础包，再补齐通用 CLI、语言工具链和少量独立二进制。
 5. 运行 `yadm alt` 应用模板和系统差异配置。
 
 ## Git 与 gix
@@ -42,22 +42,14 @@ PATH="/usr/bin:/bin:$PATH" curl -fLo /tmp/yadm https://github.com/TheLocehiliosa
 - `gix` 作为单独工具安装，需要时显式执行 `gix ...`。
 - 不假设 `gix` 与 Git 完全兼容；涉及常见 Git 工作流时默认直接使用 `git`。
 
-## Rust 工具
-
-- `bootstrap` 会先尝试安装 `cargo-binstall`，作为后续 Rust CLI 的基础安装器。
-- `bootstrap` 会在需要时通过 `rustup` 准备 `cargo`，再继续安装 Rust CLI。
-- shell 启动时如果检测到 `sccache`，会自动设置 `RUSTC_WRAPPER=sccache`。
-- `sccache` 统一走 `cargo binstall` / `cargo install`，不再混用平台包管理器。
-- 可以用 `sccache --show-stats` 查看缓存命中情况。
-
-## 安装分层
+## 工具安装
 
 - 基础系统包：macOS 走 `brew`，Arch Linux 走 `pacman`，Ubuntu 走 `apt`
 - 通用 CLI：统一走 `x env use`
 - Python CLI：统一走 `uv tool`
-- Rust CLI：统一走 `rustup` + `cargo-binstall`，必要时回退 `cargo install`
+- Rust CLI：用 `rustup` 准备 `cargo`，优先 `cargo-binstall`
 - Node.js tooling：统一走 `fnm` + `corepack` + `pnpm`
-- 特殊二进制：`nexttrace` 直接从 release 下载
+- 独立二进制：`nexttrace` 直接从 release 下载
 
 ## 仓库内常用命令
 

@@ -13,56 +13,28 @@ setup_sudo() {
   fi
 }
 
-# Get package name, handling exceptions for different package managers
-get_package_name() {
-  local package=$1
-  local manager=$2
-
-  # Handle package name exceptions
-  case "${package}:${manager}" in
-    "gh:pacman")
-      echo "github-cli"
-      ;;
-    "gpg:pacman"|"gpg:brew")
-      echo "gnupg"
-      ;;
-    *)
-      echo "$package"
-      ;;
-  esac
-}
-
-# Install packages with given package manager
 install_packages() {
   local manager=$1
   local cmd=$2
   shift 2
-  local package_list=("$@")
 
-  if [[ ${#package_list[@]} -eq 0 ]]; then
+  if [[ $# -eq 0 ]]; then
     return
   fi
 
-  local packages=()
-  for package in "${package_list[@]}"; do
-    packages+=("$(get_package_name "$package" "$manager")")
-  done
-
-  echo "Installing with $manager: ${packages[*]}"
-  $cmd "${packages[@]}"
+  echo "Installing with $manager: $*"
+  $cmd "$@"
 }
 
-# Base packages installed by the native package manager on each system.
 COMMON_XCMD_PACKAGES=(lua starship fastfetch lsd dust gitoxide yadm gh bat sd ripgrep fd bottom
                       procs duf ast-grep git-delta gitui zellij difftastic helix pueue fzf
                       progress atuin fnm hyperfine bitwarden-cli git-lfs just)
-MACOS_BASE_PACKAGES=(zsh gnupg python bundler-completion squirrel-app pinentry-mac aviator-co/tap/av)
+MACOS_BREW_PACKAGES=(zsh gnupg python bundler-completion squirrel-app pinentry-mac aviator-co/tap/av)
 ARCH_ROOT_PACKAGES=(zsh gnupg python)
-ARCH_USER_BASE_PACKAGES=(zsh gnupg python unrar)
+ARCH_USER_PACKAGES=(zsh gnupg python unrar)
 APT_BASE_PACKAGES=(zsh unzip gpg python3)
-MACOS_CASK_PACKAGES=(linearmouse)
 UV_TOOL_PACKAGES=(auto-config auto-token httpie)
-RUST_TOOL_PACKAGES=(sccache)
+RUST_TOOLS=(sccache)
 
 ensure_uv() {
   export PATH="$HOME/.local/bin:$PATH"
@@ -94,36 +66,22 @@ ensure_xcmd() {
   eval "$(curl -fsSL https://get.x-cmd.com)"
 }
 
-ensure_cargo() {
+ensure_rustup() {
   if command -v cargo >/dev/null 2>&1; then
-    return 0
+    return
   fi
 
   if [[ -f "$HOME/.cargo/env" ]]; then
     source "$HOME/.cargo/env"
   fi
 
-  command -v cargo >/dev/null 2>&1
-}
-
-ensure_rustup() {
-  if ensure_cargo; then
+  if command -v cargo >/dev/null 2>&1; then
     return
   fi
 
   echo "Installing rustup..."
   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
   source "$HOME/.cargo/env"
-}
-
-install_apt_packages() {
-  sudo apt update
-  install_packages "apt" "sudo apt install -y" "$@"
-}
-
-install_common_cli_packages() {
-  ensure_xcmd
-  install_packages "xcmd" "x env use" "${COMMON_XCMD_PACKAGES[@]}"
 }
 
 install_system_packages() {
@@ -135,27 +93,24 @@ install_system_packages() {
     fi
 
     echo "=== macOS: Installing base packages with brew ==="
-    install_packages "brew" "brew install" "${MACOS_BASE_PACKAGES[@]}"
-    install_macos_specific
+    install_packages "brew" "brew install" "${MACOS_BREW_PACKAGES[@]}"
+    install_packages "brew cask" "brew install --cask" linearmouse
   elif [[ -f /etc/arch-release ]]; then
     if [[ "$USER" == "root" ]]; then
       echo "=== Arch Linux (root): Installing base packages with pacman ==="
       install_packages "pacman" "pacman -S --noconfirm --needed" "${ARCH_ROOT_PACKAGES[@]}"
     else
       echo "=== Arch Linux: Installing base packages with pacman ==="
-      install_packages "pacman" "sudo pacman -S --noconfirm --needed" "${ARCH_USER_BASE_PACKAGES[@]}"
+      install_packages "pacman" "sudo pacman -S --noconfirm --needed" "${ARCH_USER_PACKAGES[@]}"
     fi
   elif command -v apt >/dev/null 2>&1; then
     echo "=== Ubuntu: Installing base packages with apt ==="
-    install_apt_packages "${APT_BASE_PACKAGES[@]}"
+    sudo apt update
+    install_packages "apt" "sudo apt install -y" "${APT_BASE_PACKAGES[@]}"
   else
     echo "error: unsupported system" >&2
     exit 1
   fi
-}
-
-install_macos_specific() {
-  brew install --cask "${MACOS_CASK_PACKAGES[@]}"
 }
 
 # Set git gpg.program to current gpg (e.g. Homebrew on macOS)
@@ -271,35 +226,6 @@ install_nexttrace_if_missing() {
   rm -f "$tmp_file"
 }
 
-install_cargo_binstall_if_missing() {
-  if command -v cargo-binstall >/dev/null 2>&1; then
-    echo "cargo-binstall is already installed"
-    return
-  fi
-
-  echo "Installing cargo-binstall..."
-  cargo install --locked cargo-binstall
-}
-
-install_rust_tool_if_missing() {
-  local package=$1
-  local binary=${2:-$package}
-
-  if command -v "$binary" >/dev/null 2>&1; then
-    echo "$binary is already installed"
-    return
-  fi
-
-  echo "Installing $package..."
-
-  if command -v cargo-binstall >/dev/null 2>&1; then
-    cargo binstall --no-confirm "$package"
-    return
-  fi
-
-  cargo install --locked "$package"
-}
-
 install_by_uv() {
   for tool in "${UV_TOOL_PACKAGES[@]}"; do
     if [[ "$tool" == "httpie" ]]; then
@@ -334,21 +260,37 @@ install_uv_tool_if_missing() {
   uv tool install "$package"
 }
 
-install_rust_tooling() {
-  ensure_rustup
-  install_cargo_binstall_if_missing
+install_rust_tools() {
+  local tool
 
-  for tool in "${RUST_TOOL_PACKAGES[@]}"; do
-    install_rust_tool_if_missing "$tool"
+  ensure_rustup
+  if ! command -v cargo-binstall >/dev/null 2>&1; then
+    echo "Installing cargo-binstall..."
+    cargo install --locked cargo-binstall
+  fi
+
+  for tool in "${RUST_TOOLS[@]}"; do
+    if command -v "$tool" >/dev/null 2>&1; then
+      echo "$tool is already installed"
+      continue
+    fi
+
+    echo "Installing $tool..."
+    if command -v cargo-binstall >/dev/null 2>&1; then
+      cargo binstall --no-confirm "$tool"
+    else
+      cargo install --locked "$tool"
+    fi
   done
 }
 
 install_misc_tooling() {
-  install_common_cli_packages
+  ensure_xcmd
+  install_packages "xcmd" "x env use" "${COMMON_XCMD_PACKAGES[@]}"
   ensure_uv
   install_nexttrace_if_missing
   install_by_uv
-  install_rust_tooling
+  install_rust_tools
   install_node_tooling
 
   if command -v git-lfs >/dev/null 2>&1; then
