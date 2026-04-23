@@ -42,6 +42,19 @@ for file in $HOME/.config/zsh/dotconfig/.*; do
   fi
 done
 
+# pnpm setup-like environment
+if [[ -z "${PNPM_HOME:-}" ]]; then
+  if [[ "$OSTYPE" == darwin* ]]; then
+    export PNPM_HOME="$HOME/Library/pnpm"
+  else
+    export PNPM_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/pnpm"
+  fi
+fi
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+
 export STARSHIP_CONFIG="$HOME/.config/starship.toml"
 
 # config fnm
@@ -51,6 +64,9 @@ fi
 
 # config cargo
 export PATH=$HOME/.cargo/bin:$PATH
+if command -v sccache >/dev/null 2>&1; then
+  export RUSTC_WRAPPER=sccache
+fi
 
 # config mojo
 export MODULAR_HOME="$HOME/.modular"

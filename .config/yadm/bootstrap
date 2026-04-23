@@ -13,47 +13,6 @@ setup_sudo() {
   fi
 }
 
-# Install system-agnostic applications using independent installation methods
-install_independent_apps() {
-  echo "Installing system-agnostic applications..."
-
-  # Install uv Python package manager if not available
-  if ! command -v uv >/dev/null 2>&1; then
-    echo "Installing uv..."
-    curl -LsSf https://astral.sh/uv/install.sh | sh
-  else
-    echo "uv is already installed"
-  fi
-
-  install_node_tooling
-  install_nexttrace_if_missing
-
-  # Setup git-lfs if it was installed
-  if command -v git-lfs >/dev/null 2>&1; then
-    git lfs install
-  fi
-}
-
-# Install zsh with different methods for different systems
-install_zsh() {
-  if command -v zsh >/dev/null 2>&1; then
-    echo "zsh is already installed"
-    return
-  fi
-
-  echo "Installing zsh..."
-  if [[ -f /etc/arch-release ]]; then
-    sudo pacman -S --noconfirm --needed zsh
-  elif [[ "$OSTYPE" == "darwin"* ]]; then
-    brew install zsh
-  elif command -v apt >/dev/null 2>&1; then
-    sudo apt update
-    sudo apt install -y zsh unzip
-  else
-    echo "error: unsupported system, please install zsh manually" >&2
-  fi
-}
-
 # Get package name, handling exceptions for different package managers
 get_package_name() {
   local package=$1
@@ -93,82 +52,110 @@ install_packages() {
   $cmd "${packages[@]}"
 }
 
-# Essential packages - available in all package managers (zsh handled separately)
-ESSENTIAL_PACKAGES=(lua starship fastfetch lsd dust)
-
-# Full packages - may not be available in apt, will use x-cmd fallback
-FULL_PACKAGES=(git gitoxide yadm gpg python gh bat sd ripgrep fd bottom procs duf httpie ast-grep
-              git-delta gitui zellij difftastic helix pueue fzf progress atuin fnm
-              hyperfine bitwarden-cli uv git-lfs just)
-
-# Arch Linux (user): prefer official repos with pacman, use uv for Python CLIs,
-# and install nexttrace from the upstream release binary.
-ARCH_PACMAN_PACKAGES=("${ESSENTIAL_PACKAGES[@]}" git gitoxide yadm gpg python gh bat sd ripgrep fd bottom procs duf
-                     ast-grep git-delta gitui zellij difftastic helix pueue fzf progress atuin fnm
-                     hyperfine bitwarden-cli git-lfs just unrar)
+# Base packages installed by the native package manager on each system.
+COMMON_XCMD_PACKAGES=(lua starship fastfetch lsd dust gitoxide yadm gh bat sd ripgrep fd bottom
+                      procs duf ast-grep git-delta gitui zellij difftastic helix pueue fzf
+                      progress atuin fnm hyperfine bitwarden-cli git-lfs just)
+MACOS_BASE_PACKAGES=(zsh gnupg python bundler-completion squirrel-app pinentry-mac aviator-co/tap/av)
+ARCH_ROOT_PACKAGES=(zsh gnupg python)
+ARCH_USER_BASE_PACKAGES=(zsh gnupg python unrar)
+APT_BASE_PACKAGES=(zsh unzip gpg python3)
+MACOS_CASK_PACKAGES=(linearmouse)
 UV_TOOL_PACKAGES=(auto-config auto-token httpie)
+RUST_TOOL_PACKAGES=(sccache)
 
-# Install based on system and user type
-install_programs() {
+ensure_uv() {
+  export PATH="$HOME/.local/bin:$PATH"
+
+  if command -v uv >/dev/null 2>&1; then
+    echo "uv is already installed"
+    return
+  fi
+
+  echo "Installing uv..."
+  curl -LsSf https://astral.sh/uv/install.sh | sh
+}
+
+ensure_xcmd() {
+  if command -v x >/dev/null 2>&1; then
+    return
+  fi
+
+  if [[ -f "$HOME/.x-cmd.root/X" ]]; then
+    # bootstrap runs in a non-interactive shell, so source the local entrypoint
+    # before falling back to the network installer.
+    source "$HOME/.x-cmd.root/X"
+  fi
+
+  if command -v x >/dev/null 2>&1; then
+    return
+  fi
+
+  eval "$(curl -fsSL https://get.x-cmd.com)"
+}
+
+ensure_cargo() {
+  if command -v cargo >/dev/null 2>&1; then
+    return 0
+  fi
+
+  if [[ -f "$HOME/.cargo/env" ]]; then
+    source "$HOME/.cargo/env"
+  fi
+
+  command -v cargo >/dev/null 2>&1
+}
+
+ensure_rustup() {
+  if ensure_cargo; then
+    return
+  fi
+
+  echo "Installing rustup..."
+  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+  source "$HOME/.cargo/env"
+}
+
+install_apt_packages() {
+  sudo apt update
+  install_packages "apt" "sudo apt install -y" "$@"
+}
+
+install_common_cli_packages() {
+  ensure_xcmd
+  install_packages "xcmd" "x env use" "${COMMON_XCMD_PACKAGES[@]}"
+}
+
+install_system_packages() {
   setup_sudo
-
   if [[ "$OSTYPE" == "darwin"* ]]; then
-    # macOS - always non-root user, install everything
     if [[ "$USER" == "root" ]]; then
       echo "error: macOS should not run as root user" >&2
       exit 1
     fi
 
-    echo "=== macOS: Installing all programs with brew ==="
-    install_zsh
-    install_packages "brew" "brew install" "${ESSENTIAL_PACKAGES[@]}" "${FULL_PACKAGES[@]}"
+    echo "=== macOS: Installing base packages with brew ==="
+    install_packages "brew" "brew install" "${MACOS_BASE_PACKAGES[@]}"
     install_macos_specific
-
   elif [[ -f /etc/arch-release ]]; then
-    # Arch Linux - check user type
-    install_zsh
     if [[ "$USER" == "root" ]]; then
-      echo "=== Arch Linux (root): Installing essential programs with pacman ==="
-      install_packages "pacman" "pacman -S --noconfirm --needed" "${ESSENTIAL_PACKAGES[@]}"
+      echo "=== Arch Linux (root): Installing base packages with pacman ==="
+      install_packages "pacman" "pacman -S --noconfirm --needed" "${ARCH_ROOT_PACKAGES[@]}"
     else
-      echo "=== Arch Linux (user): Installing pacman and uv packages ==="
-      install_packages "pacman" "sudo pacman -S --noconfirm --needed" "${ARCH_PACMAN_PACKAGES[@]}"
+      echo "=== Arch Linux: Installing base packages with pacman ==="
+      install_packages "pacman" "sudo pacman -S --noconfirm --needed" "${ARCH_USER_BASE_PACKAGES[@]}"
     fi
-
   elif command -v apt >/dev/null 2>&1; then
-    # Ubuntu - install zsh with apt, rest with x-cmd
-    echo "=== Ubuntu: Installing zsh with apt, others with x-cmd ==="
-    install_zsh
-
-    # TODO: merge to install_programs
-    install_with_xcmd
-    install_packages "xcmd" "x env use" "${ESSENTIAL_PACKAGES[@]}"
-
+    echo "=== Ubuntu: Installing base packages with apt ==="
+    install_apt_packages "${APT_BASE_PACKAGES[@]}"
   else
     echo "error: unsupported system" >&2
     exit 1
   fi
-
-  # Install system-agnostic applications
-  install_independent_apps
 }
 
-# Install packages with x-cmd
-install_with_xcmd() {
-  [[ -f $HOME/.x-cmd.root/X ]] || eval "$(curl https://get.x-cmd.com)"
-  x env use gh
-}
-
-# macOS specific installations
 install_macos_specific() {
-  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-
-  # Install additional tools
-  brew install bundler-completion squirrel-app pinentry-mac
-  brew install gh aviator-co/tap/av
-
-  # Install cask applications
-  brew install --cask linearmouse
+  brew install --cask "${MACOS_CASK_PACKAGES[@]}"
 }
 
 # Set git gpg.program to current gpg (e.g. Homebrew on macOS)
@@ -176,6 +163,24 @@ set_git_gpg_program() {
   if command -v gpg >/dev/null 2>&1; then
     git config --global gpg.program "$(command -v gpg)"
   fi
+}
+
+setup_pnpm_home() {
+  if [[ -z "${PNPM_HOME:-}" ]]; then
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+      PNPM_HOME="$HOME/Library/pnpm"
+    else
+      PNPM_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/pnpm"
+    fi
+  fi
+
+  export PNPM_HOME
+  mkdir -p "$PNPM_HOME"
+
+  case ":$PATH:" in
+    *":$PNPM_HOME:"*) ;;
+    *) export PATH="$PNPM_HOME:$PATH" ;;
+  esac
 }
 
 install_node_tooling() {
@@ -202,6 +207,7 @@ install_node_tooling() {
 
   fnm use "$current_node_version"
   fnm default "$current_node_version"
+  setup_pnpm_home
 
   if ! command -v corepack >/dev/null 2>&1; then
     echo "Installing corepack..."
@@ -265,6 +271,35 @@ install_nexttrace_if_missing() {
   rm -f "$tmp_file"
 }
 
+install_cargo_binstall_if_missing() {
+  if command -v cargo-binstall >/dev/null 2>&1; then
+    echo "cargo-binstall is already installed"
+    return
+  fi
+
+  echo "Installing cargo-binstall..."
+  cargo install --locked cargo-binstall
+}
+
+install_rust_tool_if_missing() {
+  local package=$1
+  local binary=${2:-$package}
+
+  if command -v "$binary" >/dev/null 2>&1; then
+    echo "$binary is already installed"
+    return
+  fi
+
+  echo "Installing $package..."
+
+  if command -v cargo-binstall >/dev/null 2>&1; then
+    cargo binstall --no-confirm "$package"
+    return
+  fi
+
+  cargo install --locked "$package"
+}
+
 install_by_uv() {
   for tool in "${UV_TOOL_PACKAGES[@]}"; do
     if [[ "$tool" == "httpie" ]]; then
@@ -284,6 +319,7 @@ install_by_pnpm() {
     echo "pnpm is not available; skipping pnpm global installs"
     return
   fi
+  setup_pnpm_home
   pnpm install -g opencode-ai
 }
 
@@ -296,6 +332,28 @@ install_uv_tool_if_missing() {
   fi
 
   uv tool install "$package"
+}
+
+install_rust_tooling() {
+  ensure_rustup
+  install_cargo_binstall_if_missing
+
+  for tool in "${RUST_TOOL_PACKAGES[@]}"; do
+    install_rust_tool_if_missing "$tool"
+  done
+}
+
+install_misc_tooling() {
+  install_common_cli_packages
+  ensure_uv
+  install_nexttrace_if_missing
+  install_by_uv
+  install_rust_tooling
+  install_node_tooling
+
+  if command -v git-lfs >/dev/null 2>&1; then
+    git lfs install
+  fi
 }
 
 config_zsh() {
@@ -313,8 +371,8 @@ config_zsh() {
 if [[ -n "$GITHUB_ACTIONS" ]]; then
   echo "::group::installing packages"
 fi
-install_programs
-install_by_uv
+install_system_packages
+install_misc_tooling
 install_by_pnpm
 set_git_gpg_program
 if [[ -n "$GITHUB_ACTIONS" ]]; then
