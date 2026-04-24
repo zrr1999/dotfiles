@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - "**"
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  bootstrap:
+    name: bootstrap
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Install dotfiles into a temporary HOME
+        env:
+          DOTFILES_HOME: ${{ runner.temp }}/dotfiles-home
+          REPO_URL: ${{ github.workspace }}
+        run: |
+          export HOME="$DOTFILES_HOME"
+          export XDG_CACHE_HOME="$HOME/.cache"
+          export XDG_CONFIG_HOME="$HOME/.config"
+          export XDG_DATA_HOME="$HOME/.local/share"
+
+          mkdir -p "$HOME" "$XDG_CACHE_HOME" "$XDG_CONFIG_HOME" "$XDG_DATA_HOME"
+          bash "$GITHUB_WORKSPACE/install.sh"
+
+      - name: Verify installed environment
+        run: |
+          export HOME="${{ runner.temp }}/dotfiles-home"
+          export XDG_CACHE_HOME="$HOME/.cache"
+          export XDG_CONFIG_HOME="$HOME/.config"
+          export XDG_DATA_HOME="$HOME/.local/share"
+          export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
+          export DOTFILES_FASTFETCH=0
+
+          test -f "$HOME/.zshrc"
+          test -f "$HOME/.config/zsh/.aliases.zsh"
+          test -f "$HOME/.config/yadm/bootstrap"
+          test ! -e "$HOME/.github"
+          test ! -e "$HOME/README.md"
+          command -v zsh
+          command -v uv
+          git config --global --get init.defaultBranch | grep -qx main
+          zsh -ic 'alias prek | command grep -q "uvx prek"'
+          zsh -ic 'alias git >/dev/null 2>&1 && exit 1 || exit 0'
+          uvx prek run -a --show-diff-on-failure

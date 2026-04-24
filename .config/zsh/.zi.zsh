@@ -1,20 +1,20 @@
 if [[ ! -f $HOME/.zi/bin/zi.zsh ]]; then
   print -P "%F{33}▓▒░ %F{160}Installing (%F{33}z-shell/zi%F{160})…%f"
   command mkdir -p "$HOME/.zi" && command chmod go-rwX "$HOME/.zi"
-  command git clone -q --depth=1 --branch "main" https://github.com/z-shell/zi "$HOME/.zi/bin" && \
-    print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
-    print -P "%F{160}▓▒░ The clone has failed.%f%b"
+  command git clone -q --depth=1 --branch "main" https://github.com/z-shell/zi "$HOME/.zi/bin" \
+    && print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" \
+    || print -P "%F{160}▓▒░ The clone has failed.%f%b"
 fi
 source "$HOME/.zi/bin/zi.zsh"
 autoload -Uz _zi
-(( ${+_comps} )) && _comps[zi]=_zi
+((${+_comps})) && _comps[zi]=_zi
 
 zi wait lucid light-mode for \
-    zsh-users/zsh-syntax-highlighting \
-    skywind3000/z.lua \
-    z-shell/zui \
-    z-shell/brew-completions \
-    z-shell/zbrowse
+  zsh-users/zsh-syntax-highlighting \
+  skywind3000/z.lua \
+  z-shell/zui \
+  z-shell/brew-completions \
+  z-shell/zbrowse
 
 if [[ -n $(command -v docker) ]]; then
   zi wait lucid light-mode for \
@@ -22,12 +22,12 @@ if [[ -n $(command -v docker) ]]; then
 fi
 
 zi lucid light-mode for \
-    wintermi/zsh-starship \
-    davidde/git \
-    zsh-users/zsh-autosuggestions \
-    zsh-users/zsh-completions \
-    sunlei/zsh-ssh \
-    romkatv/zsh-defer
+  wintermi/zsh-starship \
+  davidde/git \
+  zsh-users/zsh-autosuggestions \
+  zsh-users/zsh-completions \
+  sunlei/zsh-ssh \
+  romkatv/zsh-defer
 
 zi snippet OMZL::clipboard.zsh
 zi snippet OMZL::completion.zsh

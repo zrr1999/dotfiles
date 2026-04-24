@@ -33,7 +33,7 @@ PATH="/usr/bin:/bin:$PATH" curl -fLo /tmp/yadm https://github.com/TheLocehiliosa
 1. 通过 `yadm clone` 拉下仓库，并自动执行 `post_clone` hook。
 2. 在首次 clone 时收窄 sparse-checkout，只保留顶层入口文件。
 3. 在非容器的 root 环境下，提示创建 `zrr` 用户并配置 sudo。
-4. 按平台安装基础工具、`uv`、Node.js tooling、`nexttrace` 等。
+4. 先按平台安装基础包，再补齐通用 CLI、语言工具链和少量独立二进制。
 5. 运行 `yadm alt` 应用模板和系统差异配置。
 
 ## Git 与 gix
@@ -41,6 +41,15 @@ PATH="/usr/bin:/bin:$PATH" curl -fLo /tmp/yadm https://github.com/TheLocehiliosa
 - `git` 保持原生 Git，不做别名替换。
 - `gix` 作为单独工具安装，需要时显式执行 `gix ...`。
 - 不假设 `gix` 与 Git 完全兼容；涉及常见 Git 工作流时默认直接使用 `git`。
+
+## 工具安装
+
+- 基础系统包：macOS 走 `brew`，Arch Linux 走 `pacman`，Ubuntu 走 `apt`
+- 通用 CLI：统一走 `x env use`
+- Python CLI：统一走 `uv tool`
+- Rust CLI：用 `rustup` 准备 `cargo`，优先 `cargo-binstall`
+- Node.js tooling：统一走 `fnm` + `corepack` + `pnpm`
+- 独立二进制：`nexttrace` 直接从 release 下载
 
 ## 仓库内常用命令
 
@@ -54,11 +63,11 @@ clone 后进入仓库根目录：
 
 ## 平台说明
 
-| 平台 | 安装方式 | 说明 |
+| 平台 | 基础系统包安装方式 | 说明 |
 | --- | --- | --- |
-| macOS | `brew` | 安装主工具链，并额外装入部分 GUI / 系统工具 |
-| Arch Linux | `pacman` + `uv tool` | 优先官方仓库，补充少量跨平台 CLI |
-| Ubuntu | `apt` + `x-cmd` | `zsh` 走 `apt`，其余多数工具走 `x-cmd` |
+| macOS | `brew` | 只装基础工具和少量 macOS 专属工具 |
+| Arch Linux | `pacman` | 只装基础工具 |
+| Ubuntu | `apt` | 只装基础工具 |
 
 ## 关键文件
 
@@ -75,6 +84,8 @@ clone 后进入仓库根目录：
 ```bash
 just verify
 ```
+
+CI 会在临时 `$HOME` 和 XDG 目录里执行 `install.sh`，确认 yadm 安装后的 shell、Git 配置和 `prek` 校验入口生效。
 
 如果安装阶段在 bootstrap 之前失败，优先确认 `curl` 和 `git` 已安装。
 
