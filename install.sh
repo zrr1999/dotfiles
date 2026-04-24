@@ -6,7 +6,14 @@ set -euo pipefail
 
 REPO_URL="${REPO_URL:-https://github.com/zrr1999/dotfiles.git}"
 YADM_URL="https://github.com/TheLocehiliosan/yadm/raw/master/yadm"
-YADM_BIN="/tmp/yadm"
+YADM_BIN=""
+
+cleanup() {
+  if [[ -n "$YADM_BIN" ]]; then
+    rm -f "$YADM_BIN"
+  fi
+}
+trap cleanup EXIT
 
 echo "==> Dotfiles one-click install (yadm)"
 echo "==> Repo: $REPO_URL"
@@ -23,6 +30,8 @@ if ! command -v git &>/dev/null; then
   exit 1
 fi
 
+YADM_BIN="$(mktemp "${TMPDIR:-/tmp}/yadm.XXXXXX")"
+
 echo "==> Downloading yadm..."
 PATH="/usr/bin:/bin:$PATH" curl -fLo "$YADM_BIN" "$YADM_URL"
 chmod a+x "$YADM_BIN"
@@ -34,7 +43,8 @@ echo "==> Running yadm bootstrap..."
 "$YADM_BIN" bootstrap
 
 echo "==> Cleaning up..."
-rm -f "$YADM_BIN"
+cleanup
+trap - EXIT
 
 echo ""
 echo "==> Done. Restart your shell or run: exec \$SHELL"

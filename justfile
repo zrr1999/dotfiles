@@ -19,6 +19,4 @@ pull:
 
 # 运行仓库校验
 verify:
-    bash -n install.sh .config/yadm/bootstrap .config/yadm/hooks/post_clone .config/yadm/hooks/post_pull
-    zsh -n .zshrc .config/zsh/.aliases.zsh .config/zsh/.functions.zsh .config/zsh/.zi.zsh
     uvx prek run -a

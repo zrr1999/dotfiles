@@ -85,6 +85,8 @@ clone 后进入仓库根目录：
 just verify
 ```
 
+CI 会先运行 `prek` 钩子，再在临时 `$HOME` 里执行 `install.sh`，确认 yadm 安装后的 shell 和 Git 配置生效。
+
 如果安装阶段在 bootstrap 之前失败，优先确认 `curl` 和 `git` 已安装。
 
 如果某个 `gix` 命令和预期不一致，优先直接回到 `git ...`，不要假设两者完全兼容。

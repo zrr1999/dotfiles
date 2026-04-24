@@ -17,7 +17,7 @@ daemon:
   shell_command: [
     "zsh",
     "-c",
-    ". $HOME/.aliases.zsh; setopt aliases; eval {{ pueue_command_string }}",
+    ". $HOME/.config/zsh/.aliases.zsh; setopt aliases; eval {{ pueue_command_string }}",
   ]
 shared:
   pueue_directory: null

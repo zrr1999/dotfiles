@@ -1,19 +1,48 @@
 [[repos]]
-repo = "https://github.com/pre-commit/pre-commit-hooks"
-rev = "v5.0.0"
+repo = "builtin"
 hooks = [
-  { id = "check-yaml" },
-  { id = "check-json", exclude = ".vscode/(.)*\\.json" },
+  { id = "check-added-large-files", args = ["--maxkb=1024", "--enforce-all"] },
+  { id = "check-case-conflict" },
+  { id = "check-executables-have-shebangs" },
+  { id = "check-json" },
+  { id = "check-json5", files = "\\.jsonc$", types = ["text"] },
   { id = "check-merge-conflict" },
-  { id = "debug-statements" },
+  { id = "check-symlinks" },
+  { id = "check-toml" },
+  { id = "check-yaml" },
+  { id = "detect-private-key" },
   { id = "end-of-file-fixer" },
   { id = "mixed-line-ending" },
   { id = "trailing-whitespace" },
 ]
 
-# [[repos]]
-# repo = "https://github.com/koalaman/shellcheck-precommit"
-# rev = "v0.7.2"
-# hooks = [
-#   { id = "shellcheck" },
-# ]
+[[repos]]
+repo = "https://github.com/scop/pre-commit-shfmt"
+rev = "v3.13.1-1"
+hooks = [
+  { id = "shfmt", args = ["--write", "--indent=2", "--case-indent", "--binary-next-line"] },
+]
+
+[[repos]]
+repo = "local"
+
+[[repos.hooks]]
+id = "bash-syntax"
+name = "bash syntax"
+language = "system"
+entry = "bash -c 'for file do bash -n \"$file\"; done' --"
+files = "^(install\\.sh|\\.config/yadm/(bootstrap|hooks/(post_clone|post_pull)))$"
+
+[[repos.hooks]]
+id = "zsh-syntax"
+name = "zsh syntax"
+language = "system"
+entry = "zsh -c 'for file do zsh -n \"$file\"; done' --"
+files = "^(\\.zshrc|\\.config/zsh/.*\\.zsh)$"
+
+[[repos.hooks]]
+id = "shellcheck"
+name = "shellcheck"
+language = "system"
+entry = "uvx --from shellcheck-py shellcheck --exclude=SC1091"
+files = "^(install\\.sh|\\.config/yadm/(bootstrap|hooks/(post_clone|post_pull)))$"

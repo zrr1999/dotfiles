@@ -27,8 +27,8 @@ install_packages() {
 }
 
 COMMON_XCMD_PACKAGES=(lua starship fastfetch lsd dust gitoxide yadm gh bat sd ripgrep fd bottom
-                      procs duf ast-grep git-delta gitui zellij difftastic helix pueue fzf
-                      progress atuin fnm hyperfine bitwarden-cli git-lfs just)
+  procs duf ast-grep git-delta gitui zellij difftastic helix pueue fzf
+  progress atuin fnm hyperfine bitwarden-cli git-lfs just)
 MACOS_BREW_PACKAGES=(zsh gnupg python bundler-completion squirrel-app pinentry-mac aviator-co/tap/av)
 ARCH_ROOT_PACKAGES=(zsh gnupg python)
 ARCH_USER_PACKAGES=(zsh gnupg python unrar)
@@ -190,10 +190,10 @@ get_nexttrace_platform() {
   esac
 
   case "$(uname -m)" in
-    x86_64|amd64) arch="amd64" ;;
-    aarch64|arm64) arch="arm64" ;;
-    armv7l|armv7) arch="armv7" ;;
-    i386|i686) arch="386" ;;
+    x86_64 | amd64) arch="amd64" ;;
+    aarch64 | arm64) arch="arm64" ;;
+    armv7l | armv7) arch="armv7" ;;
+    i386 | i686) arch="386" ;;
     riscv64) arch="riscv64" ;;
     loongarch64) arch="loong64" ;;
     s390x) arch="s390x" ;;
@@ -305,8 +305,8 @@ config_zsh() {
   fi
   # setup .zprofile
   if [[ ! -f $HOME/.zprofile ]]; then
-    touch $HOME/.zprofile
-    echo "emulate sh -c 'source /etc/profile'" | tee -a $HOME/.zprofile
+    touch "$HOME/.zprofile"
+    echo "emulate sh -c 'source /etc/profile'" | tee -a "$HOME/.zprofile"
   fi
 }
 
