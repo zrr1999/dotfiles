@@ -6,11 +6,12 @@ set -euo pipefail
 
 REPO_URL="${REPO_URL:-https://github.com/zrr1999/dotfiles.git}"
 YADM_URL="https://github.com/TheLocehiliosan/yadm/raw/master/yadm"
+YADM_TMP_DIR=""
 YADM_BIN=""
 
 cleanup() {
-  if [[ -n "$YADM_BIN" ]]; then
-    rm -f "$YADM_BIN"
+  if [[ -n "$YADM_TMP_DIR" ]]; then
+    rm -rf "$YADM_TMP_DIR"
   fi
 }
 trap cleanup EXIT
@@ -30,14 +31,16 @@ if ! command -v git &>/dev/null; then
   exit 1
 fi
 
-YADM_BIN="$(mktemp "${TMPDIR:-/tmp}/yadm.XXXXXX")"
+YADM_TMP_DIR="$(mktemp -d "${TMPDIR:-/tmp}/yadm.XXXXXX")"
+YADM_BIN="$YADM_TMP_DIR/yadm"
+PATH="$YADM_TMP_DIR:$PATH"
 
 echo "==> Downloading yadm..."
 PATH="/usr/bin:/bin:$PATH" curl -fLo "$YADM_BIN" "$YADM_URL"
 chmod a+x "$YADM_BIN"
 
 echo "==> Cloning dotfiles with yadm..."
-"$YADM_BIN" clone "$REPO_URL"
+"$YADM_BIN" clone --no-bootstrap "$REPO_URL"
 
 echo "==> Running yadm bootstrap..."
 "$YADM_BIN" bootstrap
