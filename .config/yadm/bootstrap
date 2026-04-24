@@ -26,7 +26,7 @@ install_packages() {
   $cmd "$@"
 }
 
-COMMON_XCMD_PACKAGES=(lua starship fastfetch lsd dust gitoxide yadm gh bat sd ripgrep fd bottom
+COMMON_XCMD_PACKAGES=(lua starship fastfetch lsd dust gix yadm gh bat sd ripgrep fd bottom
   procs duf ast-grep git-delta gitui zellij difftastic helix pueue fzf
   progress atuin fnm hyperfine bitwarden-cli git-lfs just)
 MACOS_BREW_PACKAGES=(zsh gnupg python bundler-completion squirrel-app pinentry-mac aviator-co/tap/av)

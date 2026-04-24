@@ -50,6 +50,6 @@ jobs:
           command -v zsh
           command -v uv
           git config --global --get init.defaultBranch | grep -qx main
-          zsh -ic 'alias prek | grep -q "uvx prek"'
+          zsh -ic 'alias prek | command grep -q "uvx prek"'
           zsh -ic 'alias git >/dev/null 2>&1 && exit 1 || exit 0'
           uvx prek run -a --show-diff-on-failure
