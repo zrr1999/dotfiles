@@ -51,16 +51,11 @@ if [[ -z "${PNPM_HOME:-}" ]]; then
   fi
 fi
 case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
+  *":$PNPM_HOME/bin:"*) ;;
+  *) export PATH="$PNPM_HOME/bin:$PATH" ;;
 esac
 
 export STARSHIP_CONFIG="$HOME/.config/starship.toml"
-
-# config fnm
-if command -v fnm >/dev/null 2>&1; then
-  eval "$(fnm env --use-on-cd --shell zsh)"
-fi
 
 # config cargo
 export PATH=$HOME/.cargo/bin:$PATH
