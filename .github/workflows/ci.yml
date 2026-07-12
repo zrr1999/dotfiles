@@ -52,4 +52,6 @@ jobs:
           git config --global --get init.defaultBranch | grep -qx main
           zsh -ic 'alias prek | command grep -q "uvx prek"'
           zsh -ic 'alias git >/dev/null 2>&1 && exit 1 || exit 0'
+          zsh -ic 'case ":$PATH:" in *":$PNPM_HOME/bin:"*) ;; *) exit 1 ;; esac'
+          zsh -ic 'case ":$PATH:" in *":$PNPM_HOME:"*) ;; *) exit 1 ;; esac'
           uvx prek run -a --show-diff-on-failure

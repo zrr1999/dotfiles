@@ -28,7 +28,7 @@ install_packages() {
 
 COMMON_XCMD_PACKAGES=(lua starship fastfetch lsd dust gix yadm gh bat sd ripgrep fd bottom
   procs duf ast-grep git-delta gitui zellij difftastic helix pueue fzf
-  progress atuin fnm hyperfine bitwarden-cli git-lfs just)
+  progress atuin hyperfine bitwarden-cli git-lfs just)
 MACOS_BREW_PACKAGES=(zsh gnupg python bundler-completion squirrel-app pinentry-mac aviator-co/tap/av)
 ARCH_ROOT_PACKAGES=(zsh gnupg python)
 ARCH_USER_PACKAGES=(zsh gnupg python unrar)
@@ -49,21 +49,36 @@ ensure_uv() {
 }
 
 ensure_xcmd() {
-  if command -v x >/dev/null 2>&1; then
-    return
-  fi
-
   if [[ -f "$HOME/.x-cmd.root/X" ]]; then
     # bootstrap runs in a non-interactive shell, so source the local entrypoint
-    # before falling back to the network installer.
+    # before falling back to the network installer. Do not use `command -v x`
+    # here: XQuartz also installs an unrelated executable named `x`.
     source "$HOME/.x-cmd.root/X"
-  fi
-
-  if command -v x >/dev/null 2>&1; then
     return
   fi
 
   eval "$(curl -fsSL https://get.x-cmd.com)"
+}
+
+ensure_vite_plus() {
+  if [[ ! -f "$HOME/.vite-plus/env" ]]; then
+    echo "Installing Vite+..."
+    curl -fsSL https://vite.plus | bash
+  fi
+
+  if [[ ! -f "$HOME/.vite-plus/env" ]]; then
+    echo "error: Vite+ did not create its shell environment" >&2
+    exit 1
+  fi
+
+  source "$HOME/.vite-plus/env"
+  if ! command -v vp >/dev/null 2>&1; then
+    echo "error: Vite+ shell environment does not expose vp" >&2
+    exit 1
+  fi
+
+  vp env setup || exit 1
+  vp env on || exit 1
 }
 
 ensure_rustup() {
@@ -121,6 +136,8 @@ set_git_gpg_program() {
 }
 
 setup_pnpm_home() {
+  local pnpm_bin_dir
+
   if [[ -z "${PNPM_HOME:-}" ]]; then
     if [[ "$OSTYPE" == "darwin"* ]]; then
       PNPM_HOME="$HOME/Library/pnpm"
@@ -132,51 +149,20 @@ setup_pnpm_home() {
   export PNPM_HOME
   mkdir -p "$PNPM_HOME"
 
-  case ":$PATH:" in
-    *":$PNPM_HOME:"*) ;;
-    *) export PATH="$PNPM_HOME:$PATH" ;;
-  esac
+  # pnpm 11 uses PNPM_HOME/bin for new global shims; older installs used
+  # PNPM_HOME directly. Keep both during migration and prefer the new layout.
+  for pnpm_bin_dir in "$PNPM_HOME" "$PNPM_HOME/bin"; do
+    case ":$PATH:" in
+      *":$pnpm_bin_dir:"*) ;;
+      *) export PATH="$pnpm_bin_dir:$PATH" ;;
+    esac
+  done
 }
 
 install_node_tooling() {
-  if ! command -v fnm >/dev/null 2>&1; then
-    echo "fnm is not installed; skipping Node.js and pnpm setup"
-    return
-  fi
-
-  eval "$(fnm env --shell bash)"
-
-  local current_node_version
-  current_node_version=$(fnm current 2>/dev/null || true)
-  if [[ -z "$current_node_version" || "$current_node_version" == "system" ]]; then
-    echo "Installing Node.js LTS with fnm..."
-    fnm install --lts
-    fnm use --lts
-    current_node_version=$(fnm current 2>/dev/null || true)
-  fi
-
-  if [[ -z "$current_node_version" || "$current_node_version" == "system" ]]; then
-    echo "warning: fnm did not activate a managed Node.js version; skipping pnpm setup" >&2
-    return
-  fi
-
-  fnm use "$current_node_version"
-  fnm default "$current_node_version"
   setup_pnpm_home
-
-  if ! command -v corepack >/dev/null 2>&1; then
-    echo "Installing corepack..."
-    npm install --global corepack@latest
-    hash -r
-  fi
-
-  corepack enable pnpm
-  hash -r
-
-  if ! command -v pnpm >/dev/null 2>&1; then
-    corepack prepare pnpm@latest --activate
-    hash -r
-  fi
+  ensure_vite_plus
+  vp install -g opencode-ai || exit 1
 }
 
 get_nexttrace_platform() {
@@ -238,15 +224,6 @@ install_by_uv() {
   if command -v nvidia-smi >/dev/null 2>&1; then
     install_uv_tool_if_missing "nvitop"
   fi
-}
-
-install_by_pnpm() {
-  if ! command -v pnpm >/dev/null 2>&1; then
-    echo "pnpm is not available; skipping pnpm global installs"
-    return
-  fi
-  setup_pnpm_home
-  pnpm install -g opencode-ai
 }
 
 install_uv_tool_if_missing() {
@@ -315,7 +292,6 @@ if [[ -n "$GITHUB_ACTIONS" ]]; then
 fi
 install_system_packages
 install_misc_tooling
-install_by_pnpm
 set_git_gpg_program
 if [[ -n "$GITHUB_ACTIONS" ]]; then
   echo "::endgroup::"

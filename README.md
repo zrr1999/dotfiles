@@ -48,7 +48,7 @@ PATH="/usr/bin:/bin:$PATH" curl -fLo /tmp/yadm https://github.com/TheLocehiliosa
 - 通用 CLI：统一走 `x env use`
 - Python CLI：统一走 `uv tool`
 - Rust CLI：用 `rustup` 准备 `cargo`，优先 `cargo-binstall`
-- Node.js tooling：统一走 `fnm` + `corepack` + `pnpm`
+- Node.js tooling：统一由 Vite+ 管理 Node.js、pnpm 和全局包
 - 独立二进制：`nexttrace` 直接从 release 下载
 
 ## 仓库内常用命令

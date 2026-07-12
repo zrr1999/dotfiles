@@ -42,7 +42,8 @@ for file in $HOME/.config/zsh/dotconfig/.*; do
   fi
 done
 
-# pnpm setup-like environment
+# pnpm 11 uses PNPM_HOME/bin for new global shims; older installs used
+# PNPM_HOME directly. Keep both during migration and prefer the new layout.
 if [[ -z "${PNPM_HOME:-}" ]]; then
   if [[ "$OSTYPE" == darwin* ]]; then
     export PNPM_HOME="$HOME/Library/pnpm"
@@ -50,10 +51,13 @@ if [[ -z "${PNPM_HOME:-}" ]]; then
     export PNPM_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/pnpm"
   fi
 fi
-case ":$PATH:" in
-  *":$PNPM_HOME/bin:"*) ;;
-  *) export PATH="$PNPM_HOME/bin:$PATH" ;;
-esac
+for pnpm_bin_dir in "$PNPM_HOME" "$PNPM_HOME/bin"; do
+  case ":$PATH:" in
+    *":$pnpm_bin_dir:"*) ;;
+    *) export PATH="$pnpm_bin_dir:$PATH" ;;
+  esac
+done
+unset pnpm_bin_dir
 
 export STARSHIP_CONFIG="$HOME/.config/starship.toml"
 
@@ -68,8 +72,10 @@ export MODULAR_HOME="$HOME/.modular"
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/.local/lib/arch-mojo
 export PATH=$PATH:$HOME/.modular/pkg/packages.modular.com_max/bin/
 
-# Vite+ (https://viteplus.dev)，若已安装则加载
-[ -f "$HOME/.vite-plus/env" ] && . "$HOME/.vite-plus/env"
+# Vite+ is the single Node.js and package-manager entrypoint.
+if [[ -f "$HOME/.vite-plus/env" ]]; then
+  source "$HOME/.vite-plus/env"
+fi
 
 # zsh-defer eval "$(atuin init zsh --disable-up-arrow)"
 if [[ -o interactive ]] && command -v ssh-add >/dev/null 2>&1 && [[ -n "${SSH_AUTH_SOCK:-}" ]]; then
