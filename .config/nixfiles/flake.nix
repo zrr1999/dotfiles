@@ -1,7 +1,7 @@
 {
   description = "User CLI packages replacing x-cmd";
 
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
   outputs = { nixpkgs, ... }:
     let
