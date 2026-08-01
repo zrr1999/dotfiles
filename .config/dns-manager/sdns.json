@@ -22,57 +22,11 @@
       "clawcloud-ubuntu.ssh.cloud.zrr.dev"
     ],
     [
-      "ghk.derp",
-      "guanxing-ubuntu.ssh.cloud.sixbones.dev"
-    ],
-    [
-      "tunnel",
-      "guanxing-ubuntu.ssh.cloud.sixbones.dev"
-    ],
-    [
-      [
-        "caddy",
-        "password",
-        "pw",
-        "headscale",
-        "memos",
-        "rss",
-        "miniflux"
-      ],
-      "guanxing-ubuntu.ssh.cloud.zrr.dev"
-    ],
-    [
-      [
-        "consul",
-        "homepage",
-        "one-api",
-        "llm-api",
-        "n8n",
-        "flow",
-        "chat",
-        "lobe",
-        "lobe-chat",
-        "illa",
-        "tools",
-        "git",
-        "gitea",
-        "searxng",
-        "dozzle",
-        "wallos",
-        "home"
-      ],
-      "tunnel.zrr.dev"
-    ],
-    [
       [
         "research",
         "mail"
       ],
       "cname-china.vercel-dns.com."
-    ],
-    [
-      "*.home",
-      "home.zrr.dev"
     ]
   ]
 }
