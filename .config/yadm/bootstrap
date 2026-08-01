@@ -75,11 +75,27 @@ ensure_vite_plus() {
   vp env on || exit 1
 }
 
-install_nix_cli_packages() {
-  if ! command -v nix >/dev/null 2>&1; then
-    echo "error: nix is required to install CLI tools (x-cmd was removed)" >&2
-    exit 1
+ensure_nix() {
+  if command -v nix >/dev/null 2>&1; then
+    return
   fi
+
+  echo "Installing Determinate Nix..."
+  local installer
+  installer=$(mktemp)
+  curl --proto '=https' --tlsv1.2 -fsSL https://install.determinate.systems/nix -o "$installer" || exit 1
+  sh "$installer" install --no-confirm || exit 1
+  rm -f "$installer"
+
+  source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+  command -v nix >/dev/null 2>&1 || {
+    echo "error: Nix installation completed but nix is unavailable" >&2
+    exit 1
+  }
+}
+
+install_nix_cli_packages() {
+  ensure_nix
 
   if [[ ! -f "$NIXFILES_DIR/flake.nix" ]]; then
     echo "error: nixfiles flake not found at $NIXFILES_DIR" >&2
