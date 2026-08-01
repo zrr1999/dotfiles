@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+fleet_config_root="${SSH_FLEET_ROOT:-$HOME/workspace/zrr1999/fleet-config}"
+inventory="$fleet_config_root/devices.toml"
+render_dir="${AUTO_CONFIG_RENDER_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/auto-config/rendered}"
+
+if [[ ! -r "$inventory" ]]; then
+  echo "warning: private fleet inventory not found at $inventory; skipping auto-config render" >&2
+  exit 0
+fi
+
+auto-config validate "$inventory"
+auto-config render "$inventory" \
+  --output "$render_dir" \
+  --groups home \
+  --gateway-group home
+
+echo "Rendered device configuration to $render_dir; review it before a separate apply."

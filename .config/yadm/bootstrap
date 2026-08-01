@@ -328,7 +328,7 @@ fi
 if [[ -n "$GITHUB_ACTIONS" ]]; then
   echo "::group::configuring zsh"
 fi
-auto-config generate-config
+"$HOME/.local/bin/render-device-config"
 auto-token init
 config_zsh
 if [[ -n "$GITHUB_ACTIONS" ]]; then
