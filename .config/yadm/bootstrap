@@ -306,10 +306,7 @@ install_misc_tooling() {
 }
 
 config_zsh() {
-  if ! command -v zi >/dev/null 2>&1; then
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/z-shell/zi-src/main/lib/sh/install.sh)" -- -i skip
-    zsh -cl -- '(source $HOME/.config/zsh/.zi.zsh && @zi-scheduler burst) || true'
-  fi
+  zsh -cl -- '(source "$HOME/.config/zsh/.zi.zsh" && @zi-scheduler burst) || true'
   # setup .zprofile
   if [[ ! -f $HOME/.zprofile ]]; then
     touch "$HOME/.zprofile"
