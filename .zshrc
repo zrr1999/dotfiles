@@ -20,8 +20,17 @@ zstyle ':completion:*' menu select
 # config local bin
 export PATH=$PATH:$HOME/.local/bin
 
+# Keep shared npm settings in yadm while ~/.npmrc remains local for auth tokens.
+export NPM_CONFIG_GLOBALCONFIG="$HOME/.config/npm/npmrc"
+
 [ ! -s "$HOME/.brewconfig" ] || source "$HOME/.brewconfig"
-[ ! -s "$HOME/.x-cmd.root/X" ] || source "$HOME/.x-cmd.root/X"
+
+# Nix profile exposes the former x-cmd CLI set (`nixfiles#dotfiles-cli`).
+if [ -e "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then
+  . "$HOME/.nix-profile/etc/profile.d/nix.sh"
+elif [ -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]; then
+  . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+fi
 
 if command -v brew >/dev/null 2>&1; then
   fpath+=$(brew --prefix)/share/zsh/site-functions

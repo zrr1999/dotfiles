@@ -46,3 +46,10 @@ name = "shellcheck"
 language = "system"
 entry = "uvx --from shellcheck-py shellcheck --exclude=SC1091"
 files = "^(install\\.sh|\\.config/yadm/(bootstrap|hooks/(post_clone|post_pull)))$"
+
+[[repos.hooks]]
+id = "forbid-npm-auth-token"
+name = "forbid npm auth token in managed config"
+language = "system"
+entry = "bash -c 'if rg --quiet -- \"_authToken[[:space:]]*=\" \"$@\"; then echo \"npm auth tokens belong in local ~/.npmrc\" >&2; exit 1; fi' --"
+files = "^\\.config/npm/npmrc$"

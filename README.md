@@ -1,6 +1,22 @@
 # Dotfiles
 
-使用 `yadm` 管理的个人 dotfiles，用来在 macOS、Arch Linux、Ubuntu 上快速恢复一致的 shell、Git 和开发环境。
+使用 `yadm` 管理的个人 dotfiles，用来在 macOS、Arch Linux、Debian/Ubuntu 上快速恢复一致的 shell、Git 和开发环境。
+
+## 用户程序管理
+
+`yadm` 继续管理所有 dotfiles。`~/.config/nixfiles` 只是原 x-cmd 用户程序清单的 Nix 替代，不包含设备模型、Home Manager、nix-darwin 或 NixOS 配置。
+
+可用以下命令只做求值或构建验证：
+
+```bash
+just nix-check
+just nix-build
+just nix-verify
+```
+
+实际安装由 yadm bootstrap 创建的 `dotfiles-cli` 用户 profile 完成；Nix 不接管任何系统或 dotfiles 配置。
+
+通用 npm 配置由 yadm 管理在 `~/.config/npm/npmrc`，并通过 `NPM_CONFIG_GLOBALCONFIG` 生效。`~/.npmrc` 只保留 `npm login` 写入的本机认证信息，已从 Git 忽略。
 
 ## 快速开始
 
@@ -60,6 +76,9 @@ clone 后进入仓库根目录：
 - `just update`：拉取最新配置并重新应用
 - `just pull`：只拉取，不执行 bootstrap
 - `just verify`：运行脚本语法检查和 `prek`
+- `just nix-check`：对用户 CLI flake 做全平台求值
+- `just nix-build`：构建当前平台的 CLI profile，不安装
+- `just nix-verify`：依次执行全平台求值与当前平台构建
 
 ## 平台说明
 
@@ -67,12 +86,15 @@ clone 后进入仓库根目录：
 | --- | --- | --- |
 | macOS | `brew` | 只装基础工具和少量 macOS 专属工具 |
 | Arch Linux | `pacman` | 只装基础工具 |
-| Ubuntu | `apt` | 只装基础工具 |
+| Debian/Ubuntu | `apt` | 只装基础工具 |
 
 ## 关键文件
 
 - `.config/yadm/bootstrap`：主安装逻辑
+- `.config/yadm/ignore`：yadm 本地工作树忽略规则，包括含认证信息的 `~/.npmrc`
 - `.config/yadm/hooks/post_clone`：首次 clone 后的收尾逻辑
+- `.config/nixfiles/`：替代 x-cmd 用户程序安装的最小 Nix flake
+- `.config/npm/npmrc`：不含凭据的通用 npm 配置
 - `.config/zsh/.aliases.zsh`：常用别名
 - `.config/zsh/.functions.zsh`：常用 shell 函数
 - `.gitconfig##template`：Git 模板配置

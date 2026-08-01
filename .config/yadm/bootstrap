@@ -26,15 +26,21 @@ install_packages() {
   $cmd "$@"
 }
 
-COMMON_XCMD_PACKAGES=(lua starship fastfetch lsd dust gix yadm gh bat sd ripgrep fd bottom
-  procs duf ast-grep git-delta gitui zellij difftastic helix pueue fzf
-  progress atuin hyperfine bitwarden-cli git-lfs just)
 MACOS_BREW_PACKAGES=(zsh gnupg python bundler-completion squirrel-app pinentry-mac aviator-co/tap/av)
 ARCH_ROOT_PACKAGES=(zsh gnupg python)
 ARCH_USER_PACKAGES=(zsh gnupg python unrar)
 APT_BASE_PACKAGES=(zsh unzip gpg python3)
 UV_TOOL_PACKAGES=(auto-config auto-token httpie)
 RUST_TOOLS=(sccache)
+
+NIXFILES_DIR="${NIXFILES_DIR:-$HOME/.config/nixfiles}"
+YADM_IGNORE_FILE="${YADM_IGNORE_FILE:-$HOME/.config/yadm/ignore}"
+
+configure_yadm_ignores() {
+  if [[ -f "$YADM_IGNORE_FILE" ]]; then
+    yadm gitconfig core.excludesFile "$YADM_IGNORE_FILE"
+  fi
+}
 
 ensure_uv() {
   export PATH="$HOME/.local/bin:$PATH"
@@ -46,18 +52,6 @@ ensure_uv() {
 
   echo "Installing uv..."
   curl -LsSf https://astral.sh/uv/install.sh | sh
-}
-
-ensure_xcmd() {
-  if [[ -f "$HOME/.x-cmd.root/X" ]]; then
-    # bootstrap runs in a non-interactive shell, so source the local entrypoint
-    # before falling back to the network installer. Do not use `command -v x`
-    # here: XQuartz also installs an unrelated executable named `x`.
-    source "$HOME/.x-cmd.root/X"
-    return
-  fi
-
-  eval "$(curl -fsSL https://get.x-cmd.com)"
 }
 
 ensure_vite_plus() {
@@ -79,6 +73,27 @@ ensure_vite_plus() {
 
   vp env setup || exit 1
   vp env on || exit 1
+}
+
+install_nix_cli_packages() {
+  if ! command -v nix >/dev/null 2>&1; then
+    echo "error: nix is required to install CLI tools (x-cmd was removed)" >&2
+    exit 1
+  fi
+
+  if [[ ! -f "$NIXFILES_DIR/flake.nix" ]]; then
+    echo "error: nixfiles flake not found at $NIXFILES_DIR" >&2
+    exit 1
+  fi
+
+  local installable="path:${NIXFILES_DIR}#dotfiles-cli"
+  echo "Installing user CLI tools with Nix: $installable"
+
+  # This profile only replaces the old x-cmd package set. It does not manage
+  # dotfiles, Home Manager, NixOS, or device-specific configuration.
+  nix profile remove dotfiles-cli >/dev/null 2>&1 || true
+  nix profile remove cli >/dev/null 2>&1 || true
+  nix profile add --priority 4 "$installable"
 }
 
 ensure_rustup() {
@@ -119,7 +134,7 @@ install_system_packages() {
       install_packages "pacman" "sudo pacman -S --noconfirm --needed" "${ARCH_USER_PACKAGES[@]}"
     fi
   elif command -v apt >/dev/null 2>&1; then
-    echo "=== Ubuntu: Installing base packages with apt ==="
+    echo "=== Debian/Ubuntu: Installing base packages with apt ==="
     sudo apt update
     install_packages "apt" "sudo apt install -y" "${APT_BASE_PACKAGES[@]}"
   else
@@ -262,8 +277,7 @@ install_rust_tools() {
 }
 
 install_misc_tooling() {
-  ensure_xcmd
-  install_packages "xcmd" "x env use" "${COMMON_XCMD_PACKAGES[@]}"
+  install_nix_cli_packages
   ensure_uv
   install_nexttrace_if_missing
   install_by_uv
@@ -290,6 +304,7 @@ config_zsh() {
 if [[ -n "$GITHUB_ACTIONS" ]]; then
   echo "::group::installing packages"
 fi
+configure_yadm_ignores
 install_system_packages
 install_misc_tooling
 set_git_gpg_program
