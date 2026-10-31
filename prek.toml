@@ -53,3 +53,11 @@ name = "forbid npm auth token in managed config"
 language = "system"
 entry = "bash -c 'if rg --quiet -- \"_authToken[[:space:]]*=\" \"$@\"; then echo \"npm auth tokens belong in local ~/.npmrc\" >&2; exit 1; fi' --"
 files = "^\\.config/npm/npmrc$"
+
+[[repos.hooks]]
+id = "fnox-migration"
+name = "fnox migration and shell behavior"
+language = "system"
+entry = "uv run --no-project --python 3.13 python -m unittest discover -s .github/tests -p test_fnox.py"
+pass_filenames = false
+files = '^(\.local/bin/migrate-auto-token-to-fnox|\.zshrc|\.github/tests/test_fnox\.py)$'

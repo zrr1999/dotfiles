@@ -67,6 +67,41 @@ PATH="/usr/bin:/bin:$PATH" curl -fLo /tmp/yadm https://github.com/TheLocehiliosa
 - Node.js tooling：统一由 Vite+ 管理 Node.js、pnpm 和全局包
 - 独立二进制：`nexttrace` 直接从 release 下载
 
+## 凭据与 fnox
+
+凭据由 fnox 管理，Zsh 启动和切换目录时自动加载配置。bootstrap 安装固定版本的 fnox 和 age，
+但不创建、迁移或覆盖凭据。全局配置位于 `~/.config/fnox/config.toml`，age 私钥位于同目录的
+`age.txt`；两者均只保存在本机，不由 yadm 同步。
+
+已有 auto-token 配置时，先安装 fnox 和 age，再预览并执行迁移：
+
+```bash
+migrate-auto-token-to-fnox --dry-run
+migrate-auto-token-to-fnox --apply
+```
+
+迁移把已启用变量合并到默认配置，停用组保存在同名 profile；内部的 `AUTO_TOKEN_ENV_DIR`
+不迁移。同名同值变量去重，值冲突时停止。明文只在内存管道中传递，加密后逐项解密核对，
+全部一致才启用新配置。目标目录已存在时拒绝写入，包括再次执行迁移。
+目录权限为 `0700`，配置和私钥权限为 `0600`，旧文件保持原样。
+
+成功后新开终端即可加载默认变量。添加凭据使用隐藏输入提示，避免在命令参数中填写秘密：
+
+```bash
+fnox set MY_TOKEN --global --provider age
+fnox exec --profile PROFILE -- command
+```
+
+指定 profile 会在默认变量上叠加该组；仅加载该组时加 `--no-defaults`。
+项目可以维护自己的 fnox 配置，离开目录时恢复此前的环境。
+全新机器可按 [fnox age 指南](https://fnox.jdx.dev/providers/age) 初始化全局配置与密钥。
+
+保留旧 auto-token 文件和工具，直到新环境验收完成。需要恢复时，将 Zsh 中的 fnox 初始化块
+替换为 `command -v auto-token >/dev/null 2>&1 && eval "$(auto-token shellenv)"`，然后新开终端。
+恢复不需要删除 fnox 配置或密钥。备份加密配置时同时妥善保管私钥；仅有密文不能恢复凭据。
+
+迁移与 shell 行为测试纳入 `prek`，使用临时 HOME 和测试凭据，要求 PATH 中已有 fnox、age 和 Zsh。
+
 ## 仓库内常用命令
 
 clone 后进入仓库根目录：

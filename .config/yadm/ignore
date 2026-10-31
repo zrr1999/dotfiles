@@ -1,1 +1,3 @@
 /.npmrc
+/.config/fnox/
+/.config/auto-token/

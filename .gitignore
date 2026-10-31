@@ -1,3 +1,5 @@
 snap/
 .cursor/
 .npmrc
+/.config/fnox/
+/.config/auto-token/

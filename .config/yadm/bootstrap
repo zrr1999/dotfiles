@@ -26,12 +26,12 @@ install_packages() {
   $cmd "$@"
 }
 
-MACOS_BREW_PACKAGES=(zsh gnupg python bundler-completion squirrel-app pinentry-mac aviator-co/tap/av)
-ARCH_ROOT_PACKAGES=(zsh gnupg python)
-ARCH_USER_PACKAGES=(zsh gnupg python unrar)
-APT_BASE_PACKAGES=(zsh unzip gpg python3)
-UV_TOOL_PACKAGES=(auto-config auto-token httpie)
-RUST_TOOLS=(sccache)
+MACOS_BREW_PACKAGES=(zsh gnupg age python bundler-completion squirrel-app pinentry-mac aviator-co/tap/av)
+ARCH_ROOT_PACKAGES=(zsh gnupg age python)
+ARCH_USER_PACKAGES=(zsh gnupg age python unrar)
+APT_BASE_PACKAGES=(zsh unzip gpg age python3)
+UV_TOOL_PACKAGES=(auto-config httpie)
+RUST_TOOLS=(sccache fnox@1.45.0)
 
 NIXFILES_DIR="${NIXFILES_DIR:-$HOME/.config/nixfiles}"
 YADM_IGNORE_FILE="${YADM_IGNORE_FILE:-$HOME/.config/yadm/ignore}"
@@ -269,7 +269,7 @@ install_uv_tool_if_missing() {
 }
 
 install_rust_tools() {
-  local tool
+  local tool binary version
 
   ensure_rustup
   if ! command -v cargo-binstall >/dev/null 2>&1; then
@@ -278,7 +278,10 @@ install_rust_tools() {
   fi
 
   for tool in "${RUST_TOOLS[@]}"; do
-    if command -v "$tool" >/dev/null 2>&1; then
+    binary=${tool%%@*}
+    version=${tool#*@}
+    if command -v "$binary" >/dev/null 2>&1 \
+      && { [[ "$tool" == "$binary" ]] || [[ "$($binary --version)" == "$binary $version" ]]; }; then
       echo "$tool is already installed"
       continue
     fi
@@ -286,6 +289,8 @@ install_rust_tools() {
     echo "Installing $tool..."
     if command -v cargo-binstall >/dev/null 2>&1; then
       cargo binstall --no-confirm "$tool"
+    elif [[ "$tool" != "$binary" ]]; then
+      cargo install --locked --version "$version" "$binary"
     else
       cargo install --locked "$tool"
     fi
@@ -329,7 +334,6 @@ if [[ -n "$GITHUB_ACTIONS" ]]; then
   echo "::group::configuring zsh"
 fi
 "$HOME/.local/bin/render-device-config"
-auto-token init
 config_zsh
 if [[ -n "$GITHUB_ACTIONS" ]]; then
   echo "::endgroup::"
