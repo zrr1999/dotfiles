@@ -113,6 +113,7 @@ install_nix_cli_packages() {
 }
 
 ensure_rustup() {
+  export PATH="${CARGO_HOME:-$HOME/.cargo}/bin:$PATH"
   if cargo --version >/dev/null 2>&1; then
     return
   fi
@@ -279,7 +280,7 @@ install_rust_tools() {
   ensure_rustup
   if ! command -v cargo-binstall >/dev/null 2>&1; then
     echo "Installing cargo-binstall..."
-    cargo install --locked cargo-binstall
+    cargo install --locked cargo-binstall || exit 1
   fi
 
   for tool in "${RUST_TOOLS[@]}"; do
@@ -293,11 +294,11 @@ install_rust_tools() {
 
     echo "Installing $tool..."
     if command -v cargo-binstall >/dev/null 2>&1; then
-      cargo binstall --no-confirm "$tool"
+      cargo binstall --no-confirm "$tool" || exit 1
     elif [[ "$tool" != "$binary" ]]; then
-      cargo install --locked --version "$version" "$binary"
+      cargo install --locked --version "$version" "$binary" || exit 1
     else
-      cargo install --locked "$tool"
+      cargo install --locked "$tool" || exit 1
     fi
   done
 }
