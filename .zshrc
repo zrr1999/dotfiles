@@ -98,5 +98,7 @@ if [[ -o interactive ]] && command -v ssh-add >/dev/null 2>&1 && [[ -n "${SSH_AU
   '
 fi
 
-# Initialize auto-token if available
-command -v auto-token >/dev/null 2>&1 && eval $(auto-token shellenv)
+if command -v fnox >/dev/null 2>&1; then
+  eval "$(fnox activate zsh)"
+  eval "$(fnox hook-env -s zsh)"
+fi

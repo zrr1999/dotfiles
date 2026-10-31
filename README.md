@@ -67,6 +67,24 @@ PATH="/usr/bin:/bin:$PATH" curl -fLo /tmp/yadm https://github.com/TheLocehiliosa
 - Node.js tooling：统一由 Vite+ 管理 Node.js、pnpm 和全局包
 - 独立二进制：`nexttrace` 直接从 release 下载
 
+## 凭据与 fnox
+
+凭据由 fnox 管理，Zsh 启动和切换目录时自动加载配置。bootstrap 仅安装固定版本的 fnox 和 age，
+凭据单独配置。全局配置位于 `~/.config/fnox/config.toml`，age 私钥位于同目录的 `age.txt`；
+两者均只保存在本机，不由 yadm 同步。目录权限应为 `0700`，配置和私钥权限应为 `0600`。
+新机器可按 [fnox age 指南](https://fnox.jdx.dev/providers/age) 初始化全局配置与密钥。
+
+添加凭据使用隐藏输入提示，避免在命令参数中填写秘密：
+
+```bash
+fnox set MY_TOKEN --global --provider age
+fnox exec --profile PROFILE -- command
+```
+
+指定 profile 会在默认变量上叠加该组；仅加载该组时加 `--no-defaults`。
+项目可以维护自己的 fnox 配置，离开目录时恢复此前的环境。
+备份加密配置时同时妥善保管私钥；仅有密文不能恢复凭据。
+
 ## 仓库内常用命令
 
 clone 后进入仓库根目录：
