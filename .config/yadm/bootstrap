@@ -57,7 +57,7 @@ ensure_uv() {
 ensure_vite_plus() {
   if [[ ! -f "$HOME/.vite-plus/env" ]]; then
     echo "Installing Vite+..."
-    curl -fsSL https://vite.plus | bash
+    curl -fsSL https://vite.plus | VP_HOME="$HOME/.vite-plus" bash
   fi
 
   if [[ ! -f "$HOME/.vite-plus/env" ]]; then
@@ -113,7 +113,7 @@ install_nix_cli_packages() {
 }
 
 ensure_rustup() {
-  if command -v cargo >/dev/null 2>&1; then
+  if cargo --version >/dev/null 2>&1; then
     return
   fi
 
@@ -121,7 +121,12 @@ ensure_rustup() {
     source "$HOME/.cargo/env"
   fi
 
-  if command -v cargo >/dev/null 2>&1; then
+  if cargo --version >/dev/null 2>&1; then
+    return
+  fi
+
+  if command -v rustup >/dev/null 2>&1; then
+    rustup default stable || exit 1
     return
   fi
 
